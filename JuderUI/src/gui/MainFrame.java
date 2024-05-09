@@ -127,9 +127,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
         comboCppCompiler = new javax.swing.JComboBox();
-        jLabel10 = new javax.swing.JLabel();
         comboJavaCompiler = new javax.swing.JComboBox();
         jCheckBox2 = new javax.swing.JCheckBox();
 
@@ -176,18 +174,16 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel15))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addGap(35, 501, Short.MAX_VALUE))))
+                    .addComponent(jLabel16)
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +222,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -283,9 +279,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("ÀŒÃÂ", 0, 10)); // NOI18N
-        jLabel8.setText("ƒ¨»œC/C++±‡“Î∆˜:");
-
         comboCppCompiler.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboCppCompiler.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -297,9 +290,6 @@ public class MainFrame extends javax.swing.JFrame {
                 comboCppCompilerActionPerformed(evt);
             }
         });
-
-        jLabel10.setFont(new java.awt.Font("ÀŒÃÂ", 0, 10)); // NOI18N
-        jLabel10.setText("ƒ¨»œJava±‡“Î∆˜:");
 
         comboJavaCompiler.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboJavaCompiler.addItemListener(new java.awt.event.ItemListener() {
@@ -330,7 +320,7 @@ public class MainFrame extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator2)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,19 +344,10 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(button_StartThread))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboCppCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9)
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comboJavaCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(353, 353, 353)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(distributorIP, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -376,30 +357,32 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(distributorPort, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36))))
+                                .addGap(18, 18, 18)
+                                .addComponent(comboCppCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(comboJavaCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(83, 83, 83)))
+                        .addGap(21, 21, 21))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(threadManagerTabb, javax.swing.GroupLayout.PREFERRED_SIZE, 955, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)))
-                .addGap(21, 21, 21)
-                .addComponent(jSeparator1))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(button_StartThread)
+                            .addComponent(threadManagerTabb, javax.swing.GroupLayout.PREFERRED_SIZE, 945, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2)
-                        .addComponent(jLabel8)
-                        .addComponent(comboCppCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel10)
-                        .addComponent(comboJavaCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(distributorPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(distributorIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3)
-                        .addComponent(jCheckBox2)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(comboCppCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboJavaCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(distributorPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(distributorIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jCheckBox2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -512,25 +495,25 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel17MouseClicked
     private boolean checkForCompile() {
-        String tmp = null;
-        tmp = Config.getCompilerDir("c",comboCppCompiler.getSelectedItem().toString());
-        if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "gcc.exe")&&!FileFinder.isExistFile(tmp + File.separator + "g++.exe")&&!FileFinder.isExistFile(tmp + File.separator + "/bin/cl.exe")) {
+        //String tmp = null;
+        //tmp = Config.getCompilerDir("c",comboCppCompiler.getSelectedItem().toString());
+        //if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "gcc.exe")&&!FileFinder.isExistFile(tmp + File.separator + "g++.exe")&&!FileFinder.isExistFile(tmp + File.separator + "/bin/cl.exe")) {
             //µØ¥∞…Ë÷√±£¥Ê
 
-            JOptionPane.showMessageDialog(this, "«Îœ»≈‰÷√C/C++±‡“Î∆˜");
+         //   JOptionPane.showMessageDialog(this, "«Îœ»≈‰÷√C/C++±‡“Î∆˜");
 //            NewCompileSetting window = new NewCompileSetting("c", this, true);
 //            window.setVisible(true);
-            return false;
-        }
+        //    return false;
+        //}
 
-        tmp = Config.getCompilerDir("java",comboJavaCompiler.getSelectedItem().toString());
-        if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
+      //  tmp = Config.getCompilerDir("java",comboJavaCompiler.getSelectedItem().toString());
+        //if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
 
-            JOptionPane.showMessageDialog(this, "«Îœ»≈‰÷√Java±‡“Î∆˜");
+        //    JOptionPane.showMessageDialog(this, "«Îœ»≈‰÷√Java±‡“Î∆˜");
 //            NewCompileSetting window = new NewCompileSetting("java", this, true);
 //            window.setVisible(true);
-            return false;
-        }
+        //    return false;
+        //}
         return true;
     }
     public String getSelectedCppCompilerName(){
@@ -684,7 +667,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel10;
     javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -695,7 +677,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     public javax.swing.JPanel jPanel2;

@@ -97,11 +97,29 @@ public class MainForNet extends Thread {
     private List<Solution> getWebServiceSolutions() throws Exception {
         Control.setWebService(new Webservice(new URL(Control.getUrl()), Control.getQname()));
         
-        String xml = Control.getWebService().getSolutions(5);
+        String xml = null;
+        try{
+            xml=Control.getWebService().getSolutions(5);
+        }
+        catch(Exception ex){
+                ex.printStackTrace();
+                EventQueue.invokeLater(() -> {
+                    Control.addExceptionInfo(0, ex.getStackTrace().toString());
+                });
+        }
         XmlToSolution xts = new XmlToSolution();
         xts.readXmlString(xml);
 
-        this.solutions = xts.convertXML();
+        
+        try{
+            this.solutions = xts.convertXML();
+        }
+        catch(Exception ex){
+                ex.printStackTrace();
+                EventQueue.invokeLater(() -> {
+                    Control.addExceptionInfo(0, ex.getStackTrace().toString());
+                });
+        }
 //        Control.addJudgeInfo("  get "+solutions.getSolution().size()+" solutioins ");
         if (solutions.getSolution().size() != 0) {
             //System.out.println("get " + solutions.getSolution().size() + " solution");

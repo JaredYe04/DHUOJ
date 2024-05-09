@@ -13,6 +13,7 @@ import edu.dhu.ws.OJWS;
 import edu.dhu.ws.OJWS_Service;
 import static gui.Control.getDistributorField;
 import static gui.Control.getJudgeInfoEditorPane;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -26,6 +27,7 @@ import javax.swing.JTextField;
 import javax.xml.namespace.QName;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.boot.logging.LogLevel;
 /**
  *
  * @author ytxlo
@@ -34,7 +36,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 public class Webservice implements java.rmi.Remote{
     private OJWS_Service webs;  
     private OJWS servicePort;
-    public static boolean ENABLE_DUBBO=false;
+    public static boolean ENABLE_DUBBO=true;
     public static boolean existDubbo=false;
     //@DubboReference(url = "http://106.15.36.190:3000/edu.dhu.ws.OJWS")
     //http://106.15.36.190:3000/edu.dhu.ws.OJWS
@@ -45,6 +47,7 @@ public class Webservice implements java.rmi.Remote{
     //@DubboReference(url = "dubbo://10.10.10.1:20880/edu.dhu.ws.OJWS")
     //@Resource
     public OJWS dubboPort;
+    common.Logger logger;
     public static OJWS initDubboPort(String url) {
         // 应用配置
         ApplicationConfig application = new ApplicationConfig();
@@ -60,7 +63,7 @@ public class Webservice implements java.rmi.Remote{
         return reference.get();
     }
     private void setDubbo(){
-        
+         logger = common.Logger.getInstance();
          String url = "dubbo://localhost:8080/edu.dhu.ws.OJWS";
          JTextField ip=getDistributorField(0);
          JTextField port=getDistributorField(1);
@@ -69,16 +72,17 @@ public class Webservice implements java.rmi.Remote{
         try
         {
             JEditorPane infoPane=getJudgeInfoEditorPane(0);
-            if(!existDubbo&&infoPane!=null)
+            if(!existDubbo&&infoPane!=null){
                 infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"正在请求Dubbo服务...\n");
-            
+                logger.log("请求dubbo服务", common.LogLevel.INFO);
+            }
             dubboPort = initDubboPort(url);
             //infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"测试test请求：..."+dubboPort.test("aa")+"\n");
             
         }
         catch(Exception e){
-                 JEditorPane infoPane=getJudgeInfoEditorPane(1);
-                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+                JEditorPane infoPane=getJudgeInfoEditorPane(1);
+                infoPane.setText(infoPane.getText()+"\n"+LocalTime.now().toString()+e.getMessage()+"\n");
             e.printStackTrace();
         }
         if(dubboPort!=null){
@@ -90,6 +94,7 @@ public class Webservice implements java.rmi.Remote{
         }else{
             existDubbo=false;
             JEditorPane infoPane=getJudgeInfoEditorPane(1);
+            logger.log("请求dubbo服务失败", common.LogLevel.ERROR);
             infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"\nDubbo服务连接失败！URL:"+url+"\n");
         }
             
@@ -110,6 +115,7 @@ public class Webservice implements java.rmi.Remote{
                     servicePort = webs.getOJWSImplPort();
                 }
             catch(Exception e){
+               logger.log(e.getMessage(), common.LogLevel.ERROR);
                e.printStackTrace();
             }
         }
@@ -138,20 +144,56 @@ public class Webservice implements java.rmi.Remote{
             setDubbo();
     }
     public String getSolutions(int arg0)throws java.rmi.RemoteException{
-         String s =this.servicePort.wsGetSolutions("judge","judge123",arg0);
-        return s;
+        try{
+           String s =this.servicePort.wsGetSolutions("judge","judge123",arg0);
+        return s; 
+        }
+         catch(Exception e){
+             logger.log(e.getMessage(), common.LogLevel.ERROR);
+             JEditorPane infoPane=getJudgeInfoEditorPane(1);
+                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+                return "";
+         }
     }
     public String getProblem(int arg)throws java.rmi.RemoteException{
 //        servicePort.wsGetProblem(arg0, arg1, arg, arg)
-        byte[] soucre = this.servicePort.wsGetProblem4Judge("felix", "felix", arg);
-        String result = Decrypt.decrypt("felix10000", soucre);
-        //String prob = result.replaceFirst("GBK", "UTF-8");
-        return result;
+        try{
+             byte[] soucre = this.servicePort.wsGetProblem4Judge("felix", "felix", arg);
+            String result = Decrypt.decrypt("felix10000", soucre);
+            //String prob = result.replaceFirst("GBK", "UTF-8");
+            return result;
+        }
+       
+            catch(Exception e){
+            logger.log(e.getMessage(), common.LogLevel.ERROR);
+            JEditorPane infoPane=getJudgeInfoEditorPane(1);
+                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+                return "";
+         }
     }
     public String updateResult(String arg)throws java.rmi.RemoteException{
+        try{
          byte[] data=Decrypt.encrypt("judge123", arg);
         String s = servicePort.wsUpdateResult("judge","judge123",data);
         return s;
+        }
+        catch(Exception e){
+             logger.log(e.getMessage(), common.LogLevel.ERROR);
+             JEditorPane infoPane=getJudgeInfoEditorPane(1);
+                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+                return "";
+         }
+    }
+    private static String getGbkString(String string) {
+        try {
+            // Convert the string to byte array using GBK encoding
+            byte[] gbkBytes = string.getBytes("GBK");
+            // Create a new string from the byte array using GBK encoding
+            return new String(gbkBytes, "GBK");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return string;
+        }
     }
     public static void main(String[] args) {
         Webservice ws=new Webservice();
@@ -160,6 +202,7 @@ public class Webservice implements java.rmi.Remote{
             System.out.println(ws.getProblem(75));
         } catch (RemoteException ex) {
             Logger.getLogger(Webservice.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 }

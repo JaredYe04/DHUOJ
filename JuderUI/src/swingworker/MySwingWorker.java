@@ -5,6 +5,9 @@
  */
 package swingworker;
 
+import common.Const;
+import gui.Control;
+import java.awt.EventQueue;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -12,6 +15,8 @@ import javax.swing.SwingWorker;
 import main.Answer;
 import main.Process;
 import persistence.oj_beans.ProblemTestCaseBean;
+import resultData.CompileInfo;
+import resultData.Result;
 
 /**
  *
@@ -44,7 +49,9 @@ public class MySwingWorker extends SwingWorker<Answer,String>{
     
     @Override
     protected Answer doInBackground() throws Exception {
-        return  new Process().Judge(getSolutionId(),getProblemId(),getLanguage(),getCompiler(), getSourceCode(), timeOut, getTestCaseList(),this::writeToGui);
+
+            return  new Process().Judge(getSolutionId(),getProblemId(),getLanguage(),getCompiler(), getSourceCode(), timeOut, getTestCaseList(),this::writeToGui);
+
     }
     
     public void writeToGui(String s){

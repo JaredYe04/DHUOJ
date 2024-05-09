@@ -18,6 +18,7 @@ import resultData.Result;
 import tool.ThreadTool;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import java.awt.EventQueue;
 import java.lang.reflect.Field;
 import resultData.JudgerInfo;
 
@@ -152,14 +153,14 @@ public class ExeCommand {
             RunInfo.remark = JudgerInfo.remark;
         }
         else if (flag) {
-            RunInfo.remark = "运行时错误" + RunInfo.errorInfo;
+            RunInfo.remark = "运行时错误";
             Result.status = Const.RE;
         } else if (RunInfo.isKilled == 1) {
             Result.status = Const.TLE;
             RunInfo.remark = "运行超时" + RunInfo.errorInfo;
         } else if (result != 0) {
             Result.status = Const.RE;
-            RunInfo.remark = "运行时错误：出口值不为零" + RunInfo.errorInfo;
+            RunInfo.remark = "运行时错误：出口值不为零";
         }
         if (result == 0) {
             RunInfo.remark = "";
@@ -229,7 +230,7 @@ public class ExeCommand {
         } catch (Exception ex) {
             ex.printStackTrace();
             Result.status = Const.SE;
-            JudgerInfo.remark = "系统出错,请重试";
+            JudgerInfo.remark = "系统出错,请重试"+ex.getMessage();
             Log.writeExceptionLog("compileCommand line:3:" + ex.getMessage() + "\n" + ex.getStackTrace());
             return -1;
         } finally {

@@ -157,22 +157,43 @@ public class JudgeFromQueue extends Thread {
         String problem = (String) problemsCachManager
                 .getObject("problemId" + problemId);
         if (problem == null) {
-            problem = Control.getWebService().getProblem(Integer.parseInt(problemId));
-            problemsCachManager.putObject("problemId" + problemId,
+            try{
+                problem = Control.getWebService().getProblem(Integer.parseInt(problemId));
+                problemsCachManager.putObject("problemId" + problemId,
                     problem);
+            }catch(Exception e){
+                Result.status = Const.SE;
+                CompileInfo.remark = "获取题目信息失败！请联系管理人员。错误信息："+e.getMessage();
+                e.printStackTrace();
+                 EventQueue.invokeLater(() -> {
+                    Control.addExceptionInfo(threadNo, e.toString());
+                });
+            }
+
         }
        if(problem.isEmpty()){
                      Result.status = Const.CE;
             CompileInfo.remark = "获取题目信息失败！";
+            
             return;
         }
 //                System.out.println(Integer.parseInt(problemId));
 
 //                System.out.println(xml);
-        xtp.readXmlString(problem);
-        problemBean = xtp.convertXML();
-        Control.addJudgeInfo(threadNo, "get problemId: " + problemId);
-        problemBeanMap.put(problemId, problemBean);
+       try{
+            xtp.readXmlString(problem);
+            problemBean = xtp.convertXML();
+            Control.addJudgeInfo(threadNo, "get problemId: " + problemId);
+            problemBeanMap.put(problemId, problemBean);
+       }catch(Exception e){
+                Result.status = Const.SE;
+                CompileInfo.remark = "解析题目信息失败！请联系管理人员。错误信息："+"problemId:"+problemId+e.getMessage();
+                e.printStackTrace();
+                 EventQueue.invokeLater(() -> {
+                    Control.addExceptionInfo(threadNo, e.toString());
+                });
+        }
+
     }
 
     //
@@ -219,6 +240,9 @@ public class JudgeFromQueue extends Thread {
             Control.addJudgeInfo(threadNo, "server result:" + req.getRspMsg());
 //            Control.addJudgeInfo("ok");
         } catch (Exception e) {
+            EventQueue.invokeLater(() -> {
+                    Control.addExceptionInfo(threadNo, e.toString());
+                });
             e.printStackTrace();
         }
 

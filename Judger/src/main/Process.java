@@ -373,33 +373,53 @@ public class Process {
                 }
                 solutionBean.setStatus(Const.STATUS[maxLevelStatus]);
                 //最高等级错误相应的信息
-                if (maxLevelStatus == Const.CE) {
-                    solutionBean.setRemark(remarks[index]);
-                } else if (result[index] == Const.WA || result[index] == Const.PE) {
-//                solutionBean.setRemark("");
-                    String message = new String();
-                    for (int i = 0; i < remarks.length; i++) {
-                        message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
-                        message += remarks[i] + "\n";
-                    }
-                    solutionBean.setRemark(message);
-                } else {//RE,TLE
-                    String wrongCaseIds = "";
-                    for (int j = 0; j < sumTestcaseNum; j++) {
-                        if (result[j] == result[index]) {
-                            wrongCaseIds += ((ProblemTestCaseBean) testCaseBeans.get(j)).getId() + ",";
-                        }
-                    }
-                    solutionBean.setRemark("测试用例ID为" + wrongCaseIds + remarks[index]);
-                    String message = new String();
-                    for (int i = 0; i < remarks.length; i++) {
-                        message += "\n";
-                        message += remarks[i];
-                    }
-                    solutionBean.setRemark(solutionBean.getRemark() + message);
+                
+                
+                
+                String message="";
+                for (int i = 0; i < remarks.length; i++) {
+                    message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
+                    message += remarks[i] + "\n";
                 }
+                solutionBean.setRemark(message);
+                
+                //old
+//                if (maxLevelStatus == Const.CE) {
+//                    solutionBean.setRemark(remarks[index]);
+//                } else if (result[index] == Const.WA || result[index] == Const.PE) {
+////                solutionBean.setRemark("");
+//                    String message = new String();
+//                    for (int i = 0; i < remarks.length; i++) {
+//                        message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
+//                        message += remarks[i] + "\n";
+//                    }
+//                    solutionBean.setRemark(message);
+//                } else {//RE,TLE
+//                    String wrongCaseIds = "";
+//                    for (int j = 0; j < sumTestcaseNum; j++) {
+//                        if (result[j] == result[index]) {
+//                            wrongCaseIds += ((ProblemTestCaseBean) testCaseBeans.get(j)).getId() + ",";
+//                        }
+//                    }
+//                    solutionBean.setRemark("测试用例ID为" + wrongCaseIds + remarks[index]);
+//                    String message = new String();
+//                    for (int i = 0; i < remarks.length; i++) {
+//                        message += "\n";
+//                        message += remarks[i];
+//                    }
+//                    solutionBean.setRemark(solutionBean.getRemark() + message);
+//                }
             }
             solutionBean.setCorrectCaseIds(correctCaseIds);
+            //remark转为GBK字符串
+            String originalRemark=solutionBean.getRemark();
+            try{
+                solutionBean.setRemark(new String(solutionBean.getRemark().getBytes("GBK"),"GBK"));
+            }catch(Exception e){
+                solutionBean.setRemark(originalRemark);
+            }
+            //Jared
+            
             //SolutionDAO.update(solutionBean);
         }
     }

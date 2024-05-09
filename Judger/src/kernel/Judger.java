@@ -56,6 +56,7 @@ public class Judger {
 //        if (!file1.exists() || !file2.exists()) {
 //            System.out.println("编译器未找到");
 //            isFound = false;
+    
 //        }
 //    }
     
@@ -121,7 +122,7 @@ public class Judger {
         else
             map.put(LangSelector.PlaceHolder.ObjFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.obj");
         map.put(LangSelector.PlaceHolder.ExeFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.exe");
-        String linkCommand = LangSelector.matchPlaceHolder(LangSelector.getCompileCommand("C++",compiler), map);
+        String linkCommand = LangSelector.matchPlaceHolder(LangSelector.getCompileCommand(language,compiler), map);
         //String linkCommand = Config.getCompilerDir(language) + File.separator + "g++ " +"\""+ Config.getTargetPath() +File.separator+"output"+File.separator+  "Main"+".o"+"\"" + " -o " +"\""+ Config.getTargetPath()+File.separator+"output"+File.separator + "Main"+".exe"+"\"\n";      
         return linkCommand;
     }
@@ -134,14 +135,7 @@ public class Judger {
             compiler=LangSelector.getDefaultCompilerName(language);
         }
         language = language.toLowerCase();//todo
-        if (language.equals("c")) {
-            
-            compileCommand += "\"" + Config.getCompilerDir(language,compiler) + File.separator + "gcc\" -c " + "\""+sourceFile +"\""+ " -o " +"\""+Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main"+".o"+"\"\n";
-        } else if (language.equals("java")) {
-            compileCommand += "\"" + Config.getCompilerDir(language,compiler) + File.separator + "javac\" " + sourceFile; //todo文件路径
-        } else if (language.equals("cpp")||language.equals("c++")) {
-            //compileCommand +=Config.getCompilerDir(language) + File.separator +LangSelector.getCompileCommand("C++",null);
-            
+                    
             HashMap<String,String>map=new HashMap<>();
             map.put(LangSelector.PlaceHolder.CompilerPath.getStr(),Config.getCompilerDir(language,compiler));
             map.put(LangSelector.PlaceHolder.SourceFile.getStr(),sourceFile);
@@ -150,41 +144,38 @@ public class Judger {
             else
                 map.put(LangSelector.PlaceHolder.ObjFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.obj");
             map.put(LangSelector.PlaceHolder.ExeFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.exe");
-            compileCommand = LangSelector.matchPlaceHolder(LangSelector.getCompileCommand("C++",compiler), map);
-            //compileCommand += "\"" + Config.getCompilerDir(language) + File.separator + "g++\" -Wall -g -c -std=c++1y "//todo:C++14
-            //        + "\""+sourceFile+"\"" + " -o " + "\""+Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main"+".o"+"\"\n";
-        } else {
-            CompileInfo.info = "this programing language is not support!!!";
-        }
+        compileCommand = LangSelector.matchPlaceHolder(LangSelector.getCompileCommand(language,compiler), map);
         return compileCommand;
     }
 
     private String runCommand(String language,String compiler) {
         String runCommand = "";
-        if (language.equals("c")) {
-            runCommand +="\""+ Config.getTargetPath()+ File.separator+"output"+File.separator + "Main"+"\"";
+        runCommand+=LangSelector.getRunCommand(language, compiler);//其他语言，如Python
+        HashMap<String,String>map=new HashMap<>();
+        if (language.equals("java")) {
+            String rawCmd= Config.getCompilerDir(language,compiler) + File.separator + "java"+ " -cp " + Config.getSourcePath()+ File.separator+"output"+File.separator+ " "+mainClassName;  // TODO 文件路径 start            
+            map.put(LangSelector.PlaceHolder.ExeFile.getStr(),rawCmd);
+//System.err.println(runCommand);
+        } else if (language.equals("cpp")||language.equals("c++")||language.equals("c")) {
+            String rawCmd="\""+ Config.getTargetPath()+ File.separator+"output"+File.separator  + "Main"+"\"";
+             map.put(LangSelector.PlaceHolder.ExeFile.getStr(),rawCmd);
+        }
+        else{
             
-        } else if (language.equals("java")) {
-        runCommand += Config.getCompilerDir(language,compiler) + File.separator + "java"+ " -cp " + Config.getSourcePath()+ File.separator+"output"+File.separator+ " "+mainClassName;  // TODO 文件路径 start            
-        //System.err.println(runCommand);
-        } else if (language.equals("cpp")||language.equals("c++")) {
-            runCommand += "\""+ Config.getTargetPath()+ File.separator+"output"+File.separator  + "Main"+"\"";
+
         }
 //        System.out.println(runCommand);
+        
+        map.put(LangSelector.PlaceHolder.CompilerPath.getStr(),Config.getCompilerDir(language,compiler));
+        map.put(LangSelector.PlaceHolder.SourceFile.getStr(),sourceFile);
+        runCommand=LangSelector.matchPlaceHolder(runCommand, map);
         return runCommand;
     }
 
     public int compile(String sourceCode, String language,String compiler) {
         int result = -1;
-        //检查语言是否在范围内
+        
         language = language.toLowerCase();
-        if (language.equals("c") || language.equals("cpp")|| language.equals("c++") || language.equals("java")) {
-            //ok
-        } else {
-            Result.status = Const.CE;
-//            CompileInfo.remark = "语言种类不符合要求";
-            return result;
-        }
         try {
             if (Shared.PID!=-1&&ThreadTool.findProcess(Shared.PID)) {  //tore0
                 Runtime.getRuntime().exec("taskkill /f /t /PID "+Shared.PID).waitFor();
@@ -199,7 +190,12 @@ public class Judger {
 
         int repeatTime = 3;
         String compileCom = compileCommand(language,compiler);
+        if(compileCom==null){
+            result=0;
+            return result;
+        }
         for (int i = 0; i < repeatTime; i++) {
+            
             result = exe.exeCompile(compileCom,"Path="+Config.getCompilerDir(language,compiler));
             if (result == 0) {
                 if (language.equals("c") || language.equals("cpp")||language.equals("c++")) {
