@@ -5,12 +5,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -24,12 +26,22 @@ import org.w3c.dom.NodeList;
  */
 public abstract class LangSelector {
     //
+    private static Map<String,String>customDefaultCompiler;
+
+    public static String getDefaultCompiler(String language) {
+        return customDefaultCompiler.get(language);
+    }
+
+    public static void setDefaultCompiler(String language,String compiler) {
+        customDefaultCompiler.put(language, compiler);
+    }
     private static String ConfigPath="";
     private static Document Data;
     public static boolean Loaded=false;
     private static XPath xpath = XPathFactory.newInstance().newXPath();
     static {
         try {
+            customDefaultCompiler=new HashMap<>();
             init();
             Loaded=true;
         } catch (Exception e) {
@@ -69,8 +81,48 @@ public abstract class LangSelector {
     public static String getConfigPath(){
         return ConfigPath;
     }
-    
+    public static String parseStandardLanguageName(String languageName) {
+        try {
+
+
+            // 创建 XPath 对象
+            XPath xpath = XPathFactory.newInstance().newXPath();
+
+            // 编译 XPath 表达式
+            XPathExpression expr = xpath.compile("//language");
+
+            // 评估 XPath 表达式
+            Object result = expr.evaluate(Data, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+
+            // 遍历每个语言节点
+            for (int i = 0; i < nodes.getLength(); i++) {
+                String id = nodes.item(i).getAttributes().getNamedItem("id").getNodeValue();
+                String aliasString = nodes.item(i).getAttributes().getNamedItem("alias").getNodeValue();
+                String[] aliases = aliasString.split(",");
+
+                // 检查 languageName 是否与 ID 匹配
+                if (id.equalsIgnoreCase(languageName)) {
+                    return id;
+                }
+
+                // 检查 languageName 是否与别名匹配
+                for (String alias : aliases) {
+                    if (alias.equalsIgnoreCase(languageName)) {
+                        return id;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 如果没有匹配项，则返回原始 languageName
+        return languageName;
+    }
     public static String getDefaultCompilerName(String languageName){
+        languageName=parseStandardLanguageName(languageName);
+        if(customDefaultCompiler.containsKey(languageName))
+           return customDefaultCompiler.get(languageName);
         //if(languageName.charAt(0)>='a')languageName
         try{
             String exp="/languages/language"+ "[@id='" +languageName+ "']"+"/compiler[1]/@name";
@@ -98,6 +150,8 @@ public abstract class LangSelector {
         return doc;
     }
     public static List<String> getCompilerNames(String languageName){
+        languageName=parseStandardLanguageName(languageName);
+        
         ArrayList<String>arrayListStr=new ArrayList<>();
         try {
             String exp="/languages/language"+ "[@id='" +languageName+ "']"+"//compiler";
@@ -117,6 +171,7 @@ public abstract class LangSelector {
     }
 
     public static String getCompilerPath(String languageName,String compilerName) {
+        languageName=parseStandardLanguageName(languageName);
         if(compilerName==null)compilerName=getDefaultCompilerName(languageName);
         try{
             String exp="/languages/language"+ "[@id='" +languageName+ "']"+"//compiler[@name='"+compilerName+"']//path/text()";
@@ -127,6 +182,7 @@ public abstract class LangSelector {
         }
     }
     public static String getCompileCommand(String languageName,String compilerName){
+        languageName=parseStandardLanguageName(languageName);
         if(compilerName==null)compilerName=getDefaultCompilerName(languageName);
         try{
             String exp="/languages/language"+ "[@id='" +languageName+ "']"+"//compiler[@name='"+compilerName+"']//compileCmd/text()";
@@ -137,6 +193,7 @@ public abstract class LangSelector {
         }
     }
     public static String getLinkCommand(String languageName,String compilerName){
+        languageName=parseStandardLanguageName(languageName);
         if(compilerName==null)compilerName=getDefaultCompilerName(languageName);
         try{
             String exp="/languages/language"+ "[@id='" +languageName+ "']"+"//compiler[@name='"+compilerName+"']//linkCmd/text()";
@@ -147,6 +204,7 @@ public abstract class LangSelector {
         }
     }
     public static String getRunCommand(String languageName,String compilerName){
+        languageName=parseStandardLanguageName(languageName);
         if(compilerName==null)compilerName=getDefaultCompilerName(languageName);
         try{
             String exp="/languages/language"+ "[@id='" +languageName+ "']"+"//compiler[@name='"+compilerName+"']//runCmd/text()";
@@ -171,12 +229,12 @@ public abstract class LangSelector {
         }
     }
     public static  String matchPlaceHolder(String src, HashMap<String,String>map){
+        if(src==null||src.trim().isEmpty())return null;
         for (java.util.Map.Entry<String, String> Entry : map.entrySet()) {
             src = src.replace(Entry.getKey(), Entry.getValue());
-            System.out.println(Entry.getKey() + "已替换：" + Entry.getValue());
+            //System.out.println(Entry.getKey() + "已替换：" + Entry.getValue());
         }
         return src;
     }
-
 
 }

@@ -1090,7 +1090,7 @@ public class CodePanel extends JPanel implements ActionListener {
     private boolean checkForCompile() {
         String tmp = null;
         if (language.toLowerCase().equals("c") || language.toLowerCase().equals("cpp") || language.toLowerCase().equals("c++")) {
-            tmp = Config.getCompilerDir("c");
+            tmp = Config.getCompilerDir("c",null);
             if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "gcc.exe") || !FileFinder.isExistFile(tmp + File.separator + "g++.exe")) {
                 //µØ¥∞…Ë÷√±£¥Ê
                 Object t = this.getParent();
@@ -1104,7 +1104,7 @@ public class CodePanel extends JPanel implements ActionListener {
             }
         }
         if (language.toLowerCase().equals("java")) {
-            tmp = Config.getCompilerDir("java");
+            tmp = Config.getCompilerDir("java",null);
             if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
                 //µØ¥∞…Ë÷√±£¥Ê
                 Object t = this.getParent();
@@ -1119,7 +1119,7 @@ public class CodePanel extends JPanel implements ActionListener {
         }
         
          if (language.toLowerCase().equals("python")) {
-            tmp = Config.getCompilerDir("python");
+            tmp = Config.getCompilerDir("python",null);
             if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
                 //µØ¥∞…Ë÷√±£¥Ê
                 Object t = this.getParent();

@@ -37,6 +37,8 @@ public class Const {
             return ".cpp";
         } else if (language.equals("java")) {
             return ".java";
+        }else if(language.equals("python")){
+            return ".py";
         }
         return null;
     }
