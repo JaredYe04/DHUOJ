@@ -3,8 +3,8 @@
   <services/>
   <clients>
     <client name="OJWS">
-      <wsdl-url>http://106.15.36.190:80/oj/webservice/OJWS?wsdl</wsdl-url>
-      <local-wsdl-file>106.15.36.190_80/oj/webservice/OJWS.wsdl</local-wsdl-file>
+      <wsdl-url>https://219.228.76.122:8080/oj/webservice/OJWS?wsdl</wsdl-url>
+      <local-wsdl-file>219.228.76.122_8080/oj/webservice/OJWS.wsdl</local-wsdl-file>
       <package-name>edu.dhu.ws</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
@@ -22,7 +22,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://106.15.36.190:80/oj/webservice/OJWS?wsdl</wsimport-option-value>
+          <wsimport-option-value>https://219.228.76.122:8080/oj/webservice/OJWS?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>

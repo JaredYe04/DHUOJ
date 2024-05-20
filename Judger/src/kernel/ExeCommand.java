@@ -76,7 +76,7 @@ public class ExeCommand {
                 CompileInfo.remark = "±‡“Î≥¨ ±,«Î÷ÿ ‘£∫" + CompileInfo.errorInfo;
             } else if (result != 0) {
                 Result.status = Const.CE;
-                CompileInfo.remark = CompileInfo.errorInfo;
+                CompileInfo.remark =   CompileInfo.errorInfo;
             } else {
                 CompileInfo.remark = "";
             }
@@ -100,7 +100,7 @@ public class ExeCommand {
 
             CompileInfo.exitValue = result;
             CompileInfo.info += "\n" + JudgerInfo.info;
-            CompileInfo.errorInfo += "\n" + JudgerInfo.errorInfo;
+            CompileInfo.errorInfo += "\n" + CompileInfo.errorInfo;
 
             if (Result.status == Const.SE)
             {
@@ -108,7 +108,9 @@ public class ExeCommand {
             }
             else if (result != 0) {
                 Result.status = Const.CE;
-                CompileInfo.remark = CompileInfo.errorInfo;
+                
+                CompileInfo.remark =   CompileInfo.errorInfo;
+
             } else {
                 CompileInfo.remark = "";
             }

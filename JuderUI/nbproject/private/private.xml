@@ -22,9 +22,15 @@
             <file>file:/E:/ojNew/JuderUI/src/data/MainForNet.java</file>
         </group>
         <group>
-            <file>file:/K:/OJ/JuderUI/src/cache/BaseCache.java</file>
+            <file>file:/K:/OJ/JuderUI/src/myjdom/model/ResultBean.java</file>
+            <file>file:/K:/OJ/JuderUI/src/data/MainForNet.java</file>
+            <file>file:/K:/OJ/JuderUI/src/myjdom/AnswerToXml.java</file>
+            <file>file:/K:/OJ/JuderUI/src/data/JudgeFromQueue.java</file>
+            <file>file:/K:/OJ/JuderUI/src/web/Dubboservice.java</file>
+            <file>file:/K:/OJ/JuderUI/src/web/Webservice.java</file>
+            <file>file:/K:/OJ/JuderUI/src/swingworker/MySwingWorker.java</file>
+            <file>file:/K:/OJ/JuderUI/src/gui/Control.java</file>
             <file>file:/K:/OJ/JuderUI/src/gui/MainFrame.java</file>
-            <file>file:/K:/OJ/JuderUI/src/cache/ProblemsCachManager.java</file>
         </group>
     </open-files>
 </project-private>

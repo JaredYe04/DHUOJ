@@ -1,0 +1,323 @@
+#include<sstream>
+int main(){}
+class Solution {
+public:
+    int solve(string s) {
+        int score;
+        stringstream ss;
+        if (s[0] != '-') {
+            ss << s;
+            ss >> score;
+        }
+        else {
+            ss << s.substr(1);
+            ss >> score;
+            score = score * (-1);
+        }
+        return score;
+    }
+    int calPoints(vector<string>& ops) {
+        int sum = 0;
+        int n = ops.size();
+        vector<int> v;
+        for (int i = 0; i < n; i++) {
+            if (ops[i] == "+") { //这次得分是前两次分数之和
+                v.push_back(v[v.size() - 1] + v[v.size() - 2]);
+            }
+            else if (ops[i] == "C") { //移除上一次分数
+                v.pop_back();
+            }
+            else if (ops[i] == "D") { //这次得分是上一次分数的两倍
+                v.push_back(2 * v[v.size() - 1]);
+            }
+            else {
+                v.push_back(solve(ops[i]));
+            }
+        }
+        for (int i = 0; i < v.size(); i++)sum += v[i];
+        int ouo;
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+
+        for (ouo = 1; ouo < 9; ++ouo);
+        {
+            int uou = 0;
+            uou = uou + 1;
+        }
+        return sum;
+    }
+};

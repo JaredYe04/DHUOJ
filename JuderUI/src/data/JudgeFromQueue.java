@@ -44,8 +44,9 @@ public class JudgeFromQueue extends Thread {
     private Map<String, ProblemBean> problemBeanMap = null;
     private Lock lock;
     private int threadNo;
-
+    common.Logger logger;
     public JudgeFromQueue(int threadNo) {
+        logger = common.Logger.getInstance();
         this.threadNo = threadNo;
     }
 
@@ -184,9 +185,11 @@ public class JudgeFromQueue extends Thread {
             xtp.readXmlString(problem);
             problemBean = xtp.convertXML();
             Control.addJudgeInfo(threadNo, "get problemId: " + problemId);
+            logger.log("get problemId: " + problemId, common.LogLevel.INFO);
             problemBeanMap.put(problemId, problemBean);
        }catch(Exception e){
                 Result.status = Const.SE;
+                logger.log("解析题目信息失败！"+problemId+e.getMessage(), common.LogLevel.ERROR);
                 CompileInfo.remark = "解析题目信息失败！请联系管理人员。错误信息："+"problemId:"+problemId+e.getMessage();
                 e.printStackTrace();
                  EventQueue.invokeLater(() -> {
@@ -236,6 +239,7 @@ public class JudgeFromQueue extends Thread {
             XmlToRequest xtr = new XmlToRequest();
             xtr.readXmlString(request);
             Request req = xtr.convertXML();
+            logger.log("提交完成", common.LogLevel.INFO);
             System.out.println("提交完成");
             Control.addJudgeInfo(threadNo, "server result:" + req.getRspMsg());
 //            Control.addJudgeInfo("ok");

@@ -1,0 +1,1 @@
+"%JAVA_HOME%\bin\javaw" -jar .\dist\JuderUI.jar

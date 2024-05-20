@@ -18,8 +18,8 @@
     </target>
     <target name="wsimport-client-OJWS" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/OJWS"/>
-        <property name="wsdl-OJWS" location="xml-resources/web-service-references/OJWS/wsdl/106.15.36.190_80/oj/webservice/OJWS.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/OJWS" destdir="${build.generated.dir}/jax-wsCache/OJWS" wsdl="${wsdl-OJWS}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://106.15.36.190:80/oj/webservice/OJWS?wsdl" xnocompile="true" xendorsed="true">
+        <property name="wsdl-OJWS" location="xml-resources/web-service-references/OJWS/wsdl/219.228.76.122_443/oj/webservice/OJWS.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/OJWS" destdir="${build.generated.dir}/jax-wsCache/OJWS" wsdl="${wsdl-OJWS}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="https://219.228.76.122:443/oj/webservice/OJWS?wsdl" xnocompile="true" xendorsed="true">
             <depends file="${wsdl-OJWS}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/OJWS"/>
         </wsimport>

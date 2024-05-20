@@ -11,6 +11,7 @@ import com.alibaba.dubbo.config.RegistryConfig;
 import util.Decrypt;
 import edu.dhu.ws.OJWS;
 import edu.dhu.ws.OJWS_Service;
+import gui.Control;
 import static gui.Control.getDistributorField;
 import static gui.Control.getJudgeInfoEditorPane;
 import java.io.UnsupportedEncodingException;
@@ -58,7 +59,7 @@ public class Webservice implements java.rmi.Remote{
         reference.setApplication(application);
         reference.setInterface(OJWS.class);
         reference.setUrl(url); // 设置远程服务的 URL
-        reference.setTimeout(3000);
+        reference.setTimeout(6000);
         // 初始化
         return reference.get();
     }
@@ -137,7 +138,7 @@ public class Webservice implements java.rmi.Remote{
             }
             catch(Exception e){
                 JEditorPane infoPane=getJudgeInfoEditorPane(1);
-                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+                Control.addExceptionInfo(0, LocalTime.now().toString()+e.getMessage()+"\n");
             }
         }
         else
@@ -150,8 +151,7 @@ public class Webservice implements java.rmi.Remote{
         }
          catch(Exception e){
              logger.log(e.getMessage(), common.LogLevel.ERROR);
-             JEditorPane infoPane=getJudgeInfoEditorPane(1);
-                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+             Control.addExceptionInfo(1, LocalTime.now().toString()+e.getMessage()+"\n");
                 return "";
          }
     }
@@ -166,8 +166,7 @@ public class Webservice implements java.rmi.Remote{
        
             catch(Exception e){
             logger.log(e.getMessage(), common.LogLevel.ERROR);
-            JEditorPane infoPane=getJudgeInfoEditorPane(1);
-                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+            Control.addExceptionInfo(1, LocalTime.now().toString()+e.getMessage()+"\n");
                 return "";
          }
     }
@@ -178,12 +177,12 @@ public class Webservice implements java.rmi.Remote{
         return s;
         }
         catch(Exception e){
-             logger.log(e.getMessage(), common.LogLevel.ERROR);
-             JEditorPane infoPane=getJudgeInfoEditorPane(1);
-                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+e.getMessage()+"\n");
+             logger.log(e.getMessage()+"\nRaw Information:"+arg, common.LogLevel.ERROR);
+             Control.addExceptionInfo(1, LocalTime.now().toString()+e.getMessage()+"\n");
                 return "";
          }
     }
+
     private static String getGbkString(String string) {
         try {
             // Convert the string to byte array using GBK encoding

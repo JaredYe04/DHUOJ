@@ -1120,7 +1120,7 @@ public class CodePanel extends JPanel implements ActionListener {
         
          if (language.toLowerCase().equals("python")) {
             tmp = Config.getCompilerDir("python",null);
-            if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
+            if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "python.exe")) {
                 //µØ¥∞…Ë÷√±£¥Ê
                 Object t = this.getParent();
                 while (!(t instanceof MainFrame)) {
