@@ -18,6 +18,12 @@ public class CreateProblemHtml {
     private String code;
     public CreateProblemHtml(String code) {
         this.code = code;
+        
+//        // for debug
+//        System.out.println();
+//        System.out.println("code: " + code);
+
+        
         //String pro = this.code.replaceFirst("UTF-8", "GBK");
         StringBuffer result = new StringBuffer("");
         createFile();

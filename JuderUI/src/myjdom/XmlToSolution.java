@@ -5,7 +5,7 @@
  */
 package myjdom;
 
-import com.sun.media.jfxmedia.logging.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 import myjdom.model.Solution;
@@ -49,7 +49,7 @@ public class XmlToSolution extends XmlToBase implements XmlConvert<Solutions> {
             }
             if (e.getElementsByTagName("compiler").item(0) != null) {
                 s.setCompiler(e.getElementsByTagName("compiler").item(0).getTextContent());
-                Logger.logMsg(Logger.DEBUG,"当前编译器:"+e.getElementsByTagName("compiler").item(0).getTextContent());
+                //Logger.logMsg(Logger.DEBUG,"当前编译器:"+e.getElementsByTagName("compiler").item(0).getTextContent());
                 System.out.println("当前编译器:"+e.getElementsByTagName("compiler").item(0).getTextContent());
             }/////NEW
             

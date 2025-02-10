@@ -90,8 +90,9 @@ public class ProblemURL {
         matcher.appendTail(result);   
         DownloadFile df = new DownloadFile(url_net, url_local);
         this.code = result.toString();
-        CreateProblemHtml cph = new CreateProblemHtml(code);
-//题目的xml        System.out.println(result); 
+//        CreateProblemHtml cph = new CreateProblemHtml(code);
+//题目的xml        
+//        System.out.println(result); 
     }
     public String getCode(){
         return this.code;

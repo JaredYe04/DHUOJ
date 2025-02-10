@@ -20,6 +20,11 @@ public class ExamProblem {
     private String updateTime;
     private String bestBefore;
     private String scoreCoef;
+    
+    // by san_san
+    private String bestBeforeForClass;
+    private String scoreCoefForClass;   
+    private String deadlineForClass; 
     public ExamProblem(){
         super();
     }
@@ -91,4 +96,29 @@ public class ExamProblem {
     public void setScoreCoef(String scoreCoef) {
         this.scoreCoef = scoreCoef;
     }
+    
+    // by san_san
+    public String getDeadlineForClass() {
+        return deadlineForClass;
+    }
+
+    public void setDeadLineForClass(String deadlineForClass) {
+        this.deadlineForClass = deadlineForClass;
+    }
+
+    public String getBestBeforeForClass() {
+        return bestBeforeForClass;
+    }
+
+    public void setBestBeforeForClass(String bestBeforeForClass) {
+        this.bestBeforeForClass = bestBeforeForClass;
+    }    
+    
+    public String getScoreCoefForClass() {
+        return scoreCoefForClass;
+    }
+
+    public void setScoreCoefForClass(String scoreCoefForClass) {
+        this.scoreCoefForClass = scoreCoefForClass;
+    }    
 }

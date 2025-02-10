@@ -99,7 +99,9 @@
                                           <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                          <Component id="button_StartThread" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jComboBox1" min="-2" pref="32" max="-2" attributes="0"/>
@@ -127,10 +129,7 @@
                                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="button_StartThread" min="-2" max="-2" attributes="0"/>
-                                      <Component id="threadManagerTabb" min="-2" pref="945" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="threadManagerTabb" min="-2" pref="945" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -262,7 +261,11 @@
                         <StringItem index="3" value="4"/>
                       </StringArray>
                     </Property>
+                    <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jComboBox1.setVisible(false);"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -462,6 +465,7 @@
                 <Component class="javax.swing.JButton" name="button_StartThread">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x8bbe;&#x7f6e;"/>
+                    <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_StartThreadActionPerformed"/>

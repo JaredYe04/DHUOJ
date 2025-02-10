@@ -7,6 +7,7 @@ package data;
 
 import cache.ProblemsCachManager;
 import common.Const;
+import common.LogLevel;
 import gui.Control;
 import java.awt.EventQueue;
 import java.util.ArrayList;
@@ -41,18 +42,22 @@ public class JudgeFromQueue extends Thread {
     public Queue<Solution> queue = null;
     private Solutions solutions;
     private List<ProblemTestCaseBean> testCaseBeans = null;
-    private Map<String, ProblemBean> problemBeanMap = null;
+    public Map<String, ProblemBean> problemBeanMap = null;//用来存放题目信息的map
     private Lock lock;
     private int threadNo;
     common.Logger logger;
     public JudgeFromQueue(int threadNo) {
+        
         logger = common.Logger.getInstance();
+        logger.log("JudgeFromQueue:threadNo="+String.valueOf(threadNo), LogLevel.INFO);
         this.threadNo = threadNo;
     }
 
     @Override
     public void run() {
+        logger.log("JudgeFromQueue:线程"+String.valueOf(this.threadNo)+"开始运行", LogLevel.INFO);
         while (Control.threadCountsManager[threadNo] || !Control.queue.isEmpty() && Control.threadCountsManager[0] == false) {
+            //logger.log("JudgeFromQueue:线程"+String.valueOf(this.threadNo)+"开始运行，循环", LogLevel.INFO);
             try {
                 if (Control.queue.isEmpty()) {
                     Thread.sleep(1000);
@@ -61,9 +66,10 @@ public class JudgeFromQueue extends Thread {
                 Solution s = null;
                 synchronized (Control.queue) {
                     if (!Control.queue.isEmpty()) {
-                        System.out.println("poll队列");
+                        logger.log("JudgeFromQueue:线程"+String.valueOf(this.threadNo)+"队列不为空，获取解答", LogLevel.INFO);
+                        //System.out.println("poll队列");
                         s = Control.queue.poll();
-                        System.out.println("poll完成");
+                        //System.out.println("poll完成");
                         //Swing不是线程安全的，invoke方法立即返回而run方法被异步执行
                         EventQueue.invokeLater(() -> {
                             Control.setGuiQueueSize("" + Control.queue.size());
@@ -77,9 +83,11 @@ public class JudgeFromQueue extends Thread {
                      System.out.println("获取promblem完成");
                     System.out.println("开始裁判");
                     Judge(s);
+                    //为了测试临时删除裁判功能
                      System.out.println("裁判完成");
                 }
             } catch (Exception ex) {
+                logger.log("JudgeFromQueue:线程"+String.valueOf(this.threadNo)+"错误"+ex.getMessage(), LogLevel.ERROR);
                 ex.printStackTrace();
                 EventQueue.invokeLater(() -> {
                     Control.addExceptionInfo(threadNo, ex.toString());
@@ -91,6 +99,9 @@ public class JudgeFromQueue extends Thread {
             Control.setTabbStopTitle(threadNo);
             Control.addJudgeInfo(threadNo, "线程" + threadNo + "stop success\n");
         });
+        
+        
+        
         //判断该停止的线程已经停止
         int i = 1;
         boolean runFlag = false;
@@ -138,7 +149,7 @@ public class JudgeFromQueue extends Thread {
         String problemId = s.getProblemId();
         String language = s.getLanguage();
         String sourceCode = s.getCode();
-        String compiler=s.getCompiler();
+        String compiler = s.getCompiler();
 
         Float timeOut = problemBeanMap.get(problemId).getTimeOut();
         List<ProblemTestCaseBean> testCaseBeanList = problemBeanMap.get(problemId).getTestCaseBeanList();
@@ -150,9 +161,11 @@ public class JudgeFromQueue extends Thread {
     }
 
     private void getWebServiceProblems(String problemId) throws Exception {
+        //if(problemBeanMap==null||problemBeanMap.size()>100)//改：需要让Map有一定缓存，而不是每次都进行初始化//new:如果不每次都初始化，可能内存泄漏
         problemBeanMap = new HashMap<>();
         ProblemBean problemBean = new ProblemBean();
         XmlToProblemBean xtp = new XmlToProblemBean();
+        
         ProblemsCachManager problemsCachManager = ProblemsCachManager
                 .getInstance();
         String problem = (String) problemsCachManager
@@ -160,8 +173,7 @@ public class JudgeFromQueue extends Thread {
         if (problem == null) {
             try{
                 problem = Control.getWebService().getProblem(Integer.parseInt(problemId));
-                problemsCachManager.putObject("problemId" + problemId,
-                    problem);
+                problemsCachManager.putObject("problemId" + problemId, problem);
             }catch(Exception e){
                 Result.status = Const.SE;
                 CompileInfo.remark = "获取题目信息失败！请联系管理人员。错误信息："+e.getMessage();
@@ -221,14 +233,20 @@ public class JudgeFromQueue extends Thread {
             List<ProblemTestCaseBean> wrongCase = new ArrayList<>();
             List<String> testCaseList = Arrays.asList(answer.getTestCaseId());
             List<String> correctList = Arrays.asList(answer.getCorrectCaseIds().split(","));
-            for (int i = 0; i < testCaseList.size(); i++) {
-                if (!correctList.contains(testCaseList.get(i))) {
-                    ProblemTestCaseBean testCase = new ProblemTestCaseBean();
-                    testCase.setId(Integer.parseInt(testCaseList.get(i)));
-                    testCase.setOutput(answer.getUsersOutput()[i]);
-                    wrongCase.add(testCase);
+            if(rb.getStatus().equals("CE")){//如果是CE就不输出具体信息
+                //
+            }
+            else{
+                for (int i = 0; i < testCaseList.size(); i++) {
+                    if (!correctList.contains(testCaseList.get(i))) {
+                        ProblemTestCaseBean testCase = new ProblemTestCaseBean();
+                        testCase.setId(Integer.parseInt(testCaseList.get(i)));
+                        testCase.setOutput(answer.getUsersOutput()[i]);
+                        wrongCase.add(testCase);
+                    }
                 }
             }
+            
             rb.setWrongCase(wrongCase);
             AnswerToXml rtx = new AnswerToXml(rb);
             xml = rtx.convertXML();
@@ -240,7 +258,7 @@ public class JudgeFromQueue extends Thread {
             xtr.readXmlString(request);
             Request req = xtr.convertXML();
             logger.log("提交完成", common.LogLevel.INFO);
-            System.out.println("提交完成");
+            //System.out.println("提交完成");
             Control.addJudgeInfo(threadNo, "server result:" + req.getRspMsg());
 //            Control.addJudgeInfo("ok");
         } catch (Exception e) {

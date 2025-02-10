@@ -70,12 +70,12 @@ private final static String FileName="DBConfig.properties";
     public static void setPassword(String Password) {
         dbConfig.setProperty("hibernate.connection.password", Password);
     }
-
-    public static void main(String[] args) {
-        System.out.println(DBConfig.getUserName());
-        System.out.println(DBConfig.getPassword());
-        System.out.println(DBConfig.getIp());
-    }
+//
+//    public static void main(String[] args) {
+//        System.out.println(DBConfig.getUserName());
+//        System.out.println(DBConfig.getPassword());
+//        System.out.println(DBConfig.getIp());
+//    }
     
     public static void writeToFile(){
          try {

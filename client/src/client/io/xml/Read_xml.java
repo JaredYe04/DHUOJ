@@ -31,6 +31,8 @@ public class Read_xml {
 
     public static List<Problem> getProblemList(String examId) {
         try {
+            // for debug
+            System.out.println("getProblemList");
             ExamProblem_io ep = new ExamProblem_io(examId);
             List<ExamProblem> epl = ep.getProblemList();
             List<Problem> prol = new ArrayList();

@@ -9,16 +9,22 @@ import cache.ProblemsCachManager;
 import common.Config;
 import common.FileFinder;
 import common.LangSelector;
+import common.LogLevel;
+import common.Logger;
+import static gui.Control.getJudgeInfoEditorPane;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.xml.namespace.QName;
 import share.gui.NewCompileSetting;
 import web.Dubboservice;
@@ -29,6 +35,7 @@ import web.Webservice;
  * @author Administrator
  */
 public class MainFrame extends javax.swing.JFrame {
+    private Logger logger=Logger.getInstance();
 
     /**
      * Creates new form MainFrame
@@ -70,15 +77,35 @@ public class MainFrame extends javax.swing.JFrame {
         });
         comboCppCompiler.removeAllItems();
         comboJavaCompiler.removeAllItems();
-        List<String> cppCompilers=LangSelector.getCompilerNames("C++");
-        for(int i=0;i<cppCompilers.size();++i){
+        List<String> cppCompilers = LangSelector.getCompilerNames("C++");
+        for (int i = 0; i < cppCompilers.size(); ++i) {
             comboCppCompiler.addItem(cppCompilers.get(i));
         }
-        List<String> javaCompilers=LangSelector.getCompilerNames("Java");
-        for(int i=0;i<javaCompilers.size();++i){
+        List<String> javaCompilers = LangSelector.getCompilerNames("Java");
+        for (int i = 0; i < javaCompilers.size(); ++i) {
             comboJavaCompiler.addItem(javaCompilers.get(i));
         }
-        
+
+//        // 设置定时器，每小时执行一次gc
+//        Timer timer = new Timer(3600* 1000, new ActionListener() { // 3600000 milliseconds = 1 hour
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+////              
+////                ProblemsCachManager problemsCachManager = ProblemsCachManager.getInstance();
+////                problemsCachManager.removeAllObject();
+//                System.gc();
+//                 logger.log("已自动执行gc！", LogLevel.INFO);
+////                synchronized (Control.refreshLock) {//
+////                //if(!Control.queue.isEmpty())return;//如果有队列任务就下次重启
+////                buttonStopActionPerformed(null);
+////                button_StartActionPerformed(null);
+////                Control.addJudgeInfo(0, "裁判机线程已自动刷新！");
+////                logger.log("裁判机线程已自动刷新！", LogLevel.INFO);
+////               }
+//            }
+//        });
+//        timer.start();
+
     }
 
     /**
@@ -160,6 +187,12 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel7.setText("线程数量:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4" }));
+        jComboBox1.setOpaque(false);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel15.setText("一般信息:");
 
@@ -241,6 +274,7 @@ public class MainFrame extends javax.swing.JFrame {
         threadManagerTabb.addTab("线程[未运行]", jPanel6);
 
         button_StartThread.setText("设置");
+        button_StartThread.setOpaque(false);
         button_StartThread.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_StartThreadActionPerformed(evt);
@@ -340,7 +374,9 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(jLabel17)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(30, 30, 30)
+                                .addComponent(button_StartThread)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -364,9 +400,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addGap(83, 83, 83)))
                         .addGap(21, 21, 21))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(button_StartThread)
-                            .addComponent(threadManagerTabb, javax.swing.GroupLayout.PREFERRED_SIZE, 945, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(threadManagerTabb, javax.swing.GroupLayout.PREFERRED_SIZE, 945, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE))
         );
@@ -455,7 +489,8 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             LangSelector.init();
         } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log("错误:"+ex.getMessage(), LogLevel.ERROR);
+            //Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }//刷新配置文件
         if (!checkForCompile()) {
             return;
@@ -474,7 +509,7 @@ public class MainFrame extends javax.swing.JFrame {
             this.buttonStop.setEnabled(true);
             this.button_StartThread.setEnabled(true);
             this.jCheckBox2.setEnabled(false);
-            Webservice.existDubbo=false;
+            Webservice.existDubbo = false;
 //            if(!Dubboservice.running){
 //                Dubboservice.main(null);
 //                Dubboservice.running=true;
@@ -491,24 +526,22 @@ public class MainFrame extends javax.swing.JFrame {
     private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
         // TODO add your handling code here:
         for (int i = 0; i <= 4; i++) {
-            Control.clearInfo(i);
+             getJudgeInfoEditorPane(i).setText("");
         }
     }//GEN-LAST:event_jLabel17MouseClicked
     private boolean checkForCompile() {
         //String tmp = null;
         //tmp = Config.getCompilerDir("c",comboCppCompiler.getSelectedItem().toString());
         //if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "gcc.exe")&&!FileFinder.isExistFile(tmp + File.separator + "g++.exe")&&!FileFinder.isExistFile(tmp + File.separator + "/bin/cl.exe")) {
-            //弹窗设置保存
+        //弹窗设置保存
 
-         //   JOptionPane.showMessageDialog(this, "请先配置C/C++编译器");
+        //   JOptionPane.showMessageDialog(this, "请先配置C/C++编译器");
 //            NewCompileSetting window = new NewCompileSetting("c", this, true);
 //            window.setVisible(true);
         //    return false;
         //}
-
-      //  tmp = Config.getCompilerDir("java",comboJavaCompiler.getSelectedItem().toString());
+        //  tmp = Config.getCompilerDir("java",comboJavaCompiler.getSelectedItem().toString());
         //if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
-
         //    JOptionPane.showMessageDialog(this, "请先配置Java编译器");
 //            NewCompileSetting window = new NewCompileSetting("java", this, true);
 //            window.setVisible(true);
@@ -516,10 +549,12 @@ public class MainFrame extends javax.swing.JFrame {
         //}
         return true;
     }
-    public String getSelectedCppCompilerName(){
+
+    public String getSelectedCppCompilerName() {
         return comboCppCompiler.getSelectedItem().toString();
     }
-    public String getSelectedJavaCompilerName(){
+
+    public String getSelectedJavaCompilerName() {
         return comboJavaCompiler.getSelectedItem().toString();
     }
     private void button_StartThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_StartThreadActionPerformed
@@ -534,41 +569,39 @@ public class MainFrame extends javax.swing.JFrame {
         ProblemsCachManager problemsCachManager = ProblemsCachManager.getInstance();
         problemsCachManager.removeAllObject();
         JOptionPane.showMessageDialog(this, "缓存清除成功");
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Desktop desktop = Desktop.getDesktop();
 
-            try {
-                // 打开文件
-                desktop.open(new File(LangSelector.getConfigPath()));
+        try {
+            // 打开文件
+            desktop.open(new File(LangSelector.getConfigPath()));
 //                desktop.open(FileFinder.findFile("ConfigEditor.exe")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-       Webservice.ENABLE_DUBBO=jCheckBox2.isSelected();
+        Webservice.ENABLE_DUBBO = jCheckBox2.isSelected();
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void comboCppCompilerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCppCompilerActionPerformed
-        try{
+        try {
             LangSelector.setDefaultCompiler("C++", comboCppCompiler.getSelectedItem().toString());
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             //e.printStackTrace();
         }
     }//GEN-LAST:event_comboCppCompilerActionPerformed
 
     private void comboJavaCompilerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboJavaCompilerActionPerformed
 
-        try{
+        try {
             LangSelector.setDefaultCompiler("Java", comboJavaCompiler.getSelectedItem().toString());
-        }
-        catch(Exception e){
-        
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_comboJavaCompilerActionPerformed
 
@@ -579,6 +612,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void comboJavaCompilerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboJavaCompilerItemStateChanged
         //LangSelector.setDefaultCompiler("Java", comboJavaCompiler.getSelectedItem().toString());
     }//GEN-LAST:event_comboJavaCompilerItemStateChanged
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void loadConfig() {
         this.distributorIP.setText(Config.getValue("distributorIP"));

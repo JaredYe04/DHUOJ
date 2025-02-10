@@ -14,6 +14,8 @@ import client.view.frame.LoginFrame;
 import client.view.panel.AnswerTablePanel;
 import client.view.panel.CodePanel;
 import client.service.web.Webservice;
+import client.view.panel.TimePanel;
+
 import javax.swing.JPanel;
 import java.util.List;
 import javax.swing.JLabel;
@@ -36,6 +38,17 @@ public class Control {
     private static List<String> languages;
     private static String examId;
     private static Exam exam;
+
+    public static TimePanel getTP_time() {
+        return TP_time;
+    }
+
+    public static void setTP_time(TimePanel TP_time) {
+        Control.TP_time = TP_time;
+    }
+
+    private static TimePanel TP_time;
+
 
     public static Exam getExam() {
         return exam;

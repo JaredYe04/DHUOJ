@@ -1,1 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?><languages/>
+<?xml version="1.0" encoding="utf-8" standalone="no"?><languages>
+  <language alias="c++,c,cpp,CPP,C" id="C++">
+    <compiler name="MSVC">
+      <path>C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\</path>
+      <compileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat" &amp;&amp; "$compilerPath$/cl.exe" "$sourceFile$" /O2 /Fe:"$exeFile$"</compileCmd>
+      <!--            g++.exe -Wall -g -std=c++14  -c D:\prog_old\test\main.cpp -o obj\Debug\main.o-->
+      <linkCmd/>
+      <!-- <linkCmd>$compilerPath$/bin/link.exe /OUT:"$exeFile$" "$objFile$" /LIBPATH:"$compilerPath$\lib"</linkCmd> -->
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>$exeFile$</runCmd>
+    </compiler>
+    <compiler name="MinGW">
+      <path>D:\裁判机\MinGW64\bin</path>
+      <compileCmd>"$compilerPath$\g++" -Wall -g -c -std=c++1y "$sourceFile$" -o "$objFile$"</compileCmd>
+      <!--            g++.exe -Wall -g -std=c++14  -c D:\prog_old\test\main.cpp -o obj\Debug\main.o-->
+      <linkCmd>$compilerPath$\g++ "$objFile$" "$exeFile$" -o -O1</linkCmd>
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>$exeFile$</runCmd>
+    </compiler>
+
+
+
+  </language>
+  <language alias="java,JAVA" id="Java">
+    <compiler name="JDK8">
+      <path>C:\Program Files\Java\jdk1.8.0_121\bin</path>
+      <compileCmd>"$compilerPath$/javac" $sourceFile$</compileCmd>
+
+      <linkCmd>g++.exe  -o $exeFile$ $objFile$  -O1</linkCmd>
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>$exeFile$</runCmd>
+    </compiler>
+  </language>
+  <language alias="python,PYTHON,py,PY" id="Python">
+    <compiler name="Python3">
+      <path>F:\裁判机\python3.12</path>
+      <compileCmd> </compileCmd>
+      <linkCmd> </linkCmd>
+      <runCmd>$compilerPath$/python "$sourceFile$"</runCmd>
+    </compiler>
+  </language>
+</languages>

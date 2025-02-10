@@ -24,6 +24,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
+
+
 /**
  *
  * @author ytxlo
@@ -35,11 +41,31 @@ public class Problem_io {
     public Problem_io(String problemId) {
         this.path = "./xml/"+Control.getPath()+"/problem_"+Control.getExamId()+"-"+problemId+".dat";
     }
+    
+    public static String documentToString(Document doc) {
+    try {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        DOMSource source = new DOMSource(doc);
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        transformer.transform(source, result);
+        return writer.toString();
+    } catch (TransformerException e) {
+        e.printStackTrace();
+        return null;
+    }
+}
 
     public Problem getproblem() {
         try {
 
             Document document = XmlUtils.getDocument(path, Control.getKey());
+            
+//            String xmlString = documentToString(document);
+//            System.out.println("path:" + path + "\n" + xmlString);
+
             Element ele = (Element) document.getElementsByTagName("root").item(0);
             Problem p = new Problem();
             p.setId(ele.getElementsByTagName("id").item(0).getTextContent());
@@ -62,6 +88,7 @@ public class Problem_io {
             p.setChapterName(ele.getElementsByTagName("chapterName").item(0).getTextContent());
             p.setCheckSimilarity(ele.getElementsByTagName("cheakSimilarity").item(0).getTextContent());
             p.setSimilarityThreshold(ele.getElementsByTagName("similarityThreshold").item(0).getTextContent());
+
             if("".equals(ele.getElementsByTagName("updateTime").item(0).getTextContent())){
                 p.setUpdateTime("2000-01-01 00:00:00");
             }else{

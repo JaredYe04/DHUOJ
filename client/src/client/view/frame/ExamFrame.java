@@ -149,9 +149,18 @@ public class ExamFrame extends javax.swing.JFrame {
         for (int i = 0; i < num; i++) {
             //this.JP_contest.setLayout(new java.awt.GridLayout(1, 4));
             if (i < examlist.size()) {
+                // by san_san
+                if (examlist.get(i).getType().equals("iTraining")) {
+                    continue;
+                }
+                String description = examlist.get(i).getDescription();
+                if (examlist.get(i).getLimitTime() != null && examlist.get(i).getLimitTime().length() > 0){
+                    description = description + "本场考试限制时间为：" + examlist.get(i).getLimitTime() + "分钟。";
+                }
+                
                 this.JLabel1 = new JLabel(String.valueOf(i + 1));
                 this.JLabel2 = new JLabel(getString(examlist.get(i).getName(), 12));
-                this.JLabel3 = new JLabel(getString(examlist.get(i).getDescription(), 25));
+                this.JLabel3 = new JLabel(getString(description, 25));
 
                 this.JLabel4 = new JLabel(getString(examlist.get(i).getStarttime(), 11));
                 this.JLabel5 = new JLabel(getString(examlist.get(i).getEndtime(), 11));

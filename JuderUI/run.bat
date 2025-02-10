@@ -1,1 +1,1 @@
-"%JAVA_HOME%\bin\javaw" -jar .\dist\JuderUI.jar
+"C:\Program Files\Java\jre1.8.0_421\bin\javaw" -jar .\dist\JuderUI.jar

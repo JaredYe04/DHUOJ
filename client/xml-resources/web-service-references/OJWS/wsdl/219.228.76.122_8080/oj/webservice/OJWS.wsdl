@@ -1,0 +1,878 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="OJWS" targetNamespace="http://ws.dhu.edu/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.dhu.edu/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://ws.dhu.edu/" version="1.0" xmlns:tns="http://ws.dhu.edu/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="WS_CanDoCategory" type="tns:WS_CanDoCategory" />
+<xs:element name="WS_CanDoCategoryResponse" type="tns:WS_CanDoCategoryResponse" />
+<xs:element name="WS_DrawProblem" type="tns:WS_DrawProblem" />
+<xs:element name="WS_DrawProblemResponse" type="tns:WS_DrawProblemResponse" />
+<xs:element name="WS_GetExamById" type="tns:WS_GetExamById" />
+<xs:element name="WS_GetExamByIdResponse" type="tns:WS_GetExamByIdResponse" />
+<xs:element name="WS_GetExamDetail" type="tns:WS_GetExamDetail" />
+<xs:element name="WS_GetExamDetailResponse" type="tns:WS_GetExamDetailResponse" />
+<xs:element name="WS_GetExamList" type="tns:WS_GetExamList" />
+<xs:element name="WS_GetExamListResponse" type="tns:WS_GetExamListResponse" />
+<xs:element name="WS_GetExamProCatagorys" type="tns:WS_GetExamProCatagorys" />
+<xs:element name="WS_GetExamProCatagorysResponse" type="tns:WS_GetExamProCatagorysResponse" />
+<xs:element name="WS_GetExamProblemStatus" type="tns:WS_GetExamProblemStatus" />
+<xs:element name="WS_GetExamProblemStatusResponse" type="tns:WS_GetExamProblemStatusResponse" />
+<xs:element name="WS_GetExamProblems" type="tns:WS_GetExamProblems" />
+<xs:element name="WS_GetExamProblemsResponse" type="tns:WS_GetExamProblemsResponse" />
+<xs:element name="WS_GetProblem" type="tns:WS_GetProblem" />
+<xs:element name="WS_GetProblem4Judge" type="tns:WS_GetProblem4Judge" />
+<xs:element name="WS_GetProblem4JudgeResponse" type="tns:WS_GetProblem4JudgeResponse" />
+<xs:element name="WS_GetProblemResponse" type="tns:WS_GetProblemResponse" />
+<xs:element name="WS_GetSolutions" type="tns:WS_GetSolutions" />
+<xs:element name="WS_GetSolutionsResponse" type="tns:WS_GetSolutionsResponse" />
+<xs:element name="WS_IsPermit" type="tns:WS_IsPermit" />
+<xs:element name="WS_IsPermitResponse" type="tns:WS_IsPermitResponse" />
+<xs:element name="WS_ItrainSubmitCode" type="tns:WS_ItrainSubmitCode" />
+<xs:element name="WS_ItrainSubmitCodeResponse" type="tns:WS_ItrainSubmitCodeResponse" />
+<xs:element name="WS_ItrainSubmitThisProblem" type="tns:WS_ItrainSubmitThisProblem" />
+<xs:element name="WS_ItrainSubmitThisProblemResponse" type="tns:WS_ItrainSubmitThisProblemResponse" />
+<xs:element name="WS_Login" type="tns:WS_Login" />
+<xs:element name="WS_LoginResponse" type="tns:WS_LoginResponse" />
+<xs:element name="WS_PassThisCategory" type="tns:WS_PassThisCategory" />
+<xs:element name="WS_PassThisCategoryResponse" type="tns:WS_PassThisCategoryResponse" />
+<xs:element name="WS_SkipThisProblem" type="tns:WS_SkipThisProblem" />
+<xs:element name="WS_SkipThisProblemResponse" type="tns:WS_SkipThisProblemResponse" />
+<xs:element name="WS_SubmitCode" type="tns:WS_SubmitCode" />
+<xs:element name="WS_SubmitCodeResponse" type="tns:WS_SubmitCodeResponse" />
+<xs:element name="WS_SubmitHistory" type="tns:WS_SubmitHistory" />
+<xs:element name="WS_SubmitHistoryResponse" type="tns:WS_SubmitHistoryResponse" />
+<xs:element name="WS_SubmitThisProblem" type="tns:WS_SubmitThisProblem" />
+<xs:element name="WS_SubmitThisProblemResponse" type="tns:WS_SubmitThisProblemResponse" />
+<xs:element name="WS_SubmittedCode" type="tns:WS_SubmittedCode" />
+<xs:element name="WS_SubmittedCodeResponse" type="tns:WS_SubmittedCodeResponse" />
+<xs:element name="WS_UpdateResult" type="tns:WS_UpdateResult" />
+<xs:element name="WS_UpdateResultResponse" type="tns:WS_UpdateResultResponse" />
+<xs:element name="WS_ViewWrongCase" type="tns:WS_ViewWrongCase" />
+<xs:element name="WS_ViewWrongCaseResponse" type="tns:WS_ViewWrongCaseResponse" />
+<xs:complexType name="WS_GetExamList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamListResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetProblem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element name="arg3" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetProblemResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmitThisProblem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element minOccurs="0" name="arg2" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmitThisProblemResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_DrawProblem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element name="arg3" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_DrawProblemResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmittedCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmittedCodeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_Login">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_LoginResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SkipThisProblem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element name="arg3" type="xs:int" />
+      <xs:element name="arg4" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SkipThisProblemResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetSolutions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetSolutionsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_ItrainSubmitCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element minOccurs="0" name="arg3" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_ItrainSubmitCodeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_ViewWrongCase">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element name="arg3" type="xs:int" />
+      <xs:element name="arg4" type="xs:int" />
+      <xs:element name="arg5" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_ViewWrongCaseResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmitHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmitHistoryResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamById">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamByIdResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetProblem4Judge">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetProblem4JudgeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmitCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element minOccurs="0" name="arg2" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_SubmitCodeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamProblemStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element name="arg3" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamProblemStatusResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_IsPermit">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element minOccurs="0" name="arg3" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_IsPermitResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_PassThisCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element name="arg3" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_PassThisCategoryResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamProblems">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamProblemsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_CanDoCategory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_CanDoCategoryResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_UpdateResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element minOccurs="0" name="arg2" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_UpdateResultResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamProCatagorys">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamProCatagorysResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_ItrainSubmitThisProblem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+      <xs:element minOccurs="0" name="arg3" type="xs:string" />
+      <xs:element minOccurs="0" name="arg4" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_ItrainSubmitThisProblemResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+      <xs:element name="arg2" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="WS_GetExamDetailResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="WS_GetExamProCatagorysResponse">
+    <wsdl:part element="tns:WS_GetExamProCatagorysResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamByIdResponse">
+    <wsdl:part element="tns:WS_GetExamByIdResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamList">
+    <wsdl:part element="tns:WS_GetExamList" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamProblemsResponse">
+    <wsdl:part element="tns:WS_GetExamProblemsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetProblem">
+    <wsdl:part element="tns:WS_GetProblem" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_DrawProblem">
+    <wsdl:part element="tns:WS_DrawProblem" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_ViewWrongCaseResponse">
+    <wsdl:part element="tns:WS_ViewWrongCaseResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetProblem4JudgeResponse">
+    <wsdl:part element="tns:WS_GetProblem4JudgeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmittedCode">
+    <wsdl:part element="tns:WS_SubmittedCode" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_ItrainSubmitCodeResponse">
+    <wsdl:part element="tns:WS_ItrainSubmitCodeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SkipThisProblem">
+    <wsdl:part element="tns:WS_SkipThisProblem" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_UpdateResultResponse">
+    <wsdl:part element="tns:WS_UpdateResultResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_ItrainSubmitCode">
+    <wsdl:part element="tns:WS_ItrainSubmitCode" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamById">
+    <wsdl:part element="tns:WS_GetExamById" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmitCode">
+    <wsdl:part element="tns:WS_SubmitCode" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_PassThisCategory">
+    <wsdl:part element="tns:WS_PassThisCategory" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_ItrainSubmitThisProblemResponse">
+    <wsdl:part element="tns:WS_ItrainSubmitThisProblemResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetProblemResponse">
+    <wsdl:part element="tns:WS_GetProblemResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_IsPermitResponse">
+    <wsdl:part element="tns:WS_IsPermitResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_CanDoCategory">
+    <wsdl:part element="tns:WS_CanDoCategory" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_UpdateResult">
+    <wsdl:part element="tns:WS_UpdateResult" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamProCatagorys">
+    <wsdl:part element="tns:WS_GetExamProCatagorys" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_ItrainSubmitThisProblem">
+    <wsdl:part element="tns:WS_ItrainSubmitThisProblem" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_CanDoCategoryResponse">
+    <wsdl:part element="tns:WS_CanDoCategoryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmitThisProblem">
+    <wsdl:part element="tns:WS_SubmitThisProblem" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmitThisProblemResponse">
+    <wsdl:part element="tns:WS_SubmitThisProblemResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmittedCodeResponse">
+    <wsdl:part element="tns:WS_SubmittedCodeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_Login">
+    <wsdl:part element="tns:WS_Login" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmitHistoryResponse">
+    <wsdl:part element="tns:WS_SubmitHistoryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamDetailResponse">
+    <wsdl:part element="tns:WS_GetExamDetailResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetSolutions">
+    <wsdl:part element="tns:WS_GetSolutions" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmitCodeResponse">
+    <wsdl:part element="tns:WS_SubmitCodeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_PassThisCategoryResponse">
+    <wsdl:part element="tns:WS_PassThisCategoryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamListResponse">
+    <wsdl:part element="tns:WS_GetExamListResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_LoginResponse">
+    <wsdl:part element="tns:WS_LoginResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_ViewWrongCase">
+    <wsdl:part element="tns:WS_ViewWrongCase" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SkipThisProblemResponse">
+    <wsdl:part element="tns:WS_SkipThisProblemResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_SubmitHistory">
+    <wsdl:part element="tns:WS_SubmitHistory" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_DrawProblemResponse">
+    <wsdl:part element="tns:WS_DrawProblemResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetProblem4Judge">
+    <wsdl:part element="tns:WS_GetProblem4Judge" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamProblemStatus">
+    <wsdl:part element="tns:WS_GetExamProblemStatus" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_IsPermit">
+    <wsdl:part element="tns:WS_IsPermit" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamProblems">
+    <wsdl:part element="tns:WS_GetExamProblems" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamProblemStatusResponse">
+    <wsdl:part element="tns:WS_GetExamProblemStatusResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetSolutionsResponse">
+    <wsdl:part element="tns:WS_GetSolutionsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="WS_GetExamDetail">
+    <wsdl:part element="tns:WS_GetExamDetail" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="OJWS">
+    <wsdl:operation name="WS_GetExamList">
+      <wsdl:input message="tns:WS_GetExamList" name="WS_GetExamList">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetExamListResponse" name="WS_GetExamListResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetProblem">
+      <wsdl:input message="tns:WS_GetProblem" name="WS_GetProblem">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetProblemResponse" name="WS_GetProblemResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmitThisProblem">
+      <wsdl:input message="tns:WS_SubmitThisProblem" name="WS_SubmitThisProblem">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_SubmitThisProblemResponse" name="WS_SubmitThisProblemResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_DrawProblem">
+      <wsdl:input message="tns:WS_DrawProblem" name="WS_DrawProblem">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_DrawProblemResponse" name="WS_DrawProblemResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmittedCode">
+      <wsdl:input message="tns:WS_SubmittedCode" name="WS_SubmittedCode">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_SubmittedCodeResponse" name="WS_SubmittedCodeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Login">
+      <wsdl:input message="tns:WS_Login" name="WS_Login">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_LoginResponse" name="WS_LoginResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SkipThisProblem">
+      <wsdl:input message="tns:WS_SkipThisProblem" name="WS_SkipThisProblem">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_SkipThisProblemResponse" name="WS_SkipThisProblemResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetSolutions">
+      <wsdl:input message="tns:WS_GetSolutions" name="WS_GetSolutions">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetSolutionsResponse" name="WS_GetSolutionsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_ItrainSubmitCode">
+      <wsdl:input message="tns:WS_ItrainSubmitCode" name="WS_ItrainSubmitCode">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_ItrainSubmitCodeResponse" name="WS_ItrainSubmitCodeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_ViewWrongCase">
+      <wsdl:input message="tns:WS_ViewWrongCase" name="WS_ViewWrongCase">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_ViewWrongCaseResponse" name="WS_ViewWrongCaseResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmitHistory">
+      <wsdl:input message="tns:WS_SubmitHistory" name="WS_SubmitHistory">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_SubmitHistoryResponse" name="WS_SubmitHistoryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamById">
+      <wsdl:input message="tns:WS_GetExamById" name="WS_GetExamById">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetExamByIdResponse" name="WS_GetExamByIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetProblem4Judge">
+      <wsdl:input message="tns:WS_GetProblem4Judge" name="WS_GetProblem4Judge">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetProblem4JudgeResponse" name="WS_GetProblem4JudgeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmitCode">
+      <wsdl:input message="tns:WS_SubmitCode" name="WS_SubmitCode">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_SubmitCodeResponse" name="WS_SubmitCodeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamProblemStatus">
+      <wsdl:input message="tns:WS_GetExamProblemStatus" name="WS_GetExamProblemStatus">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetExamProblemStatusResponse" name="WS_GetExamProblemStatusResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_IsPermit">
+      <wsdl:input message="tns:WS_IsPermit" name="WS_IsPermit">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_IsPermitResponse" name="WS_IsPermitResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_PassThisCategory">
+      <wsdl:input message="tns:WS_PassThisCategory" name="WS_PassThisCategory">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_PassThisCategoryResponse" name="WS_PassThisCategoryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamProblems">
+      <wsdl:input message="tns:WS_GetExamProblems" name="WS_GetExamProblems">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetExamProblemsResponse" name="WS_GetExamProblemsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_CanDoCategory">
+      <wsdl:input message="tns:WS_CanDoCategory" name="WS_CanDoCategory">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_CanDoCategoryResponse" name="WS_CanDoCategoryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_UpdateResult">
+      <wsdl:input message="tns:WS_UpdateResult" name="WS_UpdateResult">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_UpdateResultResponse" name="WS_UpdateResultResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamProCatagorys">
+      <wsdl:input message="tns:WS_GetExamProCatagorys" name="WS_GetExamProCatagorys">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetExamProCatagorysResponse" name="WS_GetExamProCatagorysResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_ItrainSubmitThisProblem">
+      <wsdl:input message="tns:WS_ItrainSubmitThisProblem" name="WS_ItrainSubmitThisProblem">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_ItrainSubmitThisProblemResponse" name="WS_ItrainSubmitThisProblemResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamDetail">
+      <wsdl:input message="tns:WS_GetExamDetail" name="WS_GetExamDetail">
+    </wsdl:input>
+      <wsdl:output message="tns:WS_GetExamDetailResponse" name="WS_GetExamDetailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OJWSSoapBinding" type="tns:OJWS">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="WS_GetExamList">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetExamList">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetExamListResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetProblem">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetProblem">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetProblemResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmitThisProblem">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_SubmitThisProblem">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_SubmitThisProblemResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_DrawProblem">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_DrawProblem">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_DrawProblemResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmittedCode">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_SubmittedCode">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_SubmittedCodeResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Login">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_Login">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_LoginResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SkipThisProblem">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_SkipThisProblem">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_SkipThisProblemResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetSolutions">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetSolutions">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetSolutionsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_ItrainSubmitCode">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_ItrainSubmitCode">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_ItrainSubmitCodeResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_ViewWrongCase">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_ViewWrongCase">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_ViewWrongCaseResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmitHistory">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_SubmitHistory">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_SubmitHistoryResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamById">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetExamById">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetExamByIdResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetProblem4Judge">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetProblem4Judge">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetProblem4JudgeResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_SubmitCode">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_SubmitCode">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_SubmitCodeResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamProblemStatus">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetExamProblemStatus">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetExamProblemStatusResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_IsPermit">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_IsPermit">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_IsPermitResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_PassThisCategory">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_PassThisCategory">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_PassThisCategoryResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamProblems">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetExamProblems">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetExamProblemsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_CanDoCategory">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_CanDoCategory">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_CanDoCategoryResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_UpdateResult">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_UpdateResult">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_UpdateResultResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamProCatagorys">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetExamProCatagorys">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetExamProCatagorysResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_ItrainSubmitThisProblem">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_ItrainSubmitThisProblem">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_ItrainSubmitThisProblemResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_GetExamDetail">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="WS_GetExamDetail">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="WS_GetExamDetailResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OJWS">
+    <wsdl:port binding="tns:OJWSSoapBinding" name="OJWSImplPort">
+      <soap:address location="https://219.228.76.122:443/oj/webservice/OJWS" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

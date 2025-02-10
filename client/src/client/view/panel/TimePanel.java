@@ -18,7 +18,8 @@ public class TimePanel extends JPanel{
 	private JLabel JLabel3;
 	private String DEFAULT_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	private String time;
-        private Date endDate;
+      private Date endDate;
+      private Long lefttime;
 	private int ONE_SECOND = 1000;
 	public TimePanel(String endtime){
             this.JLabel1 = new JLabel("");
@@ -28,7 +29,8 @@ public class TimePanel extends JPanel{
             this.JL_display = new JLabel();
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
             try {
-                this.endDate = dateFormatter.parse(endtime);
+                Date newDate = dateFormatter.parse(endtime);
+                this.endDate = newDate;
             } catch (ParseException ex) {
                 Logger.getLogger(TimePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -47,25 +49,53 @@ public class TimePanel extends JPanel{
             //this.add(this.JLabel2);
             //this.add(this.JLabel3);
 	}
+        
+      public TimePanel(Long lefttime){
+            this.JLabel1 = new JLabel("");
+            this.JLabel2 = new JLabel("");
+            this.JLabel3 = new JLabel("");
+            this.JL_time = new JLabel();
+            this.JL_display = new JLabel();
+            this.lefttime = lefttime;
+            if(LoginFrame.getLogin()==true){
+                
+                configTimeArea();
+            }
+            else{
+                this.JL_time.setText("");
+            }
+
+            this.JL_display.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+            this.add(this.JL_display);
+	}
+                
 	private void configTimeArea(){
 		Timer Ter = new Timer();
 		Ter.scheduleAtFixedRate(new JLabelTimerTask(),new Date(), ONE_SECOND);
 	}
+      
+      // by san_san
+      public void updateTimeDisplay(Long lefttime){
+            this.lefttime = lefttime;
+      }
+        
 	protected class JLabelTimerTask extends TimerTask{
             
             public void run() {
-                Date nowDate = GetServerTime.getNowTime();
-                if (endDate.getTime()-nowDate.getTime()<=0){
-                    time = "本场考试已经结束";
+                if (lefttime <= 0){
+                    time = "考试时间已到";
                 }
                 else{
-                    long day = (endDate.getTime()-nowDate.getTime())/(1000 * 86400);
-                    long hour = ((endDate.getTime()-nowDate.getTime())-day*(1000 * 86400))/(1000*3600);
-                    long m=((endDate.getTime()-nowDate.getTime())-day*(1000 * 86400))/1000/60%60;//分
-                    long s=((endDate.getTime()-nowDate.getTime())-day*(1000 * 86400))/1000%60;//秒
+                    long day = lefttime /(1000 * 86400);
+                    long hour = (lefttime - day*(1000 * 86400))/(1000*3600);
+                    long m=(lefttime - day*(1000 * 86400))/1000/60%60;//分
+                    long s=(lefttime - day*(1000 * 86400))/1000%60;//秒
+                    lefttime -= 1000;
                     time = "距结束："+day+"天  "+hour+":"+m+":"+s;
                 }
                 JL_display.setText(time);
+
             }
 	}
 }

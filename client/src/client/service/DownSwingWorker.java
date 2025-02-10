@@ -155,6 +155,9 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
 
     //更新题目列表 并下载所有题目
     private List<Integer> downloadProblem() {
+        
+        System.out.println("downloadProblem");
+        
         List<Integer> val = new ArrayList<Integer>();
         User user = Control.getUser();
         String username = user.getUserName();
@@ -172,7 +175,8 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
             }
             try {
                 String str = Control.getWebsService().getExamProblems(username, passwd, Integer.parseInt(examid));
-                val.add(new Integer(1));
+//                System.out.println(str);
+                val.add(Integer.valueOf(1));
                 publish((progressValue++) + "/" + numall + ":题目列表已下载");
                 new DownFileWrite().write("./xml/" + Control.getPath() + "/examproblems_" + examid + ".dat", str, Control.getKey());
             } catch (Exception e) {
@@ -200,11 +204,11 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
                     newExamProblemInfo.setUpdateTime("2000-01-01 00:00:00");
                 }
                 if (oldExamProblemInfo == null || oldExamProblemInfo.getUpdateTime().compareTo(newExamProblemInfo.getUpdateTime()) < 0 || !f.exists()) {
-                    byte[] by = Control.getWebsService().getProblem(username, passwd, Integer.parseInt(examid), problemId);
+                    byte[] by = Control.getWebsService().getProblem(username, passwd, Integer.parseInt(examid), problemId);                  
 //                    Object[] obj =client.invoke("WS_GetProblem",username,passwd,problemId);
-                    String pro = Decrypt.decrypt(key, by);
+                    String pro = Decrypt.decrypt(key, by);  
 //                    String prob = pro.replaceFirst("GBK", "UTF-8");
-                    val.add(new Integer(progressValue));
+                    val.add(Integer.valueOf(progressValue));
                     publish((progressValue++) + "/" + numall + ":第" + (i + 1) + "题已下载");
                     ProblemURL rUrl = new ProblemURL(pro);
                     String prob = rUrl.getCode();
@@ -220,6 +224,7 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
     }
 
     private List<Integer> downloadStatus() {
+        System.out.println("downloadStatus");
         List<Integer> val = new ArrayList<Integer>();
         User user = Control.getUser();;
         String username = user.getUserName();
@@ -227,8 +232,9 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
         Client client = LoginFrame.client;
         try {
             String str = Control.getWebsService().getExamDetil(username, passwd, Integer.parseInt(examid));
+
 //            Object[] obj =client.invoke("WS_GetExamDetail",username,passwd,Integer.parseInt(examid));
-            val.add(new Integer(1));
+            val.add(Integer.valueOf(1));
             publish((progressValue++) + "/" + numall + ":题目状态已下载");
             new DownFileWrite().write("./xml/" + Control.getPath() + "/studentExamDetail_" + examid + ".dat", str, Control.getKey());
         } catch (Exception e) {
@@ -239,7 +245,7 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
         List<StudentExamDetail> newStatus = new StudentExamDetail_io(examid).getstudentExamDetaillist();
         com = new CompareStatus();
         com.compare(Control.getoldExamDetail(), newStatus, problemlist, examid);
-        val.add(new Integer(1));
+        val.add(Integer.valueOf(1));
         publish((progressValue++) + "/" + numall + ":学生代码已下载");
         return val;
     }
@@ -258,10 +264,12 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
         Client client = LoginFrame.client;
         int problemId = Integer.valueOf(this.problemid);
         try {
-            byte[] by = Control.getWebsService().getProblem(username, passwd, Integer.parseInt(examid), problemId);
+            byte[] by = Control.getWebsService().getProblem(username, passwd, Integer.parseInt(examid), problemId); 
+            
 //            Object[] obj =client.invoke("WS_GetProblem",username,passwd,problemId);
             String pro = Decrypt.decrypt(key, by);
-            val.add(new Integer(progressValue));
+            System.out.println(pro);
+            val.add(Integer.valueOf(progressValue));
             publish((progressValue++) + "/" + numall + " 题已重新下载");
             ProblemURL rUrl = new ProblemURL(pro);
             String prob = rUrl.getCode();
@@ -275,6 +283,7 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
 
     //下载题目列表
     private List<Integer> downloadProblemList() throws Exception{
+//        System.out.println("downloadProblemList");
         List<Integer> val = new ArrayList<Integer>();
         User user = Control.getUser();
         String username = user.getUserName();
@@ -286,10 +295,11 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
         }
 //        try {
             String str = Control.getWebsService().getExamProblems(username, passwd, Integer.parseInt(examid));
+//            System.out.println(str);
             if(str.contains("考试未开始！")){
                 throw new Exception("考试未开始！");
             }
-            val.add(new Integer(1));
+            val.add(Integer.valueOf(1));
             publish((progressValue++) + "/" + numall + ":题目列表已重新下载");
             new DownFileWrite().write("./xml/" + Control.getPath() + "/examproblems_" + examid + ".dat", str, Control.getKey());
 //        } catch (Exception e) {
@@ -300,6 +310,7 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
 
     //下载考试信息
     private List<Integer> downloadExam() {
+//        System.out.println("downloadExam!");
         List<Integer> val = new ArrayList<Integer>();
         User user = Control.getUser();
         String username = user.getUserName();
@@ -311,7 +322,10 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
         }
         try {
             String str = Control.getWebsService().getExamList(username, passwd);
-            val.add(new Integer(1));
+
+//            System.out.println(str);
+
+            val.add(1);
             publish((progressValue++) + "/" + numall + ":题目列表已重新下载");
             new DownFileWrite().write("./xml/" + Control.getPath() + "/examlist.dat", str, Control.getKey());
         } catch (Exception e) {

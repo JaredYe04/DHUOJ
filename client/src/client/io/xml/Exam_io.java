@@ -19,9 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;  
 import org.w3c.dom.NodeList;  
 import org.xml.sax.SAXException;
-  
 
-  
 public class Exam_io {  
     
     String str = "./xml/"+Control.getPath()+"/examlist.dat";  
@@ -50,7 +48,8 @@ public class Exam_io {
                 if (ele.getElementsByTagName("allowChangeSeat").getLength()!=0) exam.setAllowChangeSeat(ele.getElementsByTagName("allowChangeSeat").item(0).getTextContent());
                 if (ele.getElementsByTagName("bestBefore").getLength()!=0) exam.setBestBefore(ele.getElementsByTagName("bestBefore").item(0).getTextContent());
                 if (ele.getElementsByTagName("scoreCoef").getLength()!=0) exam.setScoreCoef(ele.getElementsByTagName("scoreCoef").item(0).getTextContent());
-
+                if (ele.getElementsByTagName("limittime").getLength()!=0) exam.setLimitTime(ele.getElementsByTagName("limittime").item(0).getTextContent());
+                if (ele.getElementsByTagName("type").getLength()!=0) exam.setType(ele.getElementsByTagName("type").item(0).getTextContent());
 
                 l.add(exam);
             }  
@@ -61,10 +60,10 @@ public class Exam_io {
     }
     public void add(Exam ex){  
         try {  
-            // 取得 document  
+            // document  
             Document document = XmlUtils.getDocument(str,Control.getKey());  
   
-            //取得 Element  
+            // Element  
             Element examlist = document.getDocumentElement();          
             Element exam = document.createElement("exam");
             
@@ -84,9 +83,11 @@ public class Exam_io {
             Element teacherId = document.createElement("teacherId");
             Element lastUpdateTime = document.createElement("lastUpdateTime");
             Element status = document.createElement("status");
-            
-            
-   
+            Element studentViewScore = document.createElement("studentViewScore");
+
+            Element type = document.createElement("type");
+            Element limittime = document.createElement("limittime");
+  
             id.setTextContent(ex.getId());
             name.setTextContent(ex.getName());  
             starttime.setTextContent(ex.getStarttime());
@@ -101,7 +102,13 @@ public class Exam_io {
             teacherId.setTextContent(ex.getTeacherId());
             lastUpdateTime.setTextContent(ex.getUpdateTime());
             status.setTextContent(ex.getStatus());
-              
+            studentViewScore.setTextContent(ex.getStudentViewScore());
+            type.setTextContent(ex.getType());
+
+            limittime.setTextContent(null); 
+            if (ex.getLimitTime() != null){
+		   limittime.setTextContent(ex.getLimitTime());
+	      }
            
             exam.appendChild(id);  
             exam.appendChild(name);
@@ -116,8 +123,10 @@ public class Exam_io {
             exam.appendChild(teacherId);
             exam.appendChild(lastUpdateTime);
             exam.appendChild(status);
-            
-    
+            exam.appendChild(studentViewScore);
+            exam.appendChild(type);
+            exam.appendChild(limittime);
+
             examlist.appendChild(exam);  
        
             XmlUtils.write2Xml(document, str);  
@@ -136,6 +145,7 @@ public class Exam_io {
                 return new ArrayList();
             }
             Document document = XmlUtils.getDocument(str,Control.getKey()); 
+            
             NodeList list = document.getElementsByTagName("exam");  
             for(int i=0;i<list.getLength();i++){  
                 Element ele = (Element)list.item(i);  
@@ -155,6 +165,11 @@ public class Exam_io {
                 if (ele.getElementsByTagName("updateTime").getLength()!=0) exam.setUpdateTime(ele.getElementsByTagName("updateTime").item(0).getTextContent());
                 if (ele.getElementsByTagName("status").getLength()!=0) exam.setStatus(ele.getElementsByTagName("status").item(0).getTextContent());
                 if (ele.getElementsByTagName("allowChangeSeat").getLength()!=0) exam.setAllowChangeSeat(ele.getElementsByTagName("allowChangeSeat").item(0).getTextContent());
+                if (ele.getElementsByTagName("studentViewScore").getLength()!=0) exam.setStudentViewScore(ele.getElementsByTagName("studentViewScore").item(0).getTextContent());
+                if (ele.getElementsByTagName("type").getLength()!=0) exam.setType(ele.getElementsByTagName("type").item(0).getTextContent());
+
+                if (ele.getElementsByTagName("limittime").getLength()!=0) exam.setLimitTime(ele.getElementsByTagName("limittime").item(0).getTextContent());
+                
                 l.add(exam);
             }  
             return l;  
@@ -215,6 +230,13 @@ public class Exam_io {
                     ele.getElementsByTagName("updateTime").item(0).setTextContent(ex.getUpdateTime());
                     ele.getElementsByTagName("status").item(0).setTextContent(ex.getStatus());
                     ele.getElementsByTagName("allowChangeSeat").item(0).setTextContent(ex.getAllowChangeSeat());
+                    ele.getElementsByTagName("type").item(0).setTextContent(ex.getType());
+                    ele.getElementsByTagName("studentViewScore").item(0).setTextContent(ex.getStudentViewScore());
+
+                    // by san_san
+                    if (ex.getLimitTime() != null){
+		          ele.getElementsByTagName("limittime").item(0).setTextContent(ex.getLimitTime());
+	              }
                 }
             }            
             XmlUtils.DocumentToString(document, str,"GBK",Control.getKey()); 
@@ -245,7 +267,11 @@ public class Exam_io {
                 if (ele.getElementsByTagName("updateTime").getLength()!=0) exam.setUpdateTime(ele.getElementsByTagName("updateTime").item(0).getTextContent());
                 if (ele.getElementsByTagName("status").getLength()!=0) exam.setStatus(ele.getElementsByTagName("status").item(0).getTextContent());
                 if (ele.getElementsByTagName("allowChangeSeat").getLength()!=0) exam.setAllowChangeSeat(ele.getElementsByTagName("allowChangeSeat").item(0).getTextContent());
-                
+                if (ele.getElementsByTagName("studentViewScore").getLength()!=0) exam.setStudentViewScore(ele.getElementsByTagName("studentViewScore").item(0).getTextContent());
+                if (ele.getElementsByTagName("type").getLength()!=0) exam.setType(ele.getElementsByTagName("type").item(0).getTextContent());
+
+                if (ele.getElementsByTagName("limittime").getLength()!=0) exam.setLimitTime(ele.getElementsByTagName("limittime").item(0).getTextContent());
+
                 l.add(exam);
             }  
             return l;  
@@ -256,7 +282,7 @@ public class Exam_io {
     public Exam getexamString(String str){
         try {  
 //            System.out.println(str);
-            Document document = XmlUtils.StringToDocument(str); 
+            Document document = XmlUtils.StringToDocument(str);
             NodeList list = document.getElementsByTagName("root");  
 
             Element ele = (Element)list.item(0);  
@@ -275,8 +301,11 @@ public class Exam_io {
                 if (ele.getElementsByTagName("teacherId").getLength()!=0) exam.setTeacherId(ele.getElementsByTagName("teacherId").item(0).getTextContent());
                 if (ele.getElementsByTagName("updateTime").getLength()!=0) exam.setUpdateTime(ele.getElementsByTagName("updateTime").item(0).getTextContent());
                 if (ele.getElementsByTagName("status").getLength()!=0) exam.setStatus(ele.getElementsByTagName("status").item(0).getTextContent());
+                if (ele.getElementsByTagName("studentViewScore").getLength()!=0) exam.setStudentViewScore(ele.getElementsByTagName("studentViewScore").item(0).getTextContent());
                 if (ele.getElementsByTagName("allowChangeSeat").getLength()!=0) exam.setAllowChangeSeat(ele.getElementsByTagName("allowChangeSeat").item(0).getTextContent());
-                
+                if (ele.getElementsByTagName("limittime").getLength()!=0) exam.setLimitTime(ele.getElementsByTagName("limittime").item(0).getTextContent());
+                if (ele.getElementsByTagName("type").getLength()!=0) exam.setType(ele.getElementsByTagName("type").item(0).getTextContent());
+
             return exam;  
         } catch (Exception e) {  
             throw new RuntimeException(e);  

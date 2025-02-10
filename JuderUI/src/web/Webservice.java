@@ -7,7 +7,6 @@ package web;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
-import com.alibaba.dubbo.config.RegistryConfig;
 import util.Decrypt;
 import edu.dhu.ws.OJWS;
 import edu.dhu.ws.OJWS_Service;
@@ -17,18 +16,13 @@ import static gui.Control.getJudgeInfoEditorPane;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.swing.JEditorPane;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.xml.namespace.QName;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.boot.logging.LogLevel;
 /**
  *
  * @author ytxlo
@@ -39,6 +33,7 @@ public class Webservice implements java.rmi.Remote{
     private OJWS servicePort;
     public static boolean ENABLE_DUBBO=true;
     public static boolean existDubbo=false;
+    private static ReferenceConfig<OJWS> reference = null;
     //@DubboReference(url = "http://106.15.36.190:3000/edu.dhu.ws.OJWS")
     //http://106.15.36.190:3000/edu.dhu.ws.OJWS
     //dubbo://219.228.76.122:80/edu.dhu.ws.OJWS
@@ -48,14 +43,25 @@ public class Webservice implements java.rmi.Remote{
     //@DubboReference(url = "dubbo://10.10.10.1:20880/edu.dhu.ws.OJWS")
     //@Resource
     public OJWS dubboPort;
-    common.Logger logger;
+    static common.Logger logger = common.Logger.getInstance();
+    // 销毁当前Dubbo实例的方法
+
+    private static void destroyCurrentDubboPort() {
+        if (reference != null) {
+            reference.destroy(); // 销毁ReferenceConfig
+            reference = null;
+            existDubbo = false;
+            logger.log("现有的Dubbo实例已销毁", common.LogLevel.INFO);
+        }
+    }
     public static OJWS initDubboPort(String url) {
         // 应用配置
         ApplicationConfig application = new ApplicationConfig();
         application.setName("consumer");
-
+        
+        destroyCurrentDubboPort();
         // 引用远程服务
-        ReferenceConfig<OJWS> reference = new ReferenceConfig<>();
+        reference = new ReferenceConfig<>();
         reference.setApplication(application);
         reference.setInterface(OJWS.class);
         reference.setUrl(url); // 设置远程服务的 URL
@@ -64,7 +70,6 @@ public class Webservice implements java.rmi.Remote{
         return reference.get();
     }
     private void setDubbo(){
-         logger = common.Logger.getInstance();
          String url = "dubbo://localhost:8080/edu.dhu.ws.OJWS";
          JTextField ip=getDistributorField(0);
          JTextField port=getDistributorField(1);
@@ -74,7 +79,8 @@ public class Webservice implements java.rmi.Remote{
         {
             JEditorPane infoPane=getJudgeInfoEditorPane(0);
             if(!existDubbo&&infoPane!=null){
-                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"正在请求Dubbo服务...\n");
+                Control.addJudgeInfo(0,"正在请求Dubbo服务..");
+                //infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"正在请求Dubbo服务...\n");
                 logger.log("请求dubbo服务", common.LogLevel.INFO);
             }
             dubboPort = initDubboPort(url);
@@ -82,21 +88,22 @@ public class Webservice implements java.rmi.Remote{
             
         }
         catch(Exception e){
-                JEditorPane infoPane=getJudgeInfoEditorPane(1);
-                infoPane.setText(infoPane.getText()+"\n"+LocalTime.now().toString()+e.getMessage()+"\n");
+            Control.addExceptionInfo(1, e.getMessage());
             e.printStackTrace();
         }
         if(dubboPort!=null){
              JEditorPane infoPane=getJudgeInfoEditorPane(0);
              if(!existDubbo&&infoPane!=null)
-                infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"\nDubbo服务连接成功！URL:"+url+"\n");
+                Control.addJudgeInfo(0,"Dubbo服务连接成功！URL:"+url);
+                //infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"\nDubbo服务连接成功！URL:"+url+"\n");
              existDubbo=true;
             servicePort=dubboPort;
         }else{
             existDubbo=false;
             JEditorPane infoPane=getJudgeInfoEditorPane(1);
             logger.log("请求dubbo服务失败", common.LogLevel.ERROR);
-            infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"\nDubbo服务连接失败！URL:"+url+"\n");
+            Control.addExceptionInfo(1,"Dubbo服务连接失败！URL:"+url);
+            //infoPane.setText(infoPane.getText()+LocalTime.now().toString()+"\nDubbo服务连接失败！URL:"+url+"\n");
         }
             
         //如果能使用dubbo服务就使用，不能的话就用原来的
@@ -112,8 +119,8 @@ public class Webservice implements java.rmi.Remote{
         if(!ENABLE_DUBBO){
             try{
                 
-                    webs = new OJWS_Service();
-                    servicePort = webs.getOJWSImplPort();
+                    //webs = new OJWS_Service();
+                    //servicePort = webs.getOJWSImplPort();
                 }
             catch(Exception e){
                logger.log(e.getMessage(), common.LogLevel.ERROR);
@@ -132,8 +139,8 @@ public class Webservice implements java.rmi.Remote{
         }
         if(!ENABLE_DUBBO){
             try{
-                webs = new OJWS_Service(url,qname);
-                servicePort = webs.getOJWSImplPort();
+                //webs = new OJWS_Service(url,qname);
+                //servicePort = webs.getOJWSImplPort();
 
             }
             catch(Exception e){
@@ -150,9 +157,9 @@ public class Webservice implements java.rmi.Remote{
         return s; 
         }
          catch(Exception e){
-             logger.log(e.getMessage(), common.LogLevel.ERROR);
-             Control.addExceptionInfo(1, LocalTime.now().toString()+e.getMessage()+"\n");
-                return "";
+             logger.log("getSolutions出错:"+e.getMessage(), common.LogLevel.ERROR);
+             Control.addExceptionInfo(1, "getSolutions出错:"+e.getMessage()+"\n");
+                throw e;
          }
     }
     public String getProblem(int arg)throws java.rmi.RemoteException{
@@ -194,16 +201,16 @@ public class Webservice implements java.rmi.Remote{
             return string;
         }
     }
-    public static void main(String[] args) {
-        Webservice ws=new Webservice();
-        
-        try {
-            System.out.println(ws.getProblem(75));
-        } catch (RemoteException ex) {
-            Logger.getLogger(Webservice.class.getName()).log(Level.SEVERE, null, ex);
-            
-        }
-    }
+//    public static void main(String[] args) {
+//        Webservice ws=new Webservice();
+//        
+//        try {
+//            System.out.println(ws.getProblem(75));
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(Webservice.class.getName()).log(Level.SEVERE, null, ex);
+//            
+//        }
+//    }
 }
 
 //////P.S.部署到服务器时要注意账号密码修改

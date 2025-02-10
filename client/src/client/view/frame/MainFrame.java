@@ -43,6 +43,7 @@ public class MainFrame extends JFrame implements ColorChange {
 
     private String examId;
     private String endtime;
+    private String limittime; // by san_san
     private JTabbedPane TP_Main;
 
     private JButton JB_return;
@@ -86,9 +87,6 @@ public class MainFrame extends JFrame implements ColorChange {
     private JPanel NorthPanel;
     private JLabel jl_south;
 
-//    private JMenu JM_CompileInfo;
-//    private JMenuItem cCPlus_CompileInfo;
-//    private JMenuItem java_CompileInfo;
     private JMenuItem JM_return;
     private JMenuItem JM_UpdateProblem;
     private JMenuItem JM_UpdateStatus;
@@ -102,6 +100,10 @@ public class MainFrame extends JFrame implements ColorChange {
     private JLabel jpb_message;
     private Map<String, ExamProblem> examProblemMap;
 
+    private Long lefttime; // by san_san
+
+    private int choosedProblemId;
+
     public MainFrame(Exam exam, CompareStatus com) {
 //        this.probleml = pl;
         Control.setExamId(exam.getId());
@@ -113,25 +115,29 @@ public class MainFrame extends JFrame implements ColorChange {
         Control.setLanguages(languages);
         this.examId = exam.getId();
         this.endtime = exam.getEndtime();
+        this.limittime = exam.getLimitTime(); // by san_san
+        this.lefttime = Control.getWebsService().getExamDeadline(Control.getUser().getUserName(), Control.getUser().getPassword(), Integer.parseInt(this.examId)); // by san_san
         this.problem = new PaperPanel();
         this.answer = new AnswerTablePanel();
-        this.codepanel = new CodePanel(answer);
+        this.codepanel = new CodePanel(answer, lefttime); // by san_san 新增一个参数
+        
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.JP_Code.add(this.problem, "Center");
+        this.JP_Code.add(this.problem, BorderLayout.CENTER);
         this.JPT_Result.add(this.answer);
         this.JPT_Submit.add(this.codepanel);
         this.getPorblemStandard(exam.getId());
         Control.setMainFrame(this);
         Control.setCode(this.codepanel);
         Control.setAns(this.answer);
+        Control.setTP_time(this.TP_time);
 
         if (com != null) {
             com.doPrompt();
         }
-//            //this.JTP_Code.setTabComponentAt(i, new ButtonTabComponent(this.JTP_Code));
-        
-        if(!problemlist.isEmpty()){ 
+//        this.JTP_Code.setTabComponentAt(i, new ButtonTabComponent(this.JTP_Code));
+
+        if (!problemlist.isEmpty()) {
             this.JT_problem.setRowSelectionInterval(0, 0);
             chooseProblem();
         }
@@ -150,12 +156,9 @@ public class MainFrame extends JFrame implements ColorChange {
         this.TP_Main = new JTabbedPane();
         this.JPT_Result = new JPanel();
         this.JPT_Submit = new JPanel();
-        
-//        this.cCPlus_CompileInfo = new JMenuItem("C/C++编译器");
-//        this.java_CompileInfo = new JMenuItem("Java编译器");
-        
+
         this.JB_return = new JButton();
-        //this.JCB_Model = new JComboBox();
+//        this.JCB_Model = new JComboBox();
         this.UpdateProblem = new JButton();
         this.UpdateStatus = new JButton();
         this.UpdateExam = new JButton();
@@ -169,12 +172,11 @@ public class MainFrame extends JFrame implements ColorChange {
         this.jLabel1 = new JLabel();
         this.jToolBarAll = new JToolBar();
         this.jToolBarProblem = new JToolBar();
-        this.TP_time = new TimePanel(endtime);
+        this.TP_time = new TimePanel(lefttime);
         this.menubar = new JMenuBar();
 
         this.freshMenu = new JMenu("同步");
         this.systemMenu = new JMenu("系统");
-//        this.JM_CompileInfo = new JMenu("编译器设置");
 
         this.JM_return = new JMenuItem("返回考试列表");
         this.JM_UpdateProblem = new JMenuItem("下载全部题目");
@@ -205,36 +207,18 @@ public class MainFrame extends JFrame implements ColorChange {
         this.NorthPanel.add(this.TP_time, BorderLayout.EAST);
         this.NorthPanel.add(this.jl_south, BorderLayout.WEST);
 
-//        JM_CompileInfo.add(cCPlus_CompileInfo);
-//        cCPlus_CompileInfo.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                NewCompileSetting config = new NewCompileSetting("c", MainFrame.this, true);
-//                config.setVisible(true);
-//            }
-//        });
-//        JM_CompileInfo.add(java_CompileInfo);
-//        java_CompileInfo.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                NewCompileSetting config = new NewCompileSetting("java", MainFrame.this, true);
-//                config.setVisible(true);
-//            }
-//        });
-        
         freshMenu.add(JM_UpdateProblem);
         freshMenu.add(JM_UpdateStatus);
         freshMenu.add(JM_UpdateExam);
-        //freshMenu.add(JM_return);
-       // systemMenu.add(JM_CompileInfo);
-        
+        freshMenu.add(JM_return);
+
         systemMenu.add(JM_Exit);
         menubar.setLayout(new FlowLayout(FlowLayout.LEFT));
         MenuPanel.add(this.menubar, BorderLayout.WEST);
         MenuPanel.add(this.MenuPanelRight, BorderLayout.EAST);
         menubar.add(systemMenu);
         menubar.add(freshMenu);
-        //menubar.add(this.jl);
+        menubar.add(this.jl);
         //MenuPanelRight.add(this.TP_time);
         MenuPanelRight.add(this.JB_return);
 
@@ -265,8 +249,15 @@ public class MainFrame extends JFrame implements ColorChange {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Control.setPrompt(true);
-                    new ProgressBarFrame(exam,DownSwingWorker.EXAM);
+                    // by san_san
+                    lefttime = Control.getWebsService().getExamDeadline(Control.getUser().getUserName(), Control.getUser().getPassword(), Integer.parseInt(examId));
+                    System.out.println("left:" + lefttime);
+                    TP_time.updateTimeDisplay(lefttime);
+                    codepanel.setLefttime(lefttime);
+                    //  
+                    new ProgressBarFrame(exam, DownSwingWorker.EXAM);
                     new DoBackground().compareUpdateTime();
+
                     setProblemlist(true);
                     setRank();
                 } catch (Exception ex) {
@@ -300,9 +291,8 @@ public class MainFrame extends JFrame implements ColorChange {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Control.setPrompt(true);
-                    new ProgressBarFrame(exam, DownSwingWorker.PROBLEM);
+                    new ProgressBarFrame(exam, DownSwingWorker.PROBLEM, problem, problemlist, choosedProblemId);
                     setProblemlist(true);
-                    setRank();
                 } catch (Exception ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -314,13 +304,6 @@ public class MainFrame extends JFrame implements ColorChange {
             this.JM_UpdateStatus.setEnabled(false);
         }
 
-//        this.JM_CompileInfo.addActionListener(new java.awt.event.ActionListener(){
-//            public void actionPerformed(ActionEvent evt) {
-//                      // NewCompileSetting config = new NewCompileSetting(MainFrame.this, true);
-//                      // config.setVisible(true);
-//            }
-//        });
-        
         this.JB_return.setText("返回考试列表");
         this.JB_return.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -335,7 +318,7 @@ public class MainFrame extends JFrame implements ColorChange {
         this.jToolBarAll.setFloatable(false);
         this.setJMenuBar(MenuPanel);
         getContentPane().add(this.NorthPanel, "North");
-        this.JPT_Work.setLayout(new java.awt.BorderLayout());
+        this.JPT_Work.setLayout(new BorderLayout());
         if ((LoginFrame.getLogin() == false)) {
             this.UpdateNowProblem.setEnabled(false);
         }
@@ -348,19 +331,32 @@ public class MainFrame extends JFrame implements ColorChange {
                 } else {
                     Control.setPrompt(true);
                     new ProgressBarFrame(exam, NowProblem, DownSwingWorker.NOWPROBLEM);
+                    int curRow = JT_problem.getSelectedRow();
+                    Problem_io problem_io = new Problem_io(problemlist.get(curRow).getProblemId());
+                    ExamProblem_io examproblem_io = new ExamProblem_io(problemlist.get(curRow).getExamId());
+
+                    if (new File(problem_io.getPath()).exists()) {
+                        Problem prod = problem_io.getproblem();
+                        ExamProblem epro = null;
+                        try {
+                            epro = examproblem_io.getProblemList().get(curRow);
+                        } catch (Exception ex) {
+                        }
+                        problem.setPaper(prod, curRow, epro);
+                    }
                 }
 
             }
         });
         this.JP_Paper.setLayout(new GridLayout(10, 1));
-        this.JP_Code.setLayout(new java.awt.BorderLayout());
+        this.JP_Code.setLayout(new BorderLayout());
         this.jToolBarProblem.setFloatable(false);
         this.JP_Code.add(this.jToolBarProblem, BorderLayout.NORTH);
         this.jToolBarProblem.add(this.UpdateNowProblem);
         this.JT_problem = new JTable();
         setProblemlist(true);
         this.JSP_Pane = new JScrollPane(this.JT_problem);
-        this.JPT_Work.add(this.JP_Code, "Center");
+        this.JPT_Work.add(this.JP_Code, BorderLayout.CENTER);
 
         this.TP_Main.addTab("题目详情", JPT_Work);
 
@@ -372,15 +368,16 @@ public class MainFrame extends JFrame implements ColorChange {
 
         this.TP_Main.addTab("提交结果", JPT_Result);
         if (LoginFrame.getLogin() == true) {
-            JPT_Rank = new RankPanel();
-            TP_Main.addTab("成绩排名", JPT_Rank); //TODO 成绩排名页暂时隐藏         
+            this.JPT_Rank = new RankPanel();
+            TP_Main.addTab("成绩排名", JPT_Rank); //TODO 成绩排名页暂时隐藏    
+//            this.JPT_Rank.showHTML("./rank.html");
             setRank();
         }
         this.TP_Main.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 if (((JTabbedPane) e.getSource()).getSelectedIndex() == 3) {
-                    JPT_Rank.updateWeb();
+//                    JPT_Rank.updateWeb();
                 }
             }
         });
@@ -391,18 +388,45 @@ public class MainFrame extends JFrame implements ColorChange {
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width - 850) / 2, (screenSize.height - 650) / 2, 850, 650);
-
     }
 
     private void setRank() {
-        String ip = Config.getURLip();
-        String port = Config.getURLport();
-        String url = ip + ":" + port;
-        if(problemlist.size()>10){
-            JPT_Rank.changeHTML("http://" + url + "/oj/user/examScore3.jsp?examId=" + examId + "&fromclient=true&userId="+Control.getUser().getId());
-        } else {
-            JPT_Rank.changeHTML("http://" + url + "/oj/user/examScore2.jsp?examId=" + examId + "&fromclient=true");
-        }
+        int problemNum = this.problemlist.size();
+
+        String examId = this.examId;
+        String trainingViewScore = exam.getStudentViewScore();
+        String rankUrl = "";
+
+        switch (trainingViewScore){
+          case "System":
+              if (problemNum <= 10) {
+                  rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-rank-status";
+              } else {
+                  rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-top10";
+              }
+              JPT_Rank.changeHTML(rankUrl);
+              break;
+          case "RankAndStatus":
+              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-rank-status";
+              JPT_Rank.changeHTML(rankUrl);
+              break;
+          case "OnlyRank":
+              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-only-rank";
+              JPT_Rank.changeHTML(rankUrl);
+              break;
+          case "Top10":
+              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-top10";
+              JPT_Rank.changeHTML(rankUrl);
+              break;
+          case "iTraining":
+              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-train-rank";
+              JPT_Rank.changeHTML(rankUrl);
+              break;
+          case "NoScorePage":
+              JOptionPane.showMessageDialog(null, "本场考试不允许查看成绩");
+              break;
+          default:
+      }
     }
 
     private void JB_ReturnActionPerformed(ActionEvent evt) {
@@ -450,7 +474,7 @@ public class MainFrame extends JFrame implements ColorChange {
             boolean isCopy = false;
             String f = new String("isnotFinished");
             String c = new String("isnotCopied");
-            String backFile = "./xml/"+Control.getPath()+"/"+Control.getExamId()+"-"+problemlist.get(i).getProblemId()+".xml";
+            String backFile = "./xml/" + Control.getPath() + "/" + Control.getExamId() + "-" + problemlist.get(i).getProblemId() + ".xml";
             File tmpFile = new File(backFile);
             if (tmpFile.exists() && sc.isFinished(backFile)) {
                 isFinish = true;
@@ -493,6 +517,7 @@ public class MainFrame extends JFrame implements ColorChange {
         this.JT_problem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 chooseProblem();
+                choosedProblemId = JT_problem.getSelectedRow();
             }
         });
         this.revalidate();
@@ -506,6 +531,8 @@ public class MainFrame extends JFrame implements ColorChange {
     }
 
     public Problem getInformation(String prono) {
+        System.out.println("getInformation(prono)\n" + prono);
+
         Problem prod = new Problem_io(prono).getproblem();
         return prod;
     }
@@ -518,20 +545,22 @@ public class MainFrame extends JFrame implements ColorChange {
         if (new File(problem_io.getPath()).exists()) {
             Problem prod = problem_io.getproblem();
             ExamProblem epro = null;
-            try{epro = examproblem_io.getProblemList().get(row);}
-            catch (Exception e){}
-            prod.setDeadline(endtime);
-            if(prod == null||prod.getUpdateTime().compareTo(problemlist.get(row).getUpdateTime())<0){
+            try {
+                epro = examproblem_io.getProblemList().get(row);
+            } catch (Exception e) {
+            }
+//            prod.setDeadline(endtime);
+            if (prod == null || prod.getUpdateTime().compareTo(problemlist.get(row).getUpdateTime()) < 0) {
                 Control.setPrompt(false);
                 new ProgressBarFrame(exam, NowProblem, DownSwingWorker.NOWPROBLEM);
-            }else if (codepanel.setSample(prod, Integer.parseInt(examId), exam.getSubmitOnlyAC(), row)) {
-                problem.setPaper(prod, row,epro);
+            } else if (codepanel.setSample(prod, Integer.parseInt(examId), exam.getSubmitOnlyAC(), row)) {
+                problem.setPaper(prod, row, epro);
                 now_problem_number = row;
-                String routing = "./xml/"+Control.getPath()+"/"+Control.getExamId()+"-"+String.valueOf(this.NowProblem)+".xml";
+                String routing = "./xml/" + Control.getPath() + "/" + Control.getExamId() + "-" + String.valueOf(this.NowProblem) + ".xml";
                 SolutionCode tmp = new SolutionCode();
                 tmp.init();
                 String s = tmp.getSubmitTimes(routing);
-                if(!"".equals(problemlist.get(row).getStatus())&&"0".equals(tmp.getSubmitTimes(routing))){
+                if (!"".equals(problemlist.get(row).getStatus()) && "0".equals(tmp.getSubmitTimes(routing))) {
                     answer.refreshResult(this.NowProblem);
                 }
             }
@@ -569,13 +598,13 @@ public class MainFrame extends JFrame implements ColorChange {
 
     public void getPorblemStandard(String exam_id) {
         ExamProblem_io io = new ExamProblem_io(exam_id);
-        try{
-        List<ExamProblem> list = io.getProblemList();
-        this.examProblemMap = new HashMap<String, ExamProblem>();
-        for (ExamProblem examProblem : list) {
-            examProblemMap.put(examProblem.getProblemId(), examProblem);
-        }
-        }catch(Exception e){
+        try {
+            List<ExamProblem> list = io.getProblemList();
+            this.examProblemMap = new HashMap<String, ExamProblem>();
+            for (ExamProblem examProblem : list) {
+                examProblemMap.put(examProblem.getProblemId(), examProblem);
+            }
+        } catch (Exception e) {
             //忽略
         }
     }

@@ -57,12 +57,12 @@ public class GetServerTime {
             @Override
             public void actionPerformed(ActionEvent e) {
                 serverTime.setTime(serverTime.getTime() + 1000);
-                if (serverTime.getTime() - refreshTime.getTime() > 900000) {
+                if (serverTime.getTime() - refreshTime.getTime() > 900000) { 
                     /*
                 更新考试信息
                      */
                     new DoBackground().compareUpdateTime();
-                    //System.out.println("done");
+                    System.out.println("done");
                     refreshTime.setTime(serverTime.getTime());
                 }
             }

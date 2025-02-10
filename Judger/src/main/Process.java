@@ -11,7 +11,6 @@ import common.Const;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
-import jdk.nashorn.internal.parser.TokenType;
 import kernel.Judger;
 import resultData.RunInfo;
 import persistence.oj_beans.ExamDetailBean;
@@ -297,7 +296,8 @@ public class Process {
             for (int i = 0; i < sumTestcaseNum; i++) {
                 result[i] = Result.status;
                 output[i] = "";
-                remarks[i] = CompileInfo.remark;
+                if(remarks[i]==null) remarks[i] ="";
+                remarks[i] += CompileInfo.remark;
                 String message = "testcase id=" + (testCaseBeans.get(0)).getId() + " done" + " result:" + Const.STATUS[result[0]];
                 if (con != null) {
                     con.accept(message);
@@ -374,13 +374,18 @@ public class Process {
                 solutionBean.setStatus(Const.STATUS[maxLevelStatus]);
                 //最高等级错误相应的信息
                 
-                
-                
                 String message="";
-                for (int i = 0; i < remarks.length; i++) {
-                    message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
-                    message += remarks[i] + "\n";
+                if(Const.STATUS[result[0]].equals("CE")){
+                    message += "编译错误："+remarks[0] + "\n";
                 }
+                else{
+                        for (int i = 0; i < remarks.length; i++) {
+                            message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
+                            message += remarks[i] + "\n";
+                    }
+                }
+                
+                
                 solutionBean.setRemark(message);
                 
                 //old

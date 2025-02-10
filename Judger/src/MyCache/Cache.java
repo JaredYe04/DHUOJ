@@ -30,6 +30,6 @@ public class Cache {
         return keys.contains(key);
     }
     public static Integer getSize(){
-        return new Integer(problems.size());
+        return Integer.valueOf(problems.size());
     }
 }

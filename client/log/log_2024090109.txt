@@ -1,0 +1,21 @@
+2024-09-01 09:11:33[INFO]尝试建立Web服务
+2024-09-01 09:11:34[INFO]请求dubbo服务,url:dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS
+2024-09-01 09:11:36[INFO]请求dubbo服务成功
+2024-09-01 09:11:36[INFO]建立Web服务成功
+2024-09-01 09:29:25[INFO]尝试建立Web服务
+2024-09-01 09:29:25[INFO]请求dubbo服务,url:dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS
+2024-09-01 09:29:28[INFO]请求dubbo服务成功
+2024-09-01 09:29:28[INFO]建立Web服务成功
+2024-09-01 09:31:38[INFO]尝试建立Web服务
+2024-09-01 09:31:38[INFO]请求dubbo服务,url:dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS
+2024-09-01 09:31:41[INFO]请求dubbo服务成功
+2024-09-01 09:31:41[INFO]建立Web服务成功
+2024-09-01 09:31:59[ERROR]建立Web服务异常Failed to invoke the method wsLogin in the service edu.dhu.ws.OJWS. Tried 3 times of the providers [192.168.247.1:8080] (1/1) from the registry 192.168.247.1:8080 on the consumer 192.168.247.1 using the dubbo version 3.2.0. Last error is: Invoke remote method timeout. method: wsLogin, provider: dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS?application=consumer&background=false&executor-management-mode=isolation&file-cache=true&interface=edu.dhu.ws.OJWS&pid=20848&qos.enable=false&register.ip=192.168.247.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false, cause: org.apache.dubbo.remoting.TimeoutException: Waiting server-side response timeout by scan timer. start time: 2024-09-01 09:31:53.123, end time: 2024-09-01 09:31:59.145, client elapsed: 1 ms, server elapsed: 6021 ms, timeout: 6000 ms, request: Request [id=2, version=2.0.2, twoWay=true, event=false, broken=false, mPayload=0, data=null], channel: /192.168.247.1:57251 -> /192.168.247.1:8080
+2024-09-01 09:32:40[INFO]尝试建立Web服务
+2024-09-01 09:32:40[INFO]请求dubbo服务,url:dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS
+2024-09-01 09:32:43[INFO]请求dubbo服务成功
+2024-09-01 09:32:43[INFO]建立Web服务成功
+2024-09-01 09:57:28[INFO]尝试建立Web服务
+2024-09-01 09:57:28[INFO]请求dubbo服务,url:dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS
+2024-09-01 09:57:31[INFO]请求dubbo服务成功
+2024-09-01 09:57:31[INFO]建立Web服务成功

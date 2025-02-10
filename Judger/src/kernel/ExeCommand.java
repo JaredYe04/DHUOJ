@@ -18,6 +18,8 @@ import resultData.Result;
 import tool.ThreadTool;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import common.LogLevel;
+import common.Logger;
 import java.awt.EventQueue;
 import java.lang.reflect.Field;
 import resultData.JudgerInfo;
@@ -27,6 +29,7 @@ import resultData.JudgerInfo;
  * @author Administrator
  */
 public class ExeCommand {
+    private Logger logger=Logger.getInstance();
 
     //声明抽象接口加载本地类库kernal32   
     public interface Kernel32 extends Library {
@@ -73,17 +76,26 @@ public class ExeCommand {
             }
             else if (CompileInfo.isKilled == 1) {
                 Result.status = Const.CE;
-                CompileInfo.remark = "编译超时,请重试：" + CompileInfo.errorInfo;
+                CompileInfo.remark += "编译超时,请重试：" + CompileInfo.errorInfo;
+                logger.log("编译超时,请重试：" + CompileInfo.errorInfo, LogLevel.WARNING);
             } else if (result != 0) {
                 Result.status = Const.CE;
-                CompileInfo.remark =   CompileInfo.errorInfo;
-            } else {
+                CompileInfo.remark +=   CompileInfo.errorInfo;
+               
+            } else if(result==0) {
                 CompileInfo.remark = "";
             }
-            if (Config.DEBUG >= 2) {
-                System.out.println("compile info:" + CompileInfo.info);
-                System.out.println("compile errinfo:" + CompileInfo.errorInfo);
-            }
+           
+           if(Result.status==Const.CE){
+               logger.log("发现编译错误：" + CompileInfo.remark, LogLevel.WARNING);
+           }
+           
+//           
+//            if (Config.DEBUG >= 2) {
+//                //System.out.println("compile info:" + CompileInfo.info);
+//                logger.log("compile info:" + CompileInfo.info,LogLevel.INFO);
+//                System.out.println("compile errinfo:" + CompileInfo.errorInfo);
+//            }
             return result;
 
        
@@ -91,9 +103,9 @@ public class ExeCommand {
     }
 
     public int exeLink(String linkCommand,String env) {
-        if (Config.DEBUG >= 2) {
-            System.out.println("linkCommand:" + linkCommand);
-        }
+//        if (Config.DEBUG >= 2) {
+//            System.out.println("linkCommand:" + linkCommand);
+//        }
         int result = -1;
         Result.status =0;
             result = getJurgeResult(linkCommand,env, "", 0);
@@ -109,15 +121,15 @@ public class ExeCommand {
             else if (result != 0) {
                 Result.status = Const.CE;
                 
-                CompileInfo.remark =   CompileInfo.errorInfo;
+                CompileInfo.remark +=   CompileInfo.errorInfo;
 
             } else {
                 CompileInfo.remark = "";
             }
-            if (Config.DEBUG >= 2) {
-                System.out.println("link info:" + CompileInfo.info);
-                System.out.println("link errinfo:" + CompileInfo.errorInfo);
-            }
+//            if (Config.DEBUG >= 2) {
+//                System.out.println("link info:" + CompileInfo.info);
+//                System.out.println("link errinfo:" + CompileInfo.errorInfo);
+//            }
             return result;
 
        
@@ -143,11 +155,12 @@ public class ExeCommand {
             System.out.println("run errinfo:" + RunInfo.errorInfo);
         }
         boolean flag = false;
-        if (flag = ThreadTool.findProcess("WerFault.exe")) {
+        if (flag = ThreadTool.findProcess("WerFault.exe")) {//Jared:如果执行报错就把报错进程杀掉
             try {
                 Runtime.getRuntime().exec("taskkill /f /t /im WerFault.exe").waitFor();
             }catch(Exception e) {
-                 Log.writeExceptionLog("RunCommand line:1:" + e.getMessage() + "\n" + e.getStackTrace());
+//                 Log.writeExceptionLog("RunCommand line:1:" + e.getMessage() + "\n" + e.getStackTrace());
+                 logger.log("RunCommand line:1:" + e.getMessage() + "\n" + e.getStackTrace(), LogLevel.ERROR);
             }
         }
         if (Result.status == Const.SE)
@@ -220,6 +233,9 @@ public class ExeCommand {
             //确保进程完全被杀死
             if (Shared.PID != -1 && ThreadTool.findProcess(Shared.PID)) {
                 Runtime.getRuntime().exec("taskkill /f /t /PID " + Shared.PID).waitFor();   
+            }
+            if(ThreadTool.findProcess(Shared.PID)){//异常情况：进程没被杀死
+                logger.log("getJurgeResult警告：进程未被杀死！command:"+command+"\tenv:"+env, LogLevel.WARNING);
             }
             Shared.PID = -1;
             infoWrite.join();

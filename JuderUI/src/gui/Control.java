@@ -6,6 +6,8 @@
 package gui;
 
 import common.Config;
+import common.LogLevel;
+import common.Logger;
 import data.JudgeFromQueue;
 import java.io.File;
 import java.io.IOException;
@@ -43,11 +45,11 @@ public class Control {
     public static Queue<Solution> queue = null;
     public static boolean[] threadCountsManager; //线程数目管理
     public static boolean[] threadState;//线程状态
-
+    private static final Logger logger=Logger.getInstance();
     public static MainFrame getMainFrame() {
         return mainFrame;
     }
-
+    public final static Object refreshLock=new Object();//作为线程刷新的锁，如果没有锁就不能重启线程
     public static void setMainFrame(MainFrame mainFrame) {
         Control.mainFrame = mainFrame;
     }
@@ -81,16 +83,17 @@ public class Control {
     public static boolean managerThreadCounts(String s) {
         for (int i = 1; i <= 4; i++) {
             int a = Integer.parseInt(s);
+            logger.log("managerThreadCounts:a="+s, LogLevel.INFO);
             //原来停止的现在要启动
             if (i <= a) {
-                    //启动线程
-                    if (threadCountsManager[i] == false) {
-                        threadCountsManager[i] = true;
-                        threadState[i] = true;
-                        mainFrame.threadManagerTabb.setTitleAt(i, "线程正在运行");
-                        judgeFromQueue = new JudgeFromQueue(i);
-                        judgeFromQueue.start();
-                    }                
+                //启动线程
+                if (threadCountsManager[i] == false) {
+                    threadCountsManager[i] = true;
+                    threadState[i] = true;
+                    mainFrame.threadManagerTabb.setTitleAt(i, "线程正在运行");
+                    judgeFromQueue = new JudgeFromQueue(i);
+                    judgeFromQueue.start();
+                }
             } else //原来运行的现在要停止
             if (threadCountsManager[i] == true) {
                 threadCountsManager[i] = false;
@@ -111,9 +114,9 @@ public class Control {
         runflag = 0;  //设置线程状态关闭
 //        mainFrame.buttonCompilersConfig.setEnabled(true);//恢复编译器配置按钮
 //        mainFrame.buttonCompilersConfig1.setEnabled(true);
-         mainFrame.jButton2.setEnabled(true);//设置编辑配置文件
+        mainFrame.jButton2.setEnabled(true);//设置编辑配置文件
         mainFrame.jLabel14.setText("已关闭 ");//更新UI状态
-        
+
     }
 
     public static void setStartThreadButtontEnable() {
@@ -125,7 +128,7 @@ public class Control {
     }
 
     //
-   public static JTextField getDistributorField(int a) {
+    public static JTextField getDistributorField(int a) {
         switch (a) {
             case 0:
                 return mainFrame.distributorIP;
@@ -133,6 +136,7 @@ public class Control {
                 return mainFrame.distributorPort;
         }
     }
+
     public static JEditorPane getJudgeInfoEditorPane(int a) {
         switch (a) {
             case 1:
@@ -159,7 +163,7 @@ public class Control {
             // String s=mainFrame.jComboBox1.getSelectedItem().toString();
             int counts = 1;
             threadCountsManager[0] = false; //关闭获取test线程
-
+            logger.log("线程已关闭，总数："+String.valueOf(threadCountsManager.length), LogLevel.INFO);
             //关闭裁判线程
             for (; j <= 1; j++) {
                 if (threadCountsManager[j] == true) {
@@ -170,30 +174,29 @@ public class Control {
             return true;
         } catch (Exception e) {
             Control.addExceptionInfo(j, e.toString());
+            logger.log("异常："+e.toString(), LogLevel.ERROR);
             return false;
         }
     }
 
     @SuppressWarnings("empty-statement")
     public static boolean startJudgerForNet(String ip, int port) {
-
-        queue = new LinkedList<>();
+        if(queue==null)//此举是为了让原本queue不为空时，solution可以得到保存
+            queue = new LinkedList<>();
 
         // mainFrame.jLabel2.setText(""+queue.size());
         // mainNet = new MainForNet(ip, port);
         mainNet = new MainForNet();//获取问题到队列
         threadCountsManager[0] = true;
-        mainNet.start()
-;
+        mainNet.start();
         String a = mainFrame.jComboBox1.getSelectedItem().toString();
         return managerThreadCounts(a);
 
     }
 
     public static void addJudgeInfo(int a, String info) {
-        //信息框中信息超过2000行自动清洗屏幕
-        Element map = getJudgeInfoEditorPane(a).getDocument().getDefaultRootElement();
-        if (map.getElementCount() == 2000) {
+
+        if (getExceptionEditorPane(a).getText().split("\n").length>=max_lines) {
             clearInfo(a);
         }
         int pos = 1;//光标位置标记
@@ -205,35 +208,55 @@ public class Control {
         getJudgeInfoEditorPane(a).setSelectionEnd(pos);
     }
 
+    private static String getFirstNLines(String input, int n) {
+        // 将字符串按行分割
+        String[] lines = input.split("\n");
+        // 计算需要保留的行数，确保不会超过总行数
+        int end = Math.min(lines.length, n);
+        // 创建一个StringBuilder来组合需要保留的行
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < end; i++) {
+            sb.append(lines[i]);
+            if (i < end - 1) {
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private static final int max_lines=100;
     public static void clearInfo(int a) {
-            getJudgeInfoEditorPane(a).setText("");
-            getExceptionEditorPane(a).setText("");
+        getJudgeInfoEditorPane(a).setText(getFirstNLines(getJudgeInfoEditorPane(a).getText(), max_lines));
+        getExceptionEditorPane(a).setText(getFirstNLines(getExceptionEditorPane(a).getText(), max_lines));
     }
 
     public static void addExceptionInfo(int a, String info) {
-        //信息框中信息超过2000行自动清洗屏幕
-        Element map = getExceptionEditorPane(a).getDocument().getDefaultRootElement();
-        if (map.getElementCount() == 2000) {
+
+        if (getExceptionEditorPane(a).getText().split("\n").length>=max_lines) {
             clearInfo(a);
         }
         int pos = 1;//光标位置标记
         String preInfo = getExceptionEditorPane(a).getText();
-        preInfo = getDetailTime() + preInfo + "\n" + info;
+        preInfo = getDetailTime()+ info+ "\n" + preInfo  ;
         getExceptionEditorPane(a).setText(preInfo);
         //使焦点确定在第一行的最新信息
         getExceptionEditorPane(a).setSelectionStart(pos);
         getExceptionEditorPane(a).setSelectionEnd(pos);
+
     }
 
     public static String getChooseDirectory() {
         return getChooseDirectory("a");
     }
-    public static String getCppCompilerName(){
+
+    public static String getCppCompilerName() {
         return mainFrame.getSelectedCppCompilerName();
     }
-    public static String getJavaCompilerName(){
+
+    public static String getJavaCompilerName() {
         return mainFrame.getSelectedJavaCompilerName();
     }
+
     public static String getChooseDirectory(String lan) {
 
         try {

@@ -1,5 +1,6 @@
 package client.view.panel;
 
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import client.model.Information;
@@ -9,10 +10,10 @@ import client.model.StudentExamDetail;
 import client.util.Control;
 import client.util.Tips;
 import client.view.frame.LoginFrame;
+import common.LangSelector;
 import main.Answer;
 import main.Process;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +35,7 @@ import client.io.xml.SubmitCode;
 import client.io.xml.WrongCase;
 import common.Config;
 import common.FileFinder;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
+
 import java.awt.TrayIcon.MessageType;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -70,6 +67,7 @@ public class CodePanel extends JPanel implements ActionListener {
 
     private JComboBox JCB_Language;
     private JComboBox JCB_Coding;
+    private JComboBox JCB_Compiler;
     private JEditorPane JEP_Tmep;
 
     private JPanel Top_code;
@@ -98,6 +96,7 @@ public class CodePanel extends JPanel implements ActionListener {
     private JLabel jLabel5;
     private JLabel jLabel6;
     private JLabel jLabel7;
+    private JLabel compilerLabel; // 添加编译器标签
 
     private JPanel jpanel1;
     private JPanel jpanel2;
@@ -105,6 +104,8 @@ public class CodePanel extends JPanel implements ActionListener {
     private JPanel jpanel4;
     private JPanel jpanel5;
     private JPanel JCY;
+
+    private JPanel compilerPanel; // 用于容纳编译器标签和下拉框的面板
     private ButtonGroup JBG;
 
     private JToolBar TB_test;
@@ -122,11 +123,14 @@ public class CodePanel extends JPanel implements ActionListener {
     private String isCheckSimilarity;
     private int row;
     String submitOnlyAC;
+    private Long lefttime; // by san_san
+    private String compiler = "";
     //private AnswerTablePanel answerPage; 
 
-    public CodePanel(AnswerTablePanel ans) {
+    public CodePanel(AnswerTablePanel ans, Long lefttime) {
         this.language = "c";
         this.ans = ans;
+        this.lefttime = lefttime;
         initComponents();
         if (LoginFrame.getLogin() == false) {
             this.JB_Submit.setEnabled(false);
@@ -136,6 +140,36 @@ public class CodePanel extends JPanel implements ActionListener {
     public void setCode(String str) {
         this.JEP_Code.setText(str);
         JEP_Code.setCaretPosition(0);
+    }
+
+    private void initializeLanguageSelection() {
+        List<String> availableLanguages = Control.getLanguages();
+        if (availableLanguages.size() == 1) {
+            this.JCB_Language.setModel(new javax.swing.DefaultComboBoxModel(availableLanguages.toArray()));
+            setLanguage(availableLanguages.get(0));
+        } else {
+            List<String> list = new ArrayList<>(availableLanguages);
+            this.JCB_Language.setModel(new javax.swing.DefaultComboBoxModel(list.toArray()));
+
+            // 获取保存的语言ID
+            String savedLanguageId = LangSelector.getLastLanguage();
+            if (savedLanguageId != null) {
+                // 遍历可用语言列表，检查是否有匹配的语言
+                for (String availableLang : list) {
+                    // 将可用语言转换为标准ID进行比较
+                    String availableLangId = LangSelector.getLanguageIdFromAlias(availableLang);
+                    if (savedLanguageId.equals(availableLangId)) {
+                        // 找到匹配的语言，使用list中的原始形式（保持大小写等一致）
+                        setLanguage(availableLang);
+                        this.JCB_Language.setSelectedItem(availableLang);
+                        return;
+                    }
+                }
+            }
+
+            // 如果没有找到匹配的语言，使用第一个可用的语言
+            setLanguage(list.get(0));
+        }
     }
 
     private void initComponents() {
@@ -178,11 +212,13 @@ public class CodePanel extends JPanel implements ActionListener {
         this.jLabel5 = new JLabel("学生测试输出");
         this.jLabel6 = new JLabel("运行结果:");
         this.jLabel7 = new JLabel("编程语言:");
+        this.compilerLabel = new JLabel("编译器:");
         this.jpanel1 = new JPanel();
         this.jpanel2 = new JPanel();
         this.jpanel3 = new JPanel();
         this.jpanel4 = new JPanel();
         this.jpanel5 = new JPanel();
+        this.compilerPanel = new JPanel();
         this.JCY = new JPanel();
         this.JBG = new ButtonGroup();
         this.jSplitPane = new JSplitPane();
@@ -193,6 +229,16 @@ public class CodePanel extends JPanel implements ActionListener {
         this.JSP_Sample_input = new JScrollPane();
         this.JSP_Sample_output = new JScrollPane();
         this.JSP_Mine_output = new JScrollPane();
+        
+        // 编译器下拉框（MinGW、MSVC）by san_san
+        String[] options = {"MinGW", "MSVC"};
+        this.JCB_Compiler = new JComboBox<>(options);
+        String savedCompiler = common.LangSelector.getDefaultCompiler("C++");
+        if (savedCompiler != null && !savedCompiler.isEmpty()) {
+            this.JCB_Compiler.setSelectedItem(savedCompiler);
+        } else {
+            this.JCB_Compiler.setSelectedItem("MinGW");
+        } 
 
         //代码文本区域
         this.JEP_Code = new RSyntaxTextArea(20, 60);
@@ -268,18 +314,22 @@ public class CodePanel extends JPanel implements ActionListener {
 
         JCB_Language.setMaximumSize(new Dimension(300,100));
         JCB_Language.setPreferredSize(new Dimension(200, jToolBar.getHeight()));
+        JCB_Compiler.setMaximumSize(new Dimension(100,100));
+        JCB_Compiler.setPreferredSize(new Dimension(100, jToolBar.getHeight()));
+
         jToolBar.add(jLabel7);
         jToolBar.addSeparator(new Dimension(20, jToolBar.getHeight()));
         jToolBar.add(JCB_Language);
         jToolBar.addSeparator(new Dimension(10, jToolBar.getHeight()));
+
         //jToolBar布局 
         Container container = new Container();
         container.setLayout(new GridLayout(1, 20, 0, 0));
 
         jToolBar.add(JB_Submit);
         jToolBar.addSeparator(new Dimension(40, jToolBar.getHeight()));
-        jToolBar.add(JB_Save);
         jToolBar.add(new JPanel());
+        jToolBar.add(JB_Save);
         
         JPanel jp3 = new JPanel(new GridLayout(1, 2, 0, 0));
         jp3.add(this.JB_downFont);
@@ -293,23 +343,64 @@ public class CodePanel extends JPanel implements ActionListener {
         container.add(jp3);
         jToolBar.add(container);
 
-        Control.getLanguages();
-        if (Control.getLanguages().size() == 1) {
-            this.JCB_Language.setModel(new javax.swing.DefaultComboBoxModel(Control.getLanguages().toArray()));
-            setLanguage(Control.getLanguages().get(0));
-        } else {
-            List<String> list = new ArrayList<>();
-            list.add(new String("请选择语言"));
-            list.addAll(Control.getLanguages());
-            this.JCB_Language.setModel(new javax.swing.DefaultComboBoxModel(list.toArray()));
-        }
-//		this.JCB_Language.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"请选择", "c", "cpp", "java" }));
+//        Control.getLanguages();
+//        String lastLanguage = common.LangSelector.getLastLanguage();
+//        if (Control.getLanguages().size() == 1) {
+//            this.JCB_Language.setModel(new javax.swing.DefaultComboBoxModel(Control.getLanguages().toArray()));
+//            setLanguage(Control.getLanguages().get(0));
+//        } else {
+//            List<String> list = new ArrayList<>();
+//            list.addAll(Control.getLanguages());
+//            this.JCB_Language.setModel(new javax.swing.DefaultComboBoxModel(list.toArray()));
+//            setLanguage(Control.getLanguages().get(0));
+//        }
+        initializeLanguageSelection();
+        JCB_Compiler.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedCompiler = (String) JCB_Compiler.getSelectedItem();
+                
+                if (selectedCompiler == "MSVC"){
+                   try {
+                        System.out.println("配置文件:" + common.LangSelector.getCompilerPath("C++", "MSVC"));
+                        if (!new File(common.LangSelector.getCompilerPath("C++", "MSVC")).exists()) {//如果MSVC路径不存在
+                            String clPath = common.VSWhereUtil.findClExePath();
+                            System.out.println(clPath);
+                            if (clPath != null) {
+                                common.LangSelector.setCompilerPath("C++", "MSVC", clPath);
+                                common.LangSelector.setCompileCommand("C++", "MSVC", common.VSWhereUtil.getMsvcCompilerCommand());
+                                common.LangSelector.setLinkCommand("C++", "MSVC", common.VSWhereUtil.getMsvcLinkCommand());
+                                common.LangSelector.save(common.LangSelector.getConfigPath());
+                                setCompiler("MSVC");
+                                saveCompilerSelection("MSVC");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "未安装Visual Studio，无法选择MSVC");
+                                setCompiler("MinGW");
+                                //电脑上没有vs，向用户提示报错，无法选择msvc
+                                JCB_Compiler.setSelectedItem("MinGW");
+                                saveCompilerSelection("MinGW");
+                            }
+                        } else {
+                            //cl.exe已找到！无需额外操作
+                            setCompiler("MSVC");
+                            saveCompilerSelection("MSVC");
+                        }
+                      } catch (Exception ex) {
+                          ex.printStackTrace();
+                      }
+                } else {
+                   setCompiler("MinGW");
+                   saveCompilerSelection("MinGW");
+                }         
+            }
+        });
+        
         this.JCB_Language.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    String a = e.getItem().toString();
-                    setLanguage(a);
+                    String selectedLanguage = e.getItem().toString();
+                    setLanguage(selectedLanguage);
                 }
             }
         });
@@ -341,10 +432,11 @@ public class CodePanel extends JPanel implements ActionListener {
 
         this.JB_Submit.setText("  提交代码  ");
         this.JB_Submit.setSize(10, 10);
+        this.JB_Submit.setBackground(Color.GREEN);
         this.JB_Submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                actionPerformed_submitCode(e);
+                actionPerformed_submitCode(e, false);
             }
         });
 
@@ -388,6 +480,7 @@ public class CodePanel extends JPanel implements ActionListener {
         this.TB_sample.setFloatable(false);
         this.JB_Test2.setText("测试以下数据");
         this.JB_Test2.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 actionPerformed_sampleTest(e);
             }
@@ -455,8 +548,47 @@ public class CodePanel extends JPanel implements ActionListener {
         } else if ("C++".equals(lan)) {
             language = "C++";
             JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
-        } else if ("python".equals(lan)){
+        } else if ("Python".equals(lan)){
+            language = "python";
             JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PYTHON);
+        }
+
+        // 根据选择的语言决定是否显示编译器下拉框
+        if ("C".equals(lan) || "C++".equals(lan) || "c++".equals(lan) || "c".equals(lan)) {
+            if (jToolBar.getComponentIndex(JCB_Compiler) == -1) {
+                jToolBar.add(JCB_Compiler, jToolBar.getComponentIndex(JB_Submit));
+                jToolBar.add(compilerLabel, jToolBar.getComponentIndex(JCB_Compiler));
+            }
+        } else {
+            if (jToolBar.getComponentIndex(JCB_Compiler) != -1) {
+                jToolBar.remove(JCB_Compiler);
+                jToolBar.remove(compilerLabel);
+            }
+        }
+        // 保存语言选择
+        common.LangSelector.setLastLanguage(lan);
+
+        jToolBar.revalidate(); // 更新工具栏
+        jToolBar.repaint(); // 重绘工具栏
+    }
+    
+    // 设置时间 by san_san
+    public void setLefttime(Long lefttime){
+        this.lefttime = lefttime;
+    }
+    
+    // 保存编译器设置 by san_san
+    public void setCompiler(String compiler){
+        this.compiler = compiler;
+    }
+    
+    // 保存编译器选择至配置文件 by san_san
+    private void saveCompilerSelection(String compiler) {
+        try {
+            common.LangSelector.setDefaultCompiler("C++", compiler);
+            common.LangSelector.save(common.LangSelector.getConfigPath());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -481,19 +613,13 @@ public class CodePanel extends JPanel implements ActionListener {
                 testCaseOut[j] = testCaseBeansTmp.get(j).getOutput();
             }
             String codeString = CodePanel.this.JEP_Code.getText();
-            System.out.println("ssssss---" + codeString);
+//            System.out.println("ssssss---" + codeString);
             String regex = "[\\x00-\\x08]|[\\x0b-\\x0c]|[\\x0e-\\x1f]|[\\x7f-\\x84]|[\\x86-\\x9f]";
             codeString = codeString.replaceAll(regex, ""); //repalceAll和replace 区别在于前者用于正则表达式，后者用于普通字符串
             CodePanel.this.toLoad = codeString;
-            System.out.println("-----" + codeString);
+//            System.out.println("-----" + codeString);
             Float time_limit = Float.parseFloat(Control.getMainFrame().getInformation(String.valueOf(submitProblemId)).getTime_limit());
-            
-            
-            
-            
-            
-            
-            
+             
             //////////todo:自主选择编译器
             String compiler="";
             
@@ -509,11 +635,15 @@ public class CodePanel extends JPanel implements ActionListener {
                 submit.init();
                 toSave.updateXml(routing, codeString);
                 String codeXml = submit.SubmitCode(examId, String.valueOf(submitProblemId), language, codeString, answer);
-                System.out.println(codeXml);
+//                System.out.println(codeXml);
                 String username = Control.getUser().getUserName();
                 String passwd = Control.getUser().getPassword();
-                System.out.println("codeXml:\n" + codeXml);
-                String toWrite = Control.getWebsService().submitCode(username, passwd, codeXml);
+//                System.out.println("codeXml:\n" + codeXml);
+                
+                String userId = Control.getUser().getId();
+                String examId = Control.getExamId();
+                
+                String toWrite = Control.getWebsService().submitCode(username, passwd, codeXml, examId);
                 String backFile = "./xml/" + Control.getPath() + "/afterSubmitCode.xml";
                 File tmpFile = new File(backFile);
                 if (tmpFile.exists()) {
@@ -558,7 +688,7 @@ public class CodePanel extends JPanel implements ActionListener {
                             JOptionPane.INFORMATION_MESSAGE
                     );
                     if (answer.getStatus().equals("AC")) {
-                        String mes = "题号:" + String.valueOf(row + 1) + "\n" + "提交本题后才能将本题得分计入成绩，但一旦提交本题，不可再对本题提交代码\n你确认要自动提交本题吗？";
+                        String mes = "题号:" + String.valueOf(row + 1) + "\n" + "本题已AC，是否提交本题？\n" + "提交本题后才能将本题得分计入成绩，但一旦提交本题，不可再对本题提交代码\n你确认要自动提交本题吗？";
                         int selection = JOptionPane.showConfirmDialog(CodePanel.this,
                                 mes, "提示",
                                 JOptionPane.OK_CANCEL_OPTION,
@@ -585,7 +715,7 @@ public class CodePanel extends JPanel implements ActionListener {
                 //ans.setVisible(true);
             }
         } catch (Exception e) {
-
+            System.out.println(e);
         }
         return true;
     }
@@ -596,8 +726,16 @@ public class CodePanel extends JPanel implements ActionListener {
         Control.getJpb_message().setText("");
     }
 
-    private void actionPerformed_submitCode(ActionEvent e) {
-        if (!checkConditions()) {
+    private void actionPerformed_submitCode(ActionEvent e, boolean testSampleAC) {
+        // by san_san
+        if (this.lefttime <= 0){
+            JOptionPane.showMessageDialog(CodePanel.this,
+                    "考试时间已到，无法再提交代码", "提交失败", JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        if (!testSampleAC && !checkConditions()) {
             return;
         }
         //checkForCompile();
@@ -703,14 +841,10 @@ public class CodePanel extends JPanel implements ActionListener {
         temp.setOutput(testCaseAns);
         testCaseBeans.add(temp);
         //System.out.println(language+JEP_Code.getText()+to+testCaseBeans);
+           
         
-        
-        
-        
-        
-        
-        String compiler="";
-        outAll = new Process().Judge(language,compiler, JEP_Code.getText(), to+2, testCaseBeans);
+        String compiler=this.compiler;
+        outAll = new Process().Judge(language, compiler, JEP_Code.getText(), to+2, testCaseBeans);
 
         //System.out.println(JEP_Code.getText());
         //System.out.println(outAll.getUsersOutput()[0]);
@@ -739,12 +873,20 @@ public class CodePanel extends JPanel implements ActionListener {
             }
             message = getTips(outAll.getStatus());
             log.Log.writeInfo(outAll.getStatus());
-            if("AC".equals(outAll.getStatus())) message = "AC：用范例测试结果正确。\n如果想提交代码到服务器，请点击‘提交代码’按钮";
-            JOptionPane.showConfirmDialog(CodePanel.this,
-                    message, "测试结果",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            
+            // 测试样例AC选择是否提交至服务器
+            if ("AC".equals(outAll.getStatus())){
+                message = "AC：用范例测试结果正确。\n是否提交本题到服务器？";
+                int option = JOptionPane.showConfirmDialog(CodePanel.this,
+                        message, "测试结果",
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+                if (option == JOptionPane.YES_OPTION) {
+                    actionPerformed_submitCode(null, true);
+                }
+            }
         }
         return true;
     }
@@ -901,6 +1043,7 @@ public class CodePanel extends JPanel implements ActionListener {
         String status = sl.getStatus(routing);
         String remark = sl.getRemark(routing);
         String correctCaseIds = sl.getCorrectIds(routing, "String")[0];
+
         Answer answer = new Answer(testCaseIds, userOutput, statusofTestCase, status, remark, correctCaseIds);
         //Similarity s = sl.getSimi(routing);
         //Answer answer = new Process().Judge(language, JEP_Code.getText(), 1.0f, testCaseBeans); 
@@ -1088,51 +1231,6 @@ public class CodePanel extends JPanel implements ActionListener {
     }
 
     private boolean checkForCompile() {
-        String tmp = null;
-        if (language.toLowerCase().equals("c") || language.toLowerCase().equals("cpp") || language.toLowerCase().equals("c++")) {
-            tmp = Config.getCompilerDir("c",null);
-            if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "gcc.exe") || !FileFinder.isExistFile(tmp + File.separator + "g++.exe")) {
-                //弹窗设置保存
-                Object t = this.getParent();
-                while (!(t instanceof MainFrame)) {
-                    t = ((Component) t).getParent();
-                }
-                JOptionPane.showMessageDialog(this, "请先配置编译器");
-                NewCompileSetting window = new NewCompileSetting(language, (MainFrame) t, true);
-                window.setVisible(true);
-                return false;
-            }
-        }
-        if (language.toLowerCase().equals("java")) {
-            tmp = Config.getCompilerDir("java",null);
-            if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
-                //弹窗设置保存
-                Object t = this.getParent();
-                while (!(t instanceof MainFrame)) {
-                    t = ((Component) t).getParent();
-                }
-                JOptionPane.showMessageDialog(this, "请先配置编译器");
-                NewCompileSetting window = new NewCompileSetting(language, (MainFrame) t, true);
-                window.setVisible(true);
-                return false;
-            }
-        }
-        
-         if (language.toLowerCase().equals("python")) {
-            tmp = Config.getCompilerDir("python",null);
-            if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "python.exe")) {
-                //弹窗设置保存
-                Object t = this.getParent();
-                while (!(t instanceof MainFrame)) {
-                    t = ((Component) t).getParent();
-                }
-                JOptionPane.showMessageDialog(this, "请先配置编译器");
-                NewCompileSetting window = new NewCompileSetting(language, (MainFrame) t, true);
-                window.setVisible(true);
-                return false;
-            }
-        }
-         
         return true;
     }
 

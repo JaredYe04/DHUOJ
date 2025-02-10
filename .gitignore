@@ -29,3 +29,4 @@ client/nbproject/private/private.properties
 *.class
 *.class
 *.7z
+/client/dist/

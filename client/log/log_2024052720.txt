@@ -1,0 +1,8 @@
+2024-05-27 20:00:29[INFO]请求dubbo服务
+2024-05-27 20:02:40[INFO]请求dubbo服务
+2024-05-27 20:05:17[INFO]请求dubbo服务,url:dubbo://172.19.17.236:9000/edu.dhu.ws.OJWS
+2024-05-27 20:15:35[INFO]请求dubbo服务,url:dubbo://172.19.17.236:9000/edu.dhu.ws.OJWS
+2024-05-27 20:28:04[INFO]尝试建立Web服务
+2024-05-27 20:28:04[INFO]请求dubbo服务,url:dubbo://106.15.36.190:8080/edu.dhu.ws.OJWS
+2024-05-27 20:35:32[INFO]尝试建立Web服务
+2024-05-27 20:35:32[INFO]请求dubbo服务,url:dubbo://192.168.5.1:6379/edu.dhu.ws.OJWS

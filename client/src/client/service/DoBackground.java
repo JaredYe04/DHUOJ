@@ -36,7 +36,7 @@ public class DoBackground {
         int examId = Integer.parseInt(oldexam.getId());
         Exam_io exio = new Exam_io();
         try {
-            String str = Control.getWebsService().getExamById(username, passwd, examId);
+            String str = Control.getWebsService().getExamById(username, passwd, examId);       
 //            Object[] obj =client.invoke("WS_GetExamById",username,passwd,examId);
             this.newexam = exio.getexamString(str);
             if (this.newexam.getUpdateTime().equals("")){
@@ -48,12 +48,13 @@ public class DoBackground {
         //System.out.println(this.oldexam.getUpdateTime());
         if (!this.newexam.getUpdateTime().equals(this.oldexam.getUpdateTime())){
             exio.updateExam(newexam.getId(),newexam);
-            int r =JOptionPane .showConfirmDialog(null,"考试已经更新，是否立即更新？", "提示", JOptionPane.YES_NO_OPTION);
-            if (r==JOptionPane.YES_OPTION){
-                new ProgressBarFrame(newexam,DownSwingWorker.PROBLEMLIST); 
-            }     
-        }
-        
-        
+            Control.setExam(newexam);
+
+            Long leftTime = Control.getWebsService().getExamDeadline(Control.getUser().getUserName(), Control.getUser().getPassword(), Integer.parseInt(newexam.getId()));
+            Control.getTP_time().updateTimeDisplay(leftTime);
+            new ProgressBarFrame(newexam,DownSwingWorker.EXAM);
+            JOptionPane.showMessageDialog(null, "考试信息已经更新完毕！", "提示", JOptionPane.INFORMATION_MESSAGE);   
+              
+        }  
     }
 }

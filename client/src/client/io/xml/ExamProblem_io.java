@@ -53,14 +53,17 @@ public class ExamProblem_io {
                 ep.setTitle(ele.getElementsByTagName("title").item(0).getTextContent());
                 ep.setDifficulty(ele.getElementsByTagName("difficulty").item(0).getTextContent());
                 ep.setBestBefore(ele.getElementsByTagName("bestBefore").item(0).getTextContent());
-                ep.setScoreCoef(ele.getElementsByTagName("scoreCoef").item(0).getTextContent());
+                ep.setBestBeforeForClass(ele.getElementsByTagName("bestBeforeForClass").item(0).getTextContent());
+                ep.setScoreCoefForClass(ele.getElementsByTagName("scoreCoefForClass").item(0).getTextContent());
+                ep.setDeadLineForClass(ele.getElementsByTagName("deadlineForClass").item(0).getTextContent()); // by san_san
+
                 if ("".equals(ele.getElementsByTagName("updateTime").item(0).getTextContent())) {
                     ep.setUpdateTime("2000-01-01 00:00:00");
                 }else{
                     ep.setUpdateTime(ele.getElementsByTagName("updateTime").item(0).getTextContent());
                 }
                 
-                eplist.add(ep);
+                eplist.add(ep);                
             }
             return eplist;
     }

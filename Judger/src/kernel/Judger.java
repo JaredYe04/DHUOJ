@@ -10,6 +10,8 @@ import common.Config;
 import resultData.RunInfo;
 import common.Const;
 import common.LangSelector;
+import common.LogLevel;
+import common.Logger;
 //import gui.Control;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,7 +38,7 @@ public class Judger {
     Boolean isFound;
     String mainClassName; //
     String sourceDir;
-    
+    private static Logger logger=Logger.getInstance();
     public Judger() {
         Config.freshConfig();
         sourceFile = "";
@@ -202,6 +204,9 @@ public class Judger {
                     result = exe.exeLink(linkCommand(language,compiler),"Path="+Config.getCompilerDir(language,compiler));
                     if(result==0){
                         break;
+                    }
+                    else{
+                        logger.log("±‡“Î≥…π¶£¨¡¥Ω”¥ÌŒÛ£∫"+language+";"+compiler+";"+sourceCode, LogLevel.WARNING);
                     }
                 } else {
                     break;

@@ -569,7 +569,7 @@
   </wsdl:binding>
   <wsdl:service name="OJWS">
     <wsdl:port binding="tns:OJWSSoapBinding" name="OJWSImplPort">
-      <soap:address location="http://106.15.36.190/oj/webservice/OJWS" />
+      <soap:address location="https://219.228.76.122:8080/oj/webservice/OJWS" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

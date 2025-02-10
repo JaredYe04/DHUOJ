@@ -72,7 +72,7 @@ public class XmlUtils {
 //        Document document = builder.parse(is);  
 //        file.delete();
 
-        File f = new File(str);  
+        File f = new File(str);
         if(!f.exists()||f.isDirectory())
             f.createNewFile();
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int)f.length());  
@@ -97,9 +97,9 @@ public class XmlUtils {
 //        System.out.println("Ω‚√‹"+key);
         String tmp = Decrypt.decrypt(key, bos.toByteArray());
         InputStream is = new ByteArrayInputStream(tmp.getBytes());
-        
         return builder.parse(is);  
-    }  
+    } 
+    
     public static void DocumentToString(Document doc,String path,String bm,String key) throws Exception{
 	String xmlStr = null;
 	TransformerFactory tf = TransformerFactory.newInstance(); 

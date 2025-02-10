@@ -1,0 +1,64 @@
+2024-07-16 14:19:08[INFO]尝试建立Web服务
+2024-07-16 14:19:08[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:19:16[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3004ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:19:16[ERROR]请求dubbo服务失败
+2024-07-16 14:19:16[INFO]建立Web服务成功
+2024-07-16 14:19:16[ERROR]建立Web服务异常null
+2024-07-16 14:19:35[INFO]尝试建立Web服务
+2024-07-16 14:19:35[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:19:38[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3009ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:19:38[ERROR]请求dubbo服务失败
+2024-07-16 14:19:38[INFO]建立Web服务成功
+2024-07-16 14:19:38[ERROR]建立Web服务异常null
+2024-07-16 14:19:46[INFO]尝试建立Web服务
+2024-07-16 14:19:46[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:19:49[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3013ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:19:49[ERROR]请求dubbo服务失败
+2024-07-16 14:19:49[INFO]建立Web服务成功
+2024-07-16 14:19:49[ERROR]建立Web服务异常null
+2024-07-16 14:25:47[INFO]尝试建立Web服务
+2024-07-16 14:25:47[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:25:50[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=21824&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3013ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:25:50[ERROR]请求dubbo服务失败
+2024-07-16 14:25:50[INFO]建立Web服务成功
+2024-07-16 14:25:50[ERROR]建立Web服务异常null
+2024-07-16 14:26:29[INFO]尝试建立Web服务
+2024-07-16 14:26:29[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:26:36[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=3724&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=3724&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3011ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:26:36[ERROR]请求dubbo服务失败
+2024-07-16 14:26:36[INFO]建立Web服务成功
+2024-07-16 14:26:36[ERROR]建立Web服务异常null
+2024-07-16 14:26:45[INFO]尝试建立Web服务
+2024-07-16 14:26:45[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:26:48[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=3724&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=3724&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3009ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:26:48[ERROR]请求dubbo服务失败
+2024-07-16 14:26:48[INFO]建立Web服务成功
+2024-07-16 14:26:48[ERROR]建立Web服务异常null
+2024-07-16 14:28:18[INFO]尝试建立Web服务
+2024-07-16 14:28:18[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:28:25[INFO]请求dubbo服务成功
+2024-07-16 14:28:25[INFO]建立Web服务成功
+2024-07-16 14:28:46[INFO]尝试建立Web服务
+2024-07-16 14:28:46[ERROR]请求dubbo服务失败
+2024-07-16 14:28:46[INFO]建立Web服务成功
+2024-07-16 14:28:46[ERROR]建立Web服务异常null
+2024-07-16 14:28:53[INFO]尝试建立Web服务
+2024-07-16 14:28:53[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:28:53[INFO]请求dubbo服务成功
+2024-07-16 14:28:53[INFO]建立Web服务成功
+2024-07-16 14:28:58[INFO]尝试建立Web服务
+2024-07-16 14:28:58[ERROR]请求dubbo服务失败
+2024-07-16 14:28:58[INFO]建立Web服务成功
+2024-07-16 14:28:58[ERROR]建立Web服务异常null
+2024-07-16 14:33:25[INFO]尝试建立Web服务
+2024-07-16 14:33:25[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:33:33[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=24688&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=24688&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3012ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:33:33[ERROR]请求dubbo服务失败
+2024-07-16 14:33:33[INFO]建立Web服务成功
+2024-07-16 14:33:33[ERROR]建立Web服务异常null
+2024-07-16 14:35:26[INFO]尝试建立Web服务
+2024-07-16 14:35:27[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-16 14:35:34[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=26344&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=26344&qos.enable=false&register.ip=192.168.5.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /219.228.76.122:8080 client-side timeout 3000ms (elapsed: 3015ms) from netty client 192.168.5.1 using dubbo version 3.2.0
+2024-07-16 14:35:34[ERROR]请求dubbo服务失败
+2024-07-16 14:35:34[INFO]建立Web服务成功
+2024-07-16 14:35:34[ERROR]建立Web服务异常null

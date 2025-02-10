@@ -9,11 +9,7 @@
         </group>
         <group name="论文"/>
         <group>
-            <file>file:/K:/OJ/Judger/src/kernel/WriteInfo.java</file>
-            <file>file:/K:/OJ/Judger/src/main/Answer.java</file>
-            <file>file:/K:/OJ/Judger/src/main/Process.java</file>
-            <file>file:/K:/OJ/Judger/src/kernel/ExeCommand.java</file>
-            <file>file:/K:/OJ/Judger/src/kernel/Judger.java</file>
+            <file>file:/D:/oj/Judger/src/main/Process.java</file>
         </group>
     </open-files>
 </project-private>

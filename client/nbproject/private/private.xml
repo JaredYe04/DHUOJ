@@ -3,6 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="最新版本代码"/>
-        <group/>
+        <group>
+            <file>file:/D:/oj/client/nbproject/build-impl.xml</file>
+            <file>file:/D:/oj/client/src/client/util/similarity/check.java</file>
+            <file>file:/D:/oj/client/src/client/util/Decrypt.java</file>
+            <file>file:/D:/oj/client/src/client/service/web/Webservice.java</file>
+            <file>file:/D:/oj/client/src/META-INF/wsdl/106.15.36.190_80/oj/webservice/OJWS.wsdl</file>
+            <file>file:/D:/oj/client/src/client/service/DownSwingWorker.java</file>
+            <file>file:/D:/oj/client/src/edu/dhu/ws/OJWS.java</file>
+            <file>file:/D:/oj/client/src/META-INF/jax-ws-catalog.xml</file>
+            <file>file:/D:/oj/client/src/client/view/frame/MainFrame.java</file>
+            <file>file:/D:/oj/client/src/client/view/panel/PaperPanel.java</file>
+            <file>file:/D:/oj/client/xml-resources/web-service-references/OJWS/wsdl/219.228.76.122_8080/oj/webservice/OJWS.wsdl</file>
+            <file>file:/D:/oj/client/src/client/view/frame/LoginFrame.java</file>
+        </group>
     </open-files>
 </project-private>
