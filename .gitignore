@@ -30,3 +30,13 @@ client/nbproject/private/private.properties
 *.class
 *.7z
 /client/dist/
+*.class
+/client/build/classes
+*.class
+/client/build
+/client/可运行客户端环境
+/Judger/备份
+/JuderUI/log
+/JuderUI/build
+/JuderUI/log
+/client/build
