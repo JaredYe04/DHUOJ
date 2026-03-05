@@ -56,6 +56,7 @@ public class TimePanel extends JPanel{
             this.JLabel3 = new JLabel("");
             this.JL_time = new JLabel();
             this.JL_display = new JLabel();
+            //System.out.println("lefttime创建："+this.lefttime);
             this.lefttime = lefttime;
             if(LoginFrame.getLogin()==true){
                 
@@ -77,12 +78,14 @@ public class TimePanel extends JPanel{
       
       // by san_san
       public void updateTimeDisplay(Long lefttime){
+            //System.out.println("lefttime更新："+this.lefttime);
             this.lefttime = lefttime;
       }
         
 	protected class JLabelTimerTask extends TimerTask{
             
             public void run() {
+                //System.out.println("lefttime："+lefttime);
                 if (lefttime <= 0){
                     time = "考试时间已到";
                 }

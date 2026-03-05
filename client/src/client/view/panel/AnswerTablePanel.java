@@ -56,6 +56,8 @@ import client.io.xml.SolutionCode;
 import client.io.xml.StudentExamDetail_io;
 import client.io.xml.SubmitProblem;
 import client.io.xml.WrongCase;
+import common.LogLevel;
+import common.Logger;
 
 /**
  *
@@ -84,6 +86,7 @@ public class AnswerTablePanel extends JPanel {
     JPanel wrong;
     JPanel detail;
     JPanel wrongTestCase;
+    Logger logger;
     Answer answer;
     ActionListener wrongDetail;
     ActionListener submitPro;
@@ -131,6 +134,7 @@ public class AnswerTablePanel extends JPanel {
         this.submit.setPreferredSize(new Dimension(70, 30));
         wrongDetail = new Wrongdetail();
         this.submitPro = new SubmitPro();
+        this.logger=Logger.getInstance();
         this.Refresh = new Refresh();
         runInfo.setText("运行状态：");
         subTime.setText("提交次数：");
@@ -675,6 +679,7 @@ public class AnswerTablePanel extends JPanel {
                     JOptionPane.WARNING_MESSAGE
             );
             return;
+            
         }
         SolutionCode sc = new SolutionCode();
         sc.init();
@@ -693,7 +698,7 @@ public class AnswerTablePanel extends JPanel {
             this.simi = new Similarity("-1", "", "");
             sc.setSimi("./xml/"+Control.getPath()+"/"+Control.getExamId()+"-"+proId+".xml", "-1");
         }
-
+        logger.log("[提交代码]进行setSimilarity成功", LogLevel.INFO);
         SubmitProblem sub = new SubmitProblem();
         if (sc.isCopied("./xml/"+Control.getPath()+"/"+Control.getExamId()+"-"+proId+".xml").equals("true")) {
             String message = "此代码涉嫌抄袭，是否提交？";
@@ -727,8 +732,10 @@ public class AnswerTablePanel extends JPanel {
         try {
             toWrite = Control.getWebsService().submitThisProblem(username, passwd, problemXml);
             System.out.println("submitThisProblem:\n" + toWrite);
+            logger.log("[提交代码]submitThisProblem成功，已获得toWrite内容", LogLevel.INFO);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log("[提交代码]submitThisProblem失败："+e.getMessage(), LogLevel.ERROR);
         }
         String backFile = "./xml/" + Control.getPath() + "/afterSubmitProblem.xml";
         File tmpFile = new File(backFile);
@@ -736,10 +743,13 @@ public class AnswerTablePanel extends JPanel {
             tmpFile.delete();
         }
         TextToFile(backFile, toWrite);
+        
         SubmitProblem sb = new SubmitProblem();
         sb.init();
         String msg = sb.isSubmitted(backFile);
+        
         if (msg.equals("true")) {
+            logger.log("[提交代码]成功：", LogLevel.INFO);
             if (flag) {
                 String message = "成功提交本题";
                 JOptionPane.showConfirmDialog(AnswerTablePanel.this,
@@ -756,8 +766,10 @@ public class AnswerTablePanel extends JPanel {
             }
 
         } else if (msg.equals("不能重复提交")) {
+            logger.log("[提交代码]失败："+msg, LogLevel.WARNING);
             JOptionPane.showConfirmDialog(AnswerTablePanel.this, "请注意：\n您已经提交过本题，不可再提交。", "注意", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
         } else {
+            logger.log("[提交代码]失败："+msg, LogLevel.WARNING);
             String message = msg;
             JOptionPane.showConfirmDialog(AnswerTablePanel.this,
                     message, "提示",
@@ -797,8 +809,10 @@ public class AnswerTablePanel extends JPanel {
         try {
             toWrite = Control.getWebsService().getExamProblemStatus(username, passwd, Integer.parseInt(Control.getExamId()), Integer.parseInt(proId));
             System.out.println("getExamProblemStatus:\n" + toWrite);
+            logger.log("[刷新结果]getExamProblemStatus:"+toWrite, LogLevel.INFO);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log("[刷新结果]失败："+e.getMessage(), LogLevel.ERROR);
         }
         String backFile = "./xml/" + Control.getPath() + "/afterRefresh.xml";
         File tmpFile = new File(backFile);

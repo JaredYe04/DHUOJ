@@ -22,7 +22,7 @@ public class Config {
     public static final Properties prop= new Properties();
     static{
         try {
-            InputStream in = new FileInputStream(common.FileFinder.findFile("client/config/config.properties"));
+            InputStream in = new FileInputStream(common.FileFinder.findFile("config/config.properties"));
 
             prop.load(in);
             in.close();

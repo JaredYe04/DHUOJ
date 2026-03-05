@@ -6,6 +6,8 @@
 package client.io.xml;
 
 import client.util.Control;
+import common.LogLevel;
+import common.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,12 +38,13 @@ import org.xml.sax.SAXException;
 public class SubmitProblem {
     
     private Document document;
-    
+    private Logger logger;
 
     public void init() {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
+            this.logger=Logger.getInstance();
             this.document = db.newDocument();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -150,15 +153,20 @@ public class SubmitProblem {
              if(status.equals("Success")){
                  return "true";
              }
+             logger.log("[提交代码]status获取成功："+status, LogLevel.INFO);
              return status;
          }catch(FileNotFoundException e){
              e.printStackTrace();
+             logger.log("[提交代码]status失败：FileNotFoundException"+e.getMessage(), LogLevel.ERROR);
          }catch(ParserConfigurationException e){
              e.printStackTrace();
+             logger.log("[提交代码]status失败：ParserConfigurationException"+e.getMessage(), LogLevel.ERROR);
          }catch(SAXException e){
              e.printStackTrace();
+             logger.log("[提交代码]status失败：SAXException"+e.getMessage(), LogLevel.ERROR);
          }catch(IOException e){
              e.printStackTrace();
+             logger.log("[提交代码]status失败：IOException"+e.getMessage(), LogLevel.ERROR);
          }
           return "";
      }

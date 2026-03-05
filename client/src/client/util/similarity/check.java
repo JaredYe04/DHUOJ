@@ -51,7 +51,7 @@ public class check {
 
         Similarity s;
         List<submittedCode> submittedcodeList = new Parsexml().getCode(route);
-        if (submittedcodeList.get(0).getId().equals("-1")) {
+        if (!submittedcodeList.isEmpty() &&submittedcodeList.get(0).getId().equals("-1")) {
             s = new Similarity("error", "", "");
         }
         for (int i = 0; i < submittedcodeList.size(); i++) {

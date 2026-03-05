@@ -185,6 +185,7 @@ public class ExeCommand {
     }
 
     public int getJurgeResult(String command,String env, String input, long timeLimit) {
+        if(command==null)command="";//Jared Ye 2025.3.24
         int result = -1;
 
         Process p = null;

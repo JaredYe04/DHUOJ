@@ -8,6 +8,7 @@ package main;
 import MyCache.Shared;
 import java.util.List;
 import common.Const;
+import common.LogLevel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -28,7 +29,7 @@ public class Process {
 
     //函数接口
     private Consumer<String> con;
-
+    private static common.Logger logger=common.Logger.getInstance();
     //资源
     private SolutionBean solutionBean = null;//2
     private ProblemBean problemBean = null;//3
@@ -154,7 +155,17 @@ public class Process {
         this.judger = new Judger();
         //Boolean is = this.judger.checkForCompiler();
         this.solutionBean.setLanguage(language);
+        
+        if(compiler.trim().isEmpty()){
+            logger.log("警告：compiler为空！已选择默认编译器。", LogLevel.WARNING);
+            compiler=common.LangSelector.getDefaultCompiler(language);
+        }
+        
+        
         this.solutionBean.setCompiler(compiler);
+        
+        
+        
         this.solutionBean.setSourceCode(sourceCode);
         this.problemBean.setTime_limit(timeOut);
         // if(is == false) return ;

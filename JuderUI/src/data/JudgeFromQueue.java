@@ -150,13 +150,19 @@ public class JudgeFromQueue extends Thread {
         String language = s.getLanguage();
         String sourceCode = s.getCode();
         String compiler = s.getCompiler();
-
-        Float timeOut = problemBeanMap.get(problemId).getTimeOut();
-        List<ProblemTestCaseBean> testCaseBeanList = problemBeanMap.get(problemId).getTestCaseBeanList();
+        try{
+            Float timeOut = problemBeanMap.get(problemId).getTimeOut();
+            List<ProblemTestCaseBean> testCaseBeanList = problemBeanMap.get(problemId).getTestCaseBeanList();
         
-        MySwingWorker myswingworker = new MySwingWorker(threadNo, solutionId, problemId, language,compiler, sourceCode, timeOut, testCaseBeanList, this::changeMessage, this::submitAnswer);
-        myswingworker.execute();
-        myswingworker.get();
+            MySwingWorker myswingworker = new MySwingWorker(threadNo, solutionId, problemId, language,compiler, sourceCode, timeOut, testCaseBeanList, this::changeMessage, this::submitAnswer);
+            myswingworker.execute();
+            myswingworker.get();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            logger.log(e.getMessage(), LogLevel.ERROR);
+        }
+
 //                      int i =1/0;
     }
 
@@ -173,6 +179,8 @@ public class JudgeFromQueue extends Thread {
         if (problem == null) {
             try{
                 problem = Control.getWebService().getProblem(Integer.parseInt(problemId));
+                System.out.println("获取题目信息成功：");
+                //System.out.println(problem);
                 problemsCachManager.putObject("problemId" + problemId, problem);
             }catch(Exception e){
                 Result.status = Const.SE;

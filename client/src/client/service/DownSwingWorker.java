@@ -208,6 +208,7 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
 //                    Object[] obj =client.invoke("WS_GetProblem",username,passwd,problemId);
                     String pro = Decrypt.decrypt(key, by);  
 //                    String prob = pro.replaceFirst("GBK", "UTF-8");
+                    //System.out.println("获取题目的XML:"+pro);
                     val.add(Integer.valueOf(progressValue));
                     publish((progressValue++) + "/" + numall + ":第" + (i + 1) + "题已下载");
                     ProblemURL rUrl = new ProblemURL(pro);
@@ -268,7 +269,7 @@ public class DownSwingWorker extends SwingWorker<List<Integer>, String> {
             
 //            Object[] obj =client.invoke("WS_GetProblem",username,passwd,problemId);
             String pro = Decrypt.decrypt(key, by);
-            System.out.println(pro);
+            //System.out.println("获取题目的XML:"+pro);
             val.add(Integer.valueOf(progressValue));
             publish((progressValue++) + "/" + numall + " 题已重新下载");
             ProblemURL rUrl = new ProblemURL(pro);

@@ -259,7 +259,7 @@ public class MainFrame extends JFrame implements ColorChange {
                     new DoBackground().compareUpdateTime();
 
                     setProblemlist(true);
-                    setRank();
+                    setRank(Control.getIp());
                 } catch (Exception ex) {
                     System.err.println(ex.getMessage());
                     Log.writeExceptionLog(ex.getMessage());
@@ -371,7 +371,7 @@ public class MainFrame extends JFrame implements ColorChange {
             this.JPT_Rank = new RankPanel();
             TP_Main.addTab("成绩排名", JPT_Rank); //TODO 成绩排名页暂时隐藏    
 //            this.JPT_Rank.showHTML("./rank.html");
-            setRank();
+            setRank(Control.getIp());
         }
         this.TP_Main.addChangeListener(new ChangeListener() {
             @Override
@@ -390,36 +390,38 @@ public class MainFrame extends JFrame implements ColorChange {
         setBounds((screenSize.width - 850) / 2, (screenSize.height - 650) / 2, 850, 650);
     }
 
-    private void setRank() {
+    private void setRank(String baseUrl) {
         int problemNum = this.problemlist.size();
-
+        if(baseUrl.isEmpty())
+            baseUrl="www.52ac.tech";
+        //System.out.println("Rank BaseUrl"+baseUrl);
         String examId = this.examId;
         String trainingViewScore = exam.getStudentViewScore();
         String rankUrl = "";
-
+        String protocol=Control.determineProtocol();
         switch (trainingViewScore){
           case "System":
               if (problemNum <= 10) {
-                  rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-rank-status";
+                  rankUrl = protocol+"://"+baseUrl+"/#/client/contest/" + examId + "/score-rank-status";
               } else {
-                  rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-top10";
+                  rankUrl = protocol+"://"+baseUrl+"/#/client/contest/" + examId + "/score-top10";
               }
               JPT_Rank.changeHTML(rankUrl);
               break;
           case "RankAndStatus":
-              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-rank-status";
+              rankUrl = protocol+"://"+baseUrl+"/#/client/contest/" + examId + "/score-rank-status";
               JPT_Rank.changeHTML(rankUrl);
               break;
           case "OnlyRank":
-              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-only-rank";
+              rankUrl = protocol+"://"+baseUrl+"/#/client/contest/" + examId + "/score-only-rank";
               JPT_Rank.changeHTML(rankUrl);
               break;
           case "Top10":
-              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-top10";
+              rankUrl = protocol+"://"+baseUrl+"/#/client/contest/" + examId + "/score-top10";
               JPT_Rank.changeHTML(rankUrl);
               break;
           case "iTraining":
-              rankUrl = "http://www.52ac.tech/#/client/contest/" + examId + "/score-train-rank";
+              rankUrl = protocol+"://"+baseUrl+"/#/client/contest/" + examId + "/score-train-rank";
               JPT_Rank.changeHTML(rankUrl);
               break;
           case "NoScorePage":
@@ -427,6 +429,7 @@ public class MainFrame extends JFrame implements ColorChange {
               break;
           default:
       }
+        System.out.println("Rank RankUrl"+rankUrl);
     }
 
     private void JB_ReturnActionPerformed(ActionEvent evt) {

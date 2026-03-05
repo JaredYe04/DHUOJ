@@ -205,13 +205,15 @@ public class ExamFrame extends javax.swing.JFrame {
                 this.JP_contest.add(this.JLabel5);
                 this.JP_contest.add(this.JLabel6);
                 this.JP_temp = new JPanel();
-                this.JP_temp.setLayout(new FlowLayout(FlowLayout.CENTER));
+                this.JP_temp.setLayout(new BoxLayout(this.JP_temp, BoxLayout.Y_AXIS));
 
                 this.JB_contest.setText("²Î¼Ó");
                 //final int i=j;
                 //this.JB_contest.setActionCommand(examlist.get(i).getId());
                 this.JB_contest.addActionListener(onclicklister);
+                this.JP_temp.add(Box.createVerticalGlue());
                 this.JP_temp.add(this.JB_contest);
+                this.JP_temp.add(Box.createVerticalGlue());
                 this.JP_contest.add(this.JP_temp);
                 s.gridx = 0;
                 s.gridy = i + 1;
@@ -240,6 +242,8 @@ public class ExamFrame extends javax.swing.JFrame {
                 s.gridx = 6;
                 s.gridy = i + 1;
                 s.insets = new Insets(1, 1, 1, 0);
+                s.fill = GridBagConstraints.VERTICAL;
+                s.anchor = GridBagConstraints.CENTER;
                 layout.setConstraints(this.JP_temp, s);
             } else {
                 this.JLabel1 = new JLabel(" ");

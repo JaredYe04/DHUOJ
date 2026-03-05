@@ -357,6 +357,7 @@ public class LoginFrame extends JFrame {
     private void setUser() {
         User_io io = new User_io();
         user = io.getUser(message);
+        user.setPassword(password);//更新之后服务器返回的password是SHA256密文，因此需要手动设置为明文，以便客户端发起ws请求操作。
     }
 
     public static void main(String args[]) {
@@ -380,6 +381,7 @@ public class LoginFrame extends JFrame {
             System.err.println("更新错误啦！");
         }
         try {
+            Control.setIp(ip);
             URL url = new URL("http://" + ip + ":" + port + "/oj/webservice/OJWS?wsdl");
             QName qname = new QName("http://ws.dhu.edu/", "OJWS");
             logger.log("尝试建立Web服务", LogLevel.INFO);

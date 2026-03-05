@@ -68,6 +68,8 @@ public class CodePanel extends JPanel implements ActionListener {
     private JComboBox JCB_Language;
     private JComboBox JCB_Coding;
     private JComboBox JCB_Compiler;
+    private JComboBox JCB_PythonCompiler;
+    private JComboBox JCB_JavaCompiler;
     private JEditorPane JEP_Tmep;
 
     private JPanel Top_code;
@@ -238,7 +240,21 @@ public class CodePanel extends JPanel implements ActionListener {
             this.JCB_Compiler.setSelectedItem(savedCompiler);
         } else {
             this.JCB_Compiler.setSelectedItem("MinGW");
-        } 
+        }
+
+        // 初始化Python编译器下拉框
+        String[] pythonOptions = {"Python3.12"};
+        this.JCB_PythonCompiler = new JComboBox<>(pythonOptions);
+        this.JCB_PythonCompiler.setSelectedItem("Python3.12");
+        this.JCB_PythonCompiler.setMaximumSize(new Dimension(100,100));
+        this.JCB_PythonCompiler.setPreferredSize(new Dimension(100, jToolBar.getHeight()));
+
+        // 初始化Java编译器下拉框
+        String[] javaOptions = {"JDK8"};
+        this.JCB_JavaCompiler = new JComboBox<>(javaOptions);
+        this.JCB_JavaCompiler.setSelectedItem("JDK8");
+        this.JCB_JavaCompiler.setMaximumSize(new Dimension(100,100));
+        this.JCB_JavaCompiler.setPreferredSize(new Dimension(100, jToolBar.getHeight()));
 
         //代码文本区域
         this.JEP_Code = new RSyntaxTextArea(20, 60);
@@ -436,7 +452,7 @@ public class CodePanel extends JPanel implements ActionListener {
         this.JB_Submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                actionPerformed_submitCode(e, false);
+                actionPerformed_submitCode(e);
             }
         });
 
@@ -542,27 +558,38 @@ public class CodePanel extends JPanel implements ActionListener {
         if ("Java".equals(lan)) {
             language = "Java";
             JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+
+            removeAllCompilers();
+            if (jToolBar.getComponentIndex(JCB_JavaCompiler) == -1) {
+                jToolBar.add(JCB_JavaCompiler, jToolBar.getComponentIndex(JB_Submit));
+                jToolBar.add(compilerLabel, jToolBar.getComponentIndex(JCB_JavaCompiler));
+            }
         } else if ("C".equals(lan)) {
             language = "C";
             JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
-        } else if ("C++".equals(lan)) {
-            language = "C++";
-            JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
-        } else if ("Python".equals(lan)){
-            language = "python";
-            JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PYTHON);
-        }
 
-        // 根据选择的语言决定是否显示编译器下拉框
-        if ("C".equals(lan) || "C++".equals(lan) || "c++".equals(lan) || "c".equals(lan)) {
+            removeAllCompilers();
             if (jToolBar.getComponentIndex(JCB_Compiler) == -1) {
                 jToolBar.add(JCB_Compiler, jToolBar.getComponentIndex(JB_Submit));
                 jToolBar.add(compilerLabel, jToolBar.getComponentIndex(JCB_Compiler));
             }
-        } else {
-            if (jToolBar.getComponentIndex(JCB_Compiler) != -1) {
-                jToolBar.remove(JCB_Compiler);
-                jToolBar.remove(compilerLabel);
+        } else if ("C++".equals(lan)) {
+            language = "C++";
+            JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+
+            removeAllCompilers();
+            if (jToolBar.getComponentIndex(JCB_Compiler) == -1) {
+                jToolBar.add(JCB_Compiler, jToolBar.getComponentIndex(JB_Submit));
+                jToolBar.add(compilerLabel, jToolBar.getComponentIndex(JCB_Compiler));
+            }
+        } else if ("Python".equals(lan)){
+            language = "python";
+            JEP_Code.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_PYTHON);
+
+            removeAllCompilers();
+            if (jToolBar.getComponentIndex(JCB_PythonCompiler) == -1) {
+                jToolBar.add(JCB_PythonCompiler, jToolBar.getComponentIndex(JB_Submit));
+                jToolBar.add(compilerLabel, jToolBar.getComponentIndex(JCB_PythonCompiler));
             }
         }
         // 保存语言选择
@@ -570,6 +597,26 @@ public class CodePanel extends JPanel implements ActionListener {
 
         jToolBar.revalidate(); // 更新工具栏
         jToolBar.repaint(); // 重绘工具栏
+    }
+
+    private void removeAllCompilers() {
+        // 移除C/C++编译器下拉框
+        if (jToolBar.getComponentIndex(JCB_Compiler) != -1) {
+            jToolBar.remove(JCB_Compiler);
+            jToolBar.remove(compilerLabel);
+        }
+
+        // 移除Python编译器下拉框
+        if (jToolBar.getComponentIndex(JCB_PythonCompiler) != -1) {
+            jToolBar.remove(JCB_PythonCompiler);
+            jToolBar.remove(compilerLabel);
+        }
+
+        // 移除Java编译器下拉框
+        if (jToolBar.getComponentIndex(JCB_JavaCompiler) != -1) {
+            jToolBar.remove(JCB_JavaCompiler);
+            jToolBar.remove(compilerLabel);
+        }
     }
     
     // 设置时间 by san_san
@@ -621,8 +668,24 @@ public class CodePanel extends JPanel implements ActionListener {
             Float time_limit = Float.parseFloat(Control.getMainFrame().getInformation(String.valueOf(submitProblemId)).getTime_limit());
              
             //////////todo:自主选择编译器
-            String compiler="";
-            
+            //String compiler="";
+            System.out.println("调试CodePanel:"+language+";\n"+compiler+";\n"+codeString);
+
+
+
+            String selectedCompiler = "";
+            if ("C++".equals(language) || "C".equals(language)) {
+                selectedCompiler = (String) JCB_Compiler.getSelectedItem();
+            } else if ("python".equals(language)) {
+                selectedCompiler = (String) JCB_PythonCompiler.getSelectedItem();
+            } else if ("Java".equals(language)) {
+                selectedCompiler = (String) JCB_JavaCompiler.getSelectedItem();
+            }
+            this.compiler = selectedCompiler;
+
+
+            System.out.println("language" + language);
+            System.out.println("compiler" + compiler);
             Answer answer = new Process().Judge(language,compiler, codeString, time_limit+2, testCaseBeans); //loss of timelimit
             if (answer.getStatus().equals("NF")) {
                 JOptionPane.showMessageDialog(CodePanel.this,
@@ -726,7 +789,7 @@ public class CodePanel extends JPanel implements ActionListener {
         Control.getJpb_message().setText("");
     }
 
-    private void actionPerformed_submitCode(ActionEvent e, boolean testSampleAC) {
+    private void actionPerformed_submitCode(ActionEvent e) {
         // by san_san
         if (this.lefttime <= 0){
             JOptionPane.showMessageDialog(CodePanel.this,
@@ -735,7 +798,7 @@ public class CodePanel extends JPanel implements ActionListener {
             return;
         }
 
-        if (!testSampleAC && !checkConditions()) {
+        if (!checkForCompile()) {
             return;
         }
         //checkForCompile();
@@ -884,7 +947,7 @@ public class CodePanel extends JPanel implements ActionListener {
                 );
 
                 if (option == JOptionPane.YES_OPTION) {
-                    actionPerformed_submitCode(null, true);
+                    actionPerformed_submitCode(null);
                 }
             }
         }

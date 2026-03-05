@@ -57,6 +57,7 @@ public class ProblemsCachManager {
 			return cache.get(key);
 		} catch (Exception e) {
                         logger.log("获取缓存出错:"+key+"e:"+e.getMessage(), LogLevel.ERROR);
+                        e.printStackTrace();
 			// Cache中没有则从DB库获取
 			// 数据库中读取数据
 			// 把获取的对象再次存入Cache中

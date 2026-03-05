@@ -39,4 +39,4 @@
       <runCmd>$compilerPath$/python "$sourceFile$"</runCmd>
     </compiler>
   </language>
-</languages>
+<lastLanguage>C++</lastLanguage></languages>

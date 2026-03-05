@@ -11,6 +11,7 @@ import edu.dhu.ws.OJWS;
 import client.view.frame.LoginFrame;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
+import common.LogLevel;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,10 +63,7 @@ public class Webservice implements java.rmi.Remote{
          }
 
         try {
-            if(!existDubbo){
-                logger.log("connect to dubbo,url:"+url, common.LogLevel.INFO);
-                dubboPort = initDubboPort(url);
-            }
+            dubboPort = initDubboPort(url);
         } catch(Exception e) {
             logger.log("faild to get dubbo"+e.getMessage(), common.LogLevel.ERROR);
             e.printStackTrace();
@@ -109,7 +107,10 @@ public class Webservice implements java.rmi.Remote{
         return re;
     }
     public String getExamList(String username,String password){
+        
         String re = servicePort.wsGetExamList(username, password);
+//        System.out.println("获取考试列表：用户名："+username+"密码："+password+"服务器消息："+re);
+//        logger.log("获取考试列表：用户名："+username+"密码："+password+"服务器消息："+re, LogLevel.INFO);
         return re;
     }
     public String getExamProblems(String username,String password,int examid){
@@ -144,6 +145,7 @@ public class Webservice implements java.rmi.Remote{
     // by san_san
     public Long getExamDeadline(String username, String password, int examid){
         Long re = servicePort.wsGetExamDeadline(username, password, examid);
+        System.out.println("考试结束时间获取："+re+"用户名："+username+"密码："+password+"考试id："+examid);
         return re;
     }
 
