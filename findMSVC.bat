@@ -1,0 +1,1 @@
+vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find **/Hostx64/x64/cl.exe

@@ -1,0 +1,10 @@
+2024-08-23 00:13:34[INFO]尝试建立Web服务
+2024-08-23 00:13:35[INFO]请求dubbo服务,url:dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS
+2024-08-23 00:13:39[ERROR]请求dubbo服务失败Fail to create remoting client for service(dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=16144&qos.enable=false&register.ip=192.168.247.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false): client(url: dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS?application=consumer&background=false&codec=dubbo&executor-management-mode=isolation&file-cache=true&heartbeat=60000&interface=edu.dhu.ws.OJWS&pid=16144&qos.enable=false&register.ip=192.168.247.1&side=consumer&sticky=false&timeout=6000&unloadClusterRelated=false) failed to connect to server /192.168.247.1:8080, error message is:Connection refused: no further information: /192.168.247.1:8080
+2024-08-23 00:13:39[ERROR]请求dubbo服务失败
+2024-08-23 00:13:39[INFO]建立Web服务成功
+2024-08-23 00:13:39[ERROR]建立Web服务异常null
+2024-08-23 00:14:12[INFO]尝试建立Web服务
+2024-08-23 00:14:12[INFO]请求dubbo服务,url:dubbo://192.168.247.1:8080/edu.dhu.ws.OJWS
+2024-08-23 00:14:14[INFO]请求dubbo服务成功
+2024-08-23 00:14:14[INFO]建立Web服务成功

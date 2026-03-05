@@ -14,8 +14,12 @@ import client.view.frame.LoginFrame;
 import client.view.panel.AnswerTablePanel;
 import client.view.panel.CodePanel;
 import client.service.web.Webservice;
+import client.view.panel.TimePanel;
+import java.net.URL;
+
 import javax.swing.JPanel;
 import java.util.List;
+import javax.net.ssl.HttpsURLConnection;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
@@ -29,6 +33,7 @@ public class Control {
     private static String publicKey;
     private static String path;
     private static Webservice ws;
+
     private static List<StudentExamDetail> oldsedlist;
     private static boolean prompt;
     private static JProgressBar jpb;
@@ -36,6 +41,27 @@ public class Control {
     private static List<String> languages;
     private static String examId;
     private static Exam exam;
+    private static String ip;
+    
+
+    public static String getIp() {
+        return ip;
+    }
+
+    public static void setIp(String ip) {
+        Control.ip = ip;
+    }
+    
+    public static TimePanel getTP_time() {
+        return TP_time;
+    }
+
+    public static void setTP_time(TimePanel TP_time) {
+        Control.TP_time = TP_time;
+    }
+
+    private static TimePanel TP_time;
+
 
     public static Exam getExam() {
         return exam;
@@ -312,9 +338,35 @@ public class Control {
     public static void setUser(User aUser) {
         user = aUser;
     }
-
+    
     /**
-     * @return the jpb
+     * @return http or https
      */
+    public static String determineProtocol() {
+        String ip = Control.getIp();
+
+        // ÏÈ³¢ÊÔ HTTPS
+        if (isHttpsSupported(ip)) {
+            return "https";
+        }
+
+        // »ØÍËµ½ HTTP
+        return "http";
+    }
+
+    private static boolean isHttpsSupported(String ip) {
+        try {
+            URL url = new URL("https://" + ip);
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.setRequestMethod("HEAD");
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
+
+            int responseCode = connection.getResponseCode();
+            return responseCode >= 200 && responseCode < 400;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }

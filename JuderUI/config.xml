@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<languages>
+  <language id="C++" alias="c++,cpp,CPP">
+    <compiler name="MSVC">
+      <path>.\MSVC</path>
+      <compileCmd>$compilerPath$/bin/cl.exe /O2 /Fo"$objFile$" /Fe"$exeFile$" /I $compilerPath$\include /EHsc "$sourceFile$" /link /LIBPATH:"$compilerPath$\lib" </compileCmd>
+      <!--            g++.exe -Wall -g -std=c++14  -c D:\prog_old\test\main.cpp -o obj\Debug\main.o-->
+      <linkCmd></linkCmd>
+      <!-- <linkCmd>$compilerPath$/bin/link.exe /OUT:"$exeFile$" "$objFile$" /LIBPATH:"$compilerPath$\lib"</linkCmd> -->
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>$exeFile$</runCmd>
+    </compiler>
+    <compiler name="MinGW">
+      <path>.\MinGW64\bin</path>
+      <compileCmd>"$compilerPath$\g++" -std=c++1y "$sourceFile$" -o "$exeFile$"</compileCmd>
+      <!--            g++.exe -Wall -g -std=c++14  -c D:\prog_old\test\main.cpp -o obj\Debug\main.o-->
+      <linkCmd></linkCmd>
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>.\test\output\Main.exe</runCmd>
+    </compiler>
+  </language>
+
+    <language id="C" alias="c">
+    <compiler name="MSVC">
+      <path>.\MSVC</path>
+      <compileCmd>$compilerPath$/bin/cl.exe /O2 /Fo"$objFile$" /Fe"$exeFile$" /I $compilerPath$\include "$sourceFile$" /link /LIBPATH:"$compilerPath$\lib" </compileCmd>
+      <!--            g++.exe -Wall -g -std=c++14  -c D:\prog_old\test\main.cpp -o obj\Debug\main.o-->
+      <linkCmd></linkCmd>
+      <!-- <linkCmd>$compilerPath$/bin/link.exe /OUT:"$exeFile$" "$objFile$" /LIBPATH:"$compilerPath$\lib"</linkCmd> -->
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>$exeFile$</runCmd>
+    </compiler>
+    <compiler name="MinGW">
+      <path>.\MinGW64\bin</path>
+      <compileCmd>"$compilerPath$\gcc" -std=c11 "$sourceFile$" -o "$exeFile$"</compileCmd>
+      <!--            g++.exe -Wall -g -std=c++14  -c D:\prog_old\test\main.cpp -o obj\Debug\main.o-->
+      <linkCmd></linkCmd>
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>.\test\output\Main.exe</runCmd>
+    </compiler>
+
+
+
+  </language>
+  <language id="Java" alias="java,JAVA">
+    <compiler name="JDK8">
+      <path>.\jdk1.8.0_121\bin</path>
+      <compileCmd>"$compilerPath$/javac" $sourceFile$</compileCmd>
+
+      <linkCmd></linkCmd>
+      <!--            g++.exe  -o bin\Debug\test.exe obj\Debug\main.o  -O1-->
+      <runCmd>$exeFile$</runCmd>
+    </compiler>
+  </language>
+  <language id="Python" alias="python,PYTHON,py,PY">
+    <compiler name="Python 3.12">
+      <path>.\python3.12</path>
+      <compileCmd> </compileCmd>
+      <linkCmd> </linkCmd>
+      <runCmd>$compilerPath$/python "$sourceFile$"</runCmd>
+    </compiler>
+  </language>
+</languages>

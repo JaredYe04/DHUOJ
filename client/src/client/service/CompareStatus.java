@@ -125,7 +125,8 @@ public class CompareStatus {
             StudentExamDetail status = Status.get(i);
             int r =JOptionPane .showConfirmDialog(null,"第"+No+"题已经AC，是否提交本题？", "提示", JOptionPane.YES_NO_OPTION);
                 if (r==JOptionPane.YES_OPTION){
-                    clearOldSolution(status.getProblemId());
+//                    clearOldSolution(status.getProblemId());
+                    
                     Boolean check =Boolean.parseBoolean(Control.getMainFrame().getInformation(status.getProblemId()).getCheckSimilarity());
                     Float similarity = Float.parseFloat(Control.getMainFrame().getInformation(status.getProblemId()).getSimilarityThreshold());
                     submitProblem(status.getProblemId(),examId,check,similarity);
@@ -214,7 +215,6 @@ public class CompareStatus {
                     String remark = rf.getRemark(routing);
                     String correctCaseIds = rf.getCorrectIds(routing);
                     String submittimes = rf.getSubmitTimes(routing);
-                    
                     Answer answer = new Answer(testCaseIds,userOutput,statusofTestCase,status,remark,correctCaseIds);
                     SolutionCode sc = new SolutionCode();
                     sc.init();
@@ -302,7 +302,7 @@ public class CompareStatus {
                  SubmitProblem sb = new SubmitProblem();
                  sb.init();
                  String msg = sb.isSubmitted(backFile);
-                 if(msg.equals("'提交本题成功'")){
+                 if(msg.equals("true")){
                      if(flag){
                             String message = "成功提交本题";
                             JOptionPane.showConfirmDialog(Control.getMainFrame(),

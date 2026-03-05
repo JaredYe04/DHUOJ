@@ -5,11 +5,7 @@
  */
 package client.util;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +23,7 @@ public class Config {
     static{
         try {
             InputStream in = new FileInputStream(common.FileFinder.findFile("config/config.properties"));
+
             prop.load(in);
             in.close();
             IPaddress = prop.getProperty("IPaddress");

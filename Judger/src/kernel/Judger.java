@@ -9,11 +9,16 @@ import MyCache.Shared;
 import common.Config;
 import resultData.RunInfo;
 import common.Const;
+import common.LangSelector;
+import common.LogLevel;
+import common.Logger;
 //import gui.Control;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import log.Log;
@@ -33,7 +38,7 @@ public class Judger {
     Boolean isFound;
     String mainClassName; //
     String sourceDir;
-    
+    private static Logger logger=Logger.getInstance();
     public Judger() {
         Config.freshConfig();
         sourceFile = "";
@@ -53,18 +58,19 @@ public class Judger {
 //        if (!file1.exists() || !file2.exists()) {
 //            System.out.println("编译器未找到");
 //            isFound = false;
+    
 //        }
 //    }
     
     public Boolean checkForCompiler(){
         
-        File file1 = new File(Config.getCompilerDir("c") + File.separator + "gcc.exe");
-        File file2 = new File(Config.getCompilerDir("c") + File.separator + "gcc.exe");
-        if (!file1.exists() || !file2.exists()) {
-            System.out.println("编译器未找到");
-            isFound = false;
-            return false;
-        }
+        //File file1 = new File(Config.getCompilerDir("c",null) + File.separator + "gcc.exe");
+        //File file2 = new File(Config.getCompilerDir("c",null) + File.separator + "gcc.exe");
+        //if (!file1.exists() || !file2.exists()) {
+           // System.out.println("编译器未找到");
+          //  isFound = false;
+         //   return false;
+        //}
         isFound = true;
         return true;
     }
@@ -105,55 +111,73 @@ public class Judger {
 
     }
 
-    private String linkCommand(String language) {
+    private String linkCommand(String language,String compiler) {
+        if(compiler==null){
+            compiler=LangSelector.getDefaultCompilerName(language);
+        }
         //String language = "c";
-        String linkCommand = Config.getCompilerDir(language) + File.separator + "g++ " +"\""+ Config.getTargetPath() +File.separator+"output"+File.separator+  "Main"+".o"+"\"" + " -o " +"\""+ Config.getTargetPath()+File.separator+"output"+File.separator + "Main"+".exe"+"\"\n";      
+        HashMap<String,String>map=new HashMap<>();
+        map.put(LangSelector.PlaceHolder.CompilerPath.getStr(),Config.getCompilerDir(language,compiler));
+        map.put(LangSelector.PlaceHolder.SourceFile.getStr(),sourceFile);
+        if(!compiler.toLowerCase().equals("msvc"))
+            map.put(LangSelector.PlaceHolder.ObjFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.o");
+        else
+            map.put(LangSelector.PlaceHolder.ObjFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.obj");
+        map.put(LangSelector.PlaceHolder.ExeFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.exe");
+        String linkCommand = LangSelector.matchPlaceHolder(LangSelector.getCompileCommand(language,compiler), map);
+        //String linkCommand = Config.getCompilerDir(language) + File.separator + "g++ " +"\""+ Config.getTargetPath() +File.separator+"output"+File.separator+  "Main"+".o"+"\"" + " -o " +"\""+ Config.getTargetPath()+File.separator+"output"+File.separator + "Main"+".exe"+"\"\n";      
         return linkCommand;
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////////TODO
 //mingw32-g++.exe -Wall -g  -c E:\Downloads\aaa\aa.cpp -o obj\Debug\aa.o
 //mingw32-g++.exe  -o bin\Debug\aaa.exe obj\Debug\aa.o   
-    private String compileCommand(String language) {
+    private String compileCommand(String language,String compiler) {////////////TODO
         String compileCommand = "";
-        language = language.toLowerCase();
-        if (language.equals("c")) {
-            compileCommand += "\"" + Config.getCompilerDir(language) + File.separator + "gcc\" -c " + "\""+sourceFile +"\""+ " -o " +"\""+Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main"+".o"+"\"\n";
-        } else if (language.equals("java")) {
-            compileCommand += "\"" + Config.getCompilerDir(language) + File.separator + "javac\" " + sourceFile; //todo文件路径
-        } else if (language.equals("cpp")||language.equals("c++")) {
-            compileCommand += "\"" + Config.getCompilerDir(language) + File.separator + "g++\" -Wall -g -std=c++14 -c "
-                    + "\""+sourceFile+"\"" + " -o " + "\""+Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main"+".o"+"\"\n";
-        } else {
-            CompileInfo.info = "this programing language is not support!!!";
+        if(compiler==null){
+            compiler=LangSelector.getDefaultCompilerName(language);
         }
+        language = language.toLowerCase();//todo
+                    
+            HashMap<String,String>map=new HashMap<>();
+            map.put(LangSelector.PlaceHolder.CompilerPath.getStr(),Config.getCompilerDir(language,compiler));
+            map.put(LangSelector.PlaceHolder.SourceFile.getStr(),sourceFile);
+            if(!compiler.toLowerCase().equals("msvc"))
+                map.put(LangSelector.PlaceHolder.ObjFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.o");
+            else
+                map.put(LangSelector.PlaceHolder.ObjFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.obj");
+            map.put(LangSelector.PlaceHolder.ExeFile.getStr(),Config.getTargetPath()+ File.separator+"output"+ File.separator + "Main.exe");
+        compileCommand = LangSelector.matchPlaceHolder(LangSelector.getCompileCommand(language,compiler), map);
         return compileCommand;
     }
 
-    private String runCommand(String language) {
+    private String runCommand(String language,String compiler) {
         String runCommand = "";
-        if (language.equals("c")) {
-            runCommand +="\""+ Config.getTargetPath()+ File.separator+"output"+File.separator + "Main"+"\"";
+        runCommand+=LangSelector.getRunCommand(language, compiler);//其他语言，如Python
+        HashMap<String,String>map=new HashMap<>();
+        if (language.equals("java")) {
+            String rawCmd= Config.getCompilerDir(language,compiler) + File.separator + "java"+ " -cp " + Config.getSourcePath()+ File.separator+"output"+File.separator+ " "+mainClassName;  // TODO 文件路径 start            
+            map.put(LangSelector.PlaceHolder.ExeFile.getStr(),rawCmd);
+//System.err.println(runCommand);
+        } else if (language.equals("cpp")||language.equals("c++")||language.equals("c")) {
+            String rawCmd="\""+ Config.getTargetPath()+ File.separator+"output"+File.separator  + "Main"+"\"";
+             map.put(LangSelector.PlaceHolder.ExeFile.getStr(),rawCmd);
+        }
+        else{
             
-        } else if (language.equals("java")) {
-        runCommand += Config.getCompilerDir(language) + File.separator + "java"+ " -cp " + Config.getSourcePath()+ File.separator+"output"+File.separator+ " "+mainClassName;  // TODO 文件路径 start            
-        //System.err.println(runCommand);
-        } else if (language.equals("cpp")||language.equals("c++")) {
-            runCommand += "\""+ Config.getTargetPath()+ File.separator+"output"+File.separator  + "Main"+"\"";
+
         }
 //        System.out.println(runCommand);
+        
+        map.put(LangSelector.PlaceHolder.CompilerPath.getStr(),Config.getCompilerDir(language,compiler));
+        map.put(LangSelector.PlaceHolder.SourceFile.getStr(),sourceFile);
+        runCommand=LangSelector.matchPlaceHolder(runCommand, map);
         return runCommand;
     }
 
-    public int compile(String sourceCode, String language) {
+    public int compile(String sourceCode, String language,String compiler) {
         int result = -1;
-        //检查语言是否在范围内
+        
         language = language.toLowerCase();
-        if (language.equals("c") || language.equals("cpp")|| language.equals("c++") || language.equals("java")) {
-            //ok
-        } else {
-            Result.status = Const.CE;
-//            CompileInfo.remark = "语言种类不符合要求";
-            return result;
-        }
         try {
             if (Shared.PID!=-1&&ThreadTool.findProcess(Shared.PID)) {  //tore0
                 Runtime.getRuntime().exec("taskkill /f /t /PID "+Shared.PID).waitFor();
@@ -167,14 +191,22 @@ public class Judger {
         saveSourceCodeFile(language, sourceCode);
 
         int repeatTime = 3;
-        String compileCom = compileCommand(language);
+        String compileCom = compileCommand(language,compiler);
+        if(compileCom==null){
+            result=0;
+            return result;
+        }
         for (int i = 0; i < repeatTime; i++) {
-            result = exe.exeCompile(compileCom,"Path="+Config.getCompilerDir(language));
+            
+            result = exe.exeCompile(compileCom,"Path="+Config.getCompilerDir(language,compiler));
             if (result == 0) {
                 if (language.equals("c") || language.equals("cpp")||language.equals("c++")) {
-                    result = exe.exeLink(linkCommand(language),"Path="+Config.getCompilerDir(language));
+                    result = exe.exeLink(linkCommand(language,compiler),"Path="+Config.getCompilerDir(language,compiler));
                     if(result==0){
                         break;
+                    }
+                    else{
+                        logger.log("编译成功，链接错误："+language+";"+compiler+";"+sourceCode, LogLevel.WARNING);
                     }
                 } else {
                     break;
@@ -184,9 +216,9 @@ public class Judger {
         return result;
     }
 
-    public int run(String language, String input, int timeLimit) {
+    public int run(String language,String compiler, String input, int timeLimit) {
         language = language.toLowerCase();
-        return exe.exeRun(runCommand(language), "Path="+Config.getCompilerDir(language), input, timeLimit);
+        return exe.exeRun(runCommand(language,compiler), "Path="+Config.getCompilerDir(language,compiler), input, timeLimit);
     }
 
     public boolean check(String stdAns) {

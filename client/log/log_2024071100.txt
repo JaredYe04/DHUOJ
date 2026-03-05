@@ -1,0 +1,22 @@
+2024-07-11 00:19:26[INFO]尝试建立Web服务
+2024-07-11 00:19:26[INFO]请求dubbo服务,url:dubbo://219.228.76.122:80/edu.dhu.ws.OJWS
+2024-07-11 00:19:27[ERROR]请求dubbo服务失败create bean instance failed, type=org.apache.dubbo.common.serialize.fastjson2.Fastjson2SecurityManager
+2024-07-11 00:19:27[ERROR]请求dubbo服务失败
+2024-07-11 00:19:27[INFO]建立Web服务成功
+2024-07-11 00:19:27[ERROR]建立Web服务异常null
+2024-07-11 00:19:54[INFO]尝试建立Web服务
+2024-07-11 00:19:54[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-11 00:19:54[ERROR]请求dubbo服务失败create bean instance failed, type=org.apache.dubbo.common.utils.SerializeSecurityConfigurator
+2024-07-11 00:19:54[ERROR]请求dubbo服务失败
+2024-07-11 00:19:54[INFO]建立Web服务成功
+2024-07-11 00:19:54[ERROR]建立Web服务异常null
+2024-07-11 00:20:24[INFO]尝试建立Web服务
+2024-07-11 00:20:24[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-11 00:20:24[ERROR]请求dubbo服务失败create bean instance failed, type=org.apache.dubbo.common.serialize.fastjson2.Fastjson2SecurityManager
+2024-07-11 00:20:24[ERROR]请求dubbo服务失败
+2024-07-11 00:20:24[INFO]建立Web服务成功
+2024-07-11 00:20:24[ERROR]建立Web服务异常null
+2024-07-11 00:28:18[INFO]尝试建立Web服务
+2024-07-11 00:28:18[INFO]请求dubbo服务,url:dubbo://219.228.76.122:8080/edu.dhu.ws.OJWS
+2024-07-11 00:28:22[INFO]请求dubbo服务成功
+2024-07-11 00:28:22[INFO]建立Web服务成功

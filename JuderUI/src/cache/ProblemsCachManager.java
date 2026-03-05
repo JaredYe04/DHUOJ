@@ -1,5 +1,7 @@
 package cache;
 
+import common.LogLevel;
+import common.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -9,7 +11,7 @@ public class ProblemsCachManager {
 	private BaseCache cache;
 	private static ProblemsCachManager instance;
 	private static Object lock = new Object();
-
+        private static Logger logger=Logger.getInstance();
 	private ProblemsCachManager() {
 		// 这个根据配置文件来，初始BaseCache而已;
 		Properties prop = new Properties();
@@ -36,10 +38,12 @@ public class ProblemsCachManager {
 	}
 
 	public void putObject(String key, Object value) { // key以classId_examId
+             logger.log("已放入缓存"+key, LogLevel.INFO);
 		cache.put(key, value);
 	}
 
 	public void removeObject(String key) {
+            logger.log("已移除缓存"+key, LogLevel.INFO);
 		cache.remove(key);
 	}
 
@@ -52,6 +56,8 @@ public class ProblemsCachManager {
 			// 从Cache中获得
 			return cache.get(key);
 		} catch (Exception e) {
+                        logger.log("获取缓存出错:"+key+"e:"+e.getMessage(), LogLevel.ERROR);
+                        e.printStackTrace();
 			// Cache中没有则从DB库获取
 			// 数据库中读取数据
 			// 把获取的对象再次存入Cache中

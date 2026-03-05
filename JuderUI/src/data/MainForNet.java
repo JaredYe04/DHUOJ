@@ -5,18 +5,27 @@
  */
 package data;
 
+import common.Const;
+import common.LogLevel;
+import common.Logger;
 import gui.Control;
+import static gui.Control.getJudgeInfoEditorPane;
 import java.awt.EventQueue;
 import java.net.URL;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
+import javax.swing.JEditorPane;
 import myjdom.XmlToSolution;
 import myjdom.model.Solution;
 import myjdom.model.Solutions;
 import myjdom.model.ProblemBean;
 import persistence.oj_beans.ProblemTestCaseBean;
+import resultData.Result;
 import web.Webservice;
+import static web.Webservice.existDubbo;
 
 /**
  *
@@ -32,6 +41,7 @@ public class MainForNet extends Thread {
     private int previousSId = -1;
     public Solutions solutions;
     private Lock lock;
+    private static Logger logger=Logger.getInstance();
 //    private String ip = "127.0.0.1";
 //    private int port = 5000;
 
@@ -47,9 +57,13 @@ public class MainForNet extends Thread {
                     Thread.sleep(500);
                     continue;
                 }
-                System.out.println("开始获取solution");
-                List<Solution> list = getWebServiceSolutions();
-                System.out.println("获取slolutin数量"+list.size());
+                 List<Solution> list=new ArrayList<>();
+                 
+                synchronized(Control.refreshLock){//加锁，避免在获取solution时遇到线程刷新
+                    System.out.println("开始获取solution");
+                    list = getWebServiceSolutions();
+                    System.out.println("获取slolutin数量"+list.size());
+                }
 //          getServerObject();  
                 if (list.size() == 0) {
                     Thread.sleep(3000);
@@ -90,12 +104,39 @@ public class MainForNet extends Thread {
     }
 
     private List<Solution> getWebServiceSolutions() throws Exception {
-        Control.setWebService(new Webservice(new URL(Control.getUrl()), Control.getQname()));
-        String xml = Control.getWebService().getSolutions(5);
+        if(Control.getWebService()==null)//Jared:此前每次加载都会创建Webservice实例，疑似导致内存泄漏
+            Control.setWebService(new Webservice(new URL(Control.getUrl()), Control.getQname()));
+        
+        String xml = null;
+        try{
+            xml=Control.getWebService().getSolutions(5);
+        }
+        catch(Exception ex){
+                ex.printStackTrace();
+                EventQueue.invokeLater(() -> {
+                    Control.addExceptionInfo(0, "获取Solutions失败："+ex.getMessage());
+                });
+                logger.log("获取Solutions失败：" + ex.getMessage(), LogLevel.ERROR);
+                Result.status = Const.SE;
+                
+              //todo:返回SE
+        }
+//        if(xml==null||xml.equals("")){
+//            Result.status=Const.SE;
+//        }
         XmlToSolution xts = new XmlToSolution();
         xts.readXmlString(xml);
 
-        this.solutions = xts.convertXML();
+        
+        try{
+            this.solutions = xts.convertXML();
+        }
+        catch(Exception ex){
+                ex.printStackTrace();
+                EventQueue.invokeLater(() -> {
+                    Control.addExceptionInfo(0, ex.getStackTrace().toString());
+                });
+        }
 //        Control.addJudgeInfo("  get "+solutions.getSolution().size()+" solutioins ");
         if (solutions.getSolution().size() != 0) {
             //System.out.println("get " + solutions.getSolution().size() + " solution");

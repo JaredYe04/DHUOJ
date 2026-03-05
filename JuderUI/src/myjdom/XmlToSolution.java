@@ -5,6 +5,7 @@
  */
 package myjdom;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import myjdom.model.Solution;
@@ -44,11 +45,22 @@ public class XmlToSolution extends XmlToBase implements XmlConvert<Solutions> {
                 s.setSubmitTime(e.getElementsByTagName("submitTime").item(0).getTextContent());
             }
             if (e.getElementsByTagName("language").item(0) != null) {
-                s.setLangeuage(e.getElementsByTagName("language").item(0).getTextContent());
+                s.setLanguage(e.getElementsByTagName("language").item(0).getTextContent());
             }
+            if (e.getElementsByTagName("compiler").item(0) != null) {
+                s.setCompiler(e.getElementsByTagName("compiler").item(0).getTextContent());
+                //Logger.logMsg(Logger.DEBUG,"当前编译器:"+e.getElementsByTagName("compiler").item(0).getTextContent());
+                System.out.println("当前编译器:"+e.getElementsByTagName("compiler").item(0).getTextContent());
+            }/////NEW
+            
+            
             if (e.getElementsByTagName("code").item(0) != null) {
                 s.setCode(e.getElementsByTagName("code").item(0).getTextContent());
             }
+            
+            
+            System.out.println(s.toString());
+            
             solutionList.add(s);
         }
         if (solutionList.size() == 1 && solutionList.get(0).getProblemId() == null) {

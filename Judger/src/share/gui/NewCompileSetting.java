@@ -66,7 +66,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
             //根据radiobutton的选择情况判断写入
             if (cSystem.isSelected()||cRegistry.isSelected()||cSelf.isSelected()) {
                 //路径为自带编译器路径
-                Config.getProp().setProperty(Const.MinGWDir, Config.CompilerDir("c"));
+                Config.getProp().setProperty(Const.MinGWDir, Config.CompilerDir("c",null));
                 Config.getProp().setProperty(Const.MinGWRelative, "1");
                 Config.getProp().setProperty(Const.MinGWDir, lblCRegistryMessage.getText());
                 Config.getProp().setProperty(Const.MinGWRelative, "2");
@@ -74,7 +74,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
                 Config.getProp().setProperty(Const.MinGWRelative, "3");
             }
             if (javaSystem.isSelected()||javaRegistry.isSelected()||javaSelf.isSelected()) {
-                Config.getProp().setProperty(Const.JavaCompilerDir, Config.CompilerDir("java"));
+                Config.getProp().setProperty(Const.JavaCompilerDir, Config.CompilerDir("java",null));
                 Config.getProp().setProperty(Const.JavaRelative, "1");
                 Config.getProp().setProperty(Const.JavaCompilerDir, lblJavaRegistryMessage.getText());
                 Config.getProp().setProperty(Const.JavaRelative, "2");
@@ -110,7 +110,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
             cRegistryList.removeAllItems();
             javaRegistryList.removeAllItems();
             //第一优先级为内置编译器，第二为注册表搜索到的，最后为用户自定义
-            String MinGWDir = Config.CompilerDir("c");
+            String MinGWDir = Config.CompilerDir("c",null);
             if (!FileFinder.isExistFile(MinGWDir)) {
                 cSystem.setEnabled(false);
             }
@@ -129,7 +129,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
                 cRegistry.setEnabled(false);
             }
 
-            String javaDirString = Config.CompilerDir("java");   // SXZ530
+            String javaDirString = Config.CompilerDir("java",null);   // SXZ530
             if (!FileFinder.isExistFile(javaDirString)) {
                 javaSystem.setEnabled(false);
             }
@@ -200,7 +200,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
             } else if (Config.MinGWRelative == 2) {
                 //设置保存为选择计算机注册的东西，故路径应该是有的，无视其他情况
                 cRegistry.setSelected(true);
-                MinGWDir = Config.getCompilerDir("c");
+                MinGWDir = Config.getCompilerDir("c",null);
                 tmpHashtable = CRegistryMessage;
                 Iterator iter = tmpHashtable.entrySet().iterator();
                 while (iter.hasNext()) {
@@ -216,7 +216,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
                 lblCRegistryMessage.setText(MinGWDir);
             } else if (Config.MinGWRelative == 3) {
                 cSystem.setSelected(true);
-                MinGWDir = Config.getCompilerDir("c");
+                MinGWDir = Config.getCompilerDir("c",null);
                 cDir.setText(MinGWDir);
                 setCFindPathGroupEnable(true);
                 setCRegistryGroupEnable(false);
@@ -228,7 +228,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
                 setJavaRegistryGroupEnable(false);
             } else if (Config.JavaRelative == 2) {
                 javaRegistry.setSelected(true);
-                javaDirString = Config.getCompilerDir("java");
+                javaDirString = Config.getCompilerDir("java",null);
                 tmpHashtable = JavaRegistryMessage;
                 Iterator iter = tmpHashtable.entrySet().iterator();
                 while (iter.hasNext()) {
@@ -244,7 +244,7 @@ public class NewCompileSetting extends javax.swing.JDialog {
                 setJavaRegistryGroupEnable(true);
             } else if (Config.JavaRelative == 3) {
                 javaSystem.setSelected(true);
-                javaDirString = Config.getCompilerDir("java");
+                javaDirString = Config.getCompilerDir("java",null);
                 javaDir.setText(javaDirString);
                 setJavaFindPathGroupEnable(true);
                 setJavaRegistryGroupEnable(false);

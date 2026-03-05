@@ -8,9 +8,6 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
-import javax.sound.sampled.AudioFormat.Encoding;
-
-import sun.nio.cs.ext.GBK;
 
 public class Decrypt {
    public static final String ALGORITHM_DES = "DES/CBC/PKCS5Padding";

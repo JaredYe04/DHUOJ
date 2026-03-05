@@ -1,0 +1,4 @@
+
+如果判题用问题试试裁判机的Judger.jar和Judger.bak.jar（开发人员须知）
+
+Java目前还不支持，下一个版本修复。

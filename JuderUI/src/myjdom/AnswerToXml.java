@@ -53,7 +53,7 @@ public class AnswerToXml extends XmlToBase implements XmlConvert<String> {
         
          Element remark = doc.createElement("remark");
         solution.appendChild(remark);
-        remark.setTextContent(getResult().getRemark());
+        remark.setTextContent(common.EscapeXml.escapeXml(getResult().getRemark()));
 
         Element wrongCases = doc.createElement("wrongCases");
         solution.appendChild(wrongCases);
@@ -66,7 +66,7 @@ public class AnswerToXml extends XmlToBase implements XmlConvert<String> {
             caseId.setTextContent(String.valueOf(wrongList.get(i).getId()));
             Element output = doc.createElement("output");
             tcase.appendChild(output);
-            output.setTextContent(wrongList.get(i).getOutput());
+            output.setTextContent(common.EscapeXml.escapeXml(wrongList.get(i).getOutput()));
         }
 
         return XmlUtil.DocumentToString(doc, "GBK");

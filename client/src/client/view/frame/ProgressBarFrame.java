@@ -5,11 +5,18 @@
  */
 package client.view.frame;
 
+import client.io.xml.ExamProblem_io;
+import client.io.xml.Problem_io;
 import client.io.xml.StudentExamDetail_io;
 import client.model.Exam;
+import client.model.ExamProblem;
+import client.model.Problem;
+import client.model.Problemlist;
 import client.service.DownSwingWorker;
 import client.util.Control;
 import client.view.other.TimeLabel;
+import client.view.panel.PaperPanel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +24,7 @@ import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -44,6 +52,19 @@ public class ProgressBarFrame extends JFrame {
      private JLabel jLabelTitle;
      private JLabel jLabelEmpty;
      private JTextArea JT_Content;
+    private Runnable onCompleteCallback;
+
+    // 添加设置回调的方法
+    public void setOnCompleteCallback(Runnable callback) {
+        this.onCompleteCallback = callback;
+    }
+
+    // 在原有的 SwingWorker 的 done() 方法中调用回调
+    protected void done() {
+        if (onCompleteCallback != null) {
+            onCompleteCallback.run();
+        }
+    }
      
      public ProgressBarFrame(Exam exam,ExamFrame ef,String status,String init)
      {
@@ -60,6 +81,36 @@ public class ProgressBarFrame extends JFrame {
         this.status = status;
         init();
         DownSwingWorker sw = new DownSwingWorker(jl, progressBar,exam, NowProblem, this, status);
+        sw.execute();
+    }
+
+    public ProgressBarFrame(Exam exam, String status, PaperPanel problem, List<Problemlist> problemlist, int row){
+        this.exam = exam;
+        this.status = status;
+        init();
+        DownSwingWorker sw = new DownSwingWorker(jl, progressBar,exam, this, status);
+        sw.addPropertyChangeListener(evt -> {
+            if ("state".equals(evt.getPropertyName()) &&
+                    SwingWorker.StateValue.DONE == evt.getNewValue()) {
+                SwingUtilities.invokeLater(() -> {
+                    // 更新题目信息
+                    Problem_io problem_io = new Problem_io(problemlist.get(row).getProblemId());
+                    ExamProblem_io examproblem_io = new ExamProblem_io(problemlist.get(row).getExamId());
+
+                    if (new File(problem_io.getPath()).exists()) {
+                        Problem prod = problem_io.getproblem();
+                        ExamProblem epro = null;
+                        try {
+                            epro = examproblem_io.getProblemList().get(row);
+                            problem.setPaper(prod, row, epro);
+                        } catch (Exception ex) {
+                            // Handle exception appropriately
+                        }
+                    }
+
+                });
+            }
+        });
         sw.execute();
     }
     public ProgressBarFrame(Exam exam,String status){

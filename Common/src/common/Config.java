@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import log.Log;
-
+import java.nio.file.Paths;
 public class Config {
 
     public static int DEBUG;
@@ -100,7 +100,12 @@ public class Config {
 
     //临时代码输出路径  若要改回配置文件读取 从const里获取字段
     public static String getSourcePath() {
-        return "./test";  //
+        String curDir = Paths.get(".").toAbsolutePath().normalize().toString();
+        return curDir+"/test";
+    }
+    public static String getLogPath(){
+        String curDir = Paths.get(".").toAbsolutePath().normalize().toString();
+        return curDir+"/log";
     }
     //临时代码输出路径 
 
@@ -108,30 +113,62 @@ public class Config {
 //        if (isTestRelative) {
 //            return System.getProperty("user.dir") + prop.getProperty("relativeExeDir");
 //        } else {
-        return "./test";
+        String curDir = Paths.get(".").toAbsolutePath().normalize().toString();
+        return curDir+"/test";
         //}
 
     }
 
-    public static String getCompilerDir(String language) {
+    public static String getCompilerDir(String language,String compiler) {
         String dir = null;
-        if (language.equals("c") || language.equals("cpp") || language.equals("c++")) {
-            dir = prop.getProperty(Const.MinGWDir);
-        } else if (language.equals("java")) {
-            dir = prop.getProperty(Const.JavaCompilerDir);
-        }
+         //todo
+        dir=LangSelector.getCompilerPath(language,compiler);
+        //if (language.equals("c") || language.equals("cpp") || language.equals("c++")) {
+         //  dir=LangSelector.getCompilerPath("C++", compiler);
+            //dir = prop.getProperty(Const.MinGWDir);
+        //} else if (language.equals("java")) {
+        //    dir=LangSelector.getCompilerPath("Java", compiler);
+            //dir = prop.getProperty(Const.JavaCompilerDir);
+        //}
         return dir;
     }
 
-    public static String CompilerDir(String language) {
+    //public static String getCompilerDir(String language) {
+    //    String dir = null;
+         //todo
+    //    if (language.equals("c") || language.equals("cpp") || language.equals("c++")) {
+    //       dir=LangSelector.getCompilerPath("C++", null);
+     //       //dir = prop.getProperty(Const.MinGWDir);
+    //    } else if (language.equals("java")) {
+     //       dir=LangSelector.getCompilerPath("Java", null);
+     //       //dir = prop.getProperty(Const.JavaCompilerDir);
+    //    }
+    //    return dir;
+   // }
+    public static String CompilerDir(String language,String compiler) {
         String dir = null;
 
         if (language.equals("c") || language.equals("cpp") || language.equals("c++")) //返回各种语言的编译器地址
         {
-            dir = System.getProperty("user.dir") + Const.MinGWDir;
+            //dir = System.getProperty("user.dir") + Const.MinGWDir;
+            dir=LangSelector.getCompilerPath("C++",compiler);
         } else if (language.equals("java")) {
-            dir = System.getProperty("user.dir") + Const.JavaCompilerDir;
+            //dir = System.getProperty("user.dir") + Const.JavaCompilerDir;
+            dir=LangSelector.getCompilerPath("Java",compiler);
         }
         return dir;
     }
+//    public static String CompilerDir(String language) {
+ //       String dir = null;
+//
+  //      if (language.equals("c") || language.equals("cpp") || language.equals("c++")) //返回各种语言的编译器地址
+ //       {
+ //           //dir = System.getProperty("user.dir") + Const.MinGWDir;
+  //          dir = LangSelector.getCompilerPath("C++", compiler);
+   //     } else if (language.equals("java")) {
+  //          //dir = System.getProperty("user.dir") + Const.JavaCompilerDir;
+  //          dir = LangSelector.getCompilerPath("Java", null);
+  //      }
+  //      return dir;
+   // }
 }

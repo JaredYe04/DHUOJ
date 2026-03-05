@@ -8,10 +8,10 @@ package main;
 import MyCache.Shared;
 import java.util.List;
 import common.Const;
+import common.LogLevel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
-import jdk.nashorn.internal.parser.TokenType;
 import kernel.Judger;
 import resultData.RunInfo;
 import persistence.oj_beans.ExamDetailBean;
@@ -29,7 +29,7 @@ public class Process {
 
     //函数接口
     private Consumer<String> con;
-
+    private static common.Logger logger=common.Logger.getInstance();
     //资源
     private SolutionBean solutionBean = null;//2
     private ProblemBean problemBean = null;//3
@@ -96,7 +96,7 @@ public class Process {
     }
 
     //WebService评判
-    public Answer Judge(String solutionId, String problemId, String language, String sourceCode, Float timeOut, List<ProblemTestCaseBean> testCaseBeans, Consumer<String> con) {
+    public Answer Judge(String solutionId, String problemId, String language,String compiler, String sourceCode, Float timeOut, List<ProblemTestCaseBean> testCaseBeans, Consumer<String> con) {
         CompileInfo.init();
         RunInfo.init();
         this.con = con;
@@ -108,6 +108,7 @@ public class Process {
         this.judger = new Judger();
         Boolean is = this.judger.checkForCompiler();
         this.solutionBean.setLanguage(language);
+        this.solutionBean.setCompiler(compiler);
         this.solutionBean.setSourceCode(sourceCode);
         this.problemBean.setTime_limit(timeOut);
         // if(is == false) return ;
@@ -143,7 +144,7 @@ public class Process {
     }
 
     //得到评判结果
-    public Answer Judge(String language, String sourceCode, Float timeOut, List<ProblemTestCaseBean> testCaseBeans) {
+    public Answer Judge(String language,String compiler, String sourceCode, Float timeOut, List<ProblemTestCaseBean> testCaseBeans) {
         CompileInfo.init();
         RunInfo.init();
         Result.status = 0;
@@ -154,6 +155,17 @@ public class Process {
         this.judger = new Judger();
         //Boolean is = this.judger.checkForCompiler();
         this.solutionBean.setLanguage(language);
+        
+        if(compiler.trim().isEmpty()){
+            logger.log("警告：compiler为空！已选择默认编译器。", LogLevel.WARNING);
+            compiler=common.LangSelector.getDefaultCompiler(language);
+        }
+        
+        
+        this.solutionBean.setCompiler(compiler);
+        
+        
+        
         this.solutionBean.setSourceCode(sourceCode);
         this.problemBean.setTime_limit(timeOut);
         // if(is == false) return ;
@@ -242,7 +254,7 @@ public class Process {
     //step 2
     private void judgeForAllTestcase() {
 
-        if (judger.compileFound() && 0 == judger.compile(solutionBean.getSourceCode(), solutionBean.getLanguage())) {
+        if (judger.compileFound() && 0 == judger.compile(solutionBean.getSourceCode(), solutionBean.getLanguage(),solutionBean.getCompiler())) {
             for (int i = 0; i < sumTestcaseNum; i++) {
 
                 ProblemTestCaseBean caseBean = (ProblemTestCaseBean) testCaseBeans.get(i);
@@ -252,7 +264,7 @@ public class Process {
                 }else{
                 Shared.maxOutputLength=caseBean.getOutput().length()+2000;
                 }
-                if (judger.run(solutionBean.getLanguage(), caseBean.getInput(), problemBean.getTime_limit().intValue()) == 0) {
+                if (judger.run(solutionBean.getLanguage(),solutionBean.getCompiler(), caseBean.getInput(), problemBean.getTime_limit().intValue()) == 0) {
                     if (willCheck) {
                         judger.check(caseBean.getOutput());
                     } else {
@@ -295,7 +307,8 @@ public class Process {
             for (int i = 0; i < sumTestcaseNum; i++) {
                 result[i] = Result.status;
                 output[i] = "";
-                remarks[i] = CompileInfo.remark;
+                if(remarks[i]==null) remarks[i] ="";
+                remarks[i] += CompileInfo.remark;
                 String message = "testcase id=" + (testCaseBeans.get(0)).getId() + " done" + " result:" + Const.STATUS[result[0]];
                 if (con != null) {
                     con.accept(message);
@@ -371,33 +384,58 @@ public class Process {
                 }
                 solutionBean.setStatus(Const.STATUS[maxLevelStatus]);
                 //最高等级错误相应的信息
-                if (maxLevelStatus == Const.CE) {
-                    solutionBean.setRemark(remarks[index]);
-                } else if (result[index] == Const.WA || result[index] == Const.PE) {
-//                solutionBean.setRemark("");
-                    String message = new String();
-                    for (int i = 0; i < remarks.length; i++) {
-                        message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
-                        message += remarks[i] + "\n";
-                    }
-                    solutionBean.setRemark(message);
-                } else {//RE,TLE
-                    String wrongCaseIds = "";
-                    for (int j = 0; j < sumTestcaseNum; j++) {
-                        if (result[j] == result[index]) {
-                            wrongCaseIds += ((ProblemTestCaseBean) testCaseBeans.get(j)).getId() + ",";
-                        }
-                    }
-                    solutionBean.setRemark("测试用例ID为" + wrongCaseIds + remarks[index]);
-                    String message = new String();
-                    for (int i = 0; i < remarks.length; i++) {
-                        message += "\n";
-                        message += remarks[i];
-                    }
-                    solutionBean.setRemark(solutionBean.getRemark() + message);
+                
+                String message="";
+                if(Const.STATUS[result[0]].equals("CE")){
+                    message += "编译错误："+remarks[0] + "\n";
                 }
+                else{
+                        for (int i = 0; i < remarks.length; i++) {
+                            message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
+                            message += remarks[i] + "\n";
+                    }
+                }
+                
+                
+                solutionBean.setRemark(message);
+                
+                //old
+//                if (maxLevelStatus == Const.CE) {
+//                    solutionBean.setRemark(remarks[index]);
+//                } else if (result[index] == Const.WA || result[index] == Const.PE) {
+////                solutionBean.setRemark("");
+//                    String message = new String();
+//                    for (int i = 0; i < remarks.length; i++) {
+//                        message += "测试用例 " + testCaseBeans.get(i).getId() + "结果为 " + Const.STATUS[result[i]] + ":";
+//                        message += remarks[i] + "\n";
+//                    }
+//                    solutionBean.setRemark(message);
+//                } else {//RE,TLE
+//                    String wrongCaseIds = "";
+//                    for (int j = 0; j < sumTestcaseNum; j++) {
+//                        if (result[j] == result[index]) {
+//                            wrongCaseIds += ((ProblemTestCaseBean) testCaseBeans.get(j)).getId() + ",";
+//                        }
+//                    }
+//                    solutionBean.setRemark("测试用例ID为" + wrongCaseIds + remarks[index]);
+//                    String message = new String();
+//                    for (int i = 0; i < remarks.length; i++) {
+//                        message += "\n";
+//                        message += remarks[i];
+//                    }
+//                    solutionBean.setRemark(solutionBean.getRemark() + message);
+//                }
             }
             solutionBean.setCorrectCaseIds(correctCaseIds);
+            //remark转为GBK字符串
+            String originalRemark=solutionBean.getRemark();
+            try{
+                solutionBean.setRemark(new String(solutionBean.getRemark().getBytes("GBK"),"GBK"));
+            }catch(Exception e){
+                solutionBean.setRemark(originalRemark);
+            }
+            //Jared
+            
             //SolutionDAO.update(solutionBean);
         }
     }

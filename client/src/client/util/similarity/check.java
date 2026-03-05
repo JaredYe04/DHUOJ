@@ -51,14 +51,14 @@ public class check {
 
         Similarity s;
         List<submittedCode> submittedcodeList = new Parsexml().getCode(route);
-        if (submittedcodeList.get(0).getId().equals("-1")) {
+        if (!submittedcodeList.isEmpty() &&submittedcodeList.get(0).getId().equals("-1")) {
             s = new Similarity("error", "", "");
         }
         for (int i = 0; i < submittedcodeList.size(); i++) {
             String code2 = submittedcodeList.get(i).getProcessedCode1();
             double similarity = SimilarityByLine.getSimilarity(code1, false, code2, true);
-            Double similarityObj = new Double(similarity);
-            Double theMaxSimilarityObj = new Double(theMaxSimilarity);
+            Double similarityObj = similarity;
+            Double theMaxSimilarityObj = theMaxSimilarity;
             if (theMaxSimilarityObj.compareTo(similarityObj) < 0) {
                 theMaxSolutionId = Integer.parseInt(submittedcodeList.get(i).getSolutionId());
                 theMaxSimilarity = similarity;

@@ -22,7 +22,7 @@ public class WriteInfo extends Thread {
     public void run() {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        char[] s = new char[512];
+        char[] s = new char[512];//Jared:ÒÉËÆÄÚ´æĞ¹Â©
         //int c=-1;
         int len = -1;
 

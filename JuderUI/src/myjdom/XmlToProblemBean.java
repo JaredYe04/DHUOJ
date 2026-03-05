@@ -5,6 +5,7 @@
  */
 package myjdom;
 
+import common.Const;
 import java.util.ArrayList;
 import java.util.List;
 import myjdom.model.ProblemBean;
@@ -13,6 +14,8 @@ import persistence.oj_beans.ProblemTestCaseBean;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import resultData.CompileInfo;
+import resultData.Result;
 
 /**
  *
@@ -24,6 +27,7 @@ public class XmlToProblemBean extends XmlToBase implements XmlConvert<ProblemBea
     public ProblemBean convertXML() throws Exception {
         ProblemBean pb =new ProblemBean();   
         List<ProblemTestCaseBean> testCaseList = new ArrayList<>();
+  
        String s = doc.getDocumentElement().getElementsByTagName("time_limit").item(0).getTextContent();
         pb.setTimeOut(Float.parseFloat(doc.getDocumentElement().getElementsByTagName("time_limit").item(0).getTextContent()));
         NodeList list =doc.getDocumentElement().getElementsByTagName("Case");

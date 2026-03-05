@@ -27,10 +27,14 @@ public class Problem {
     private String chapterName;
     private String checkSimilarity;
     private String similarityThreshold;
-    private String deadline;
+    private String deadlineForClass; // by san_san
     private String bestBefore;
-    private String scoreCoef;
     private String updateTime;
+    
+    // by san_san
+    private String bestBeforeForClass;
+    private String scoreCoefForClass;
+    
 
     public Problem() {
     }
@@ -51,9 +55,9 @@ public class Problem {
         this.chapterName = chapterName;
         this.checkSimilarity = checkSimilarity;
         this.similarityThreshold = similarityThreshold;
-        this.deadline = deadline;
+        this.deadlineForClass = deadline;
         this.bestBefore = bestBefore;
-        this.scoreCoef = scoreCoef;
+        this.scoreCoefForClass = scoreCoef;
         this.updateTime = updateTime;
     }
 
@@ -176,12 +180,6 @@ public class Problem {
     public void setSimilarityThreshold(String str) {
         similarityThreshold = str;
     }
-//    public List<Case> getTestCase(){
-//        return TestCase;
-//    }
-//    public void setTestCase(List<Case> list){
-//        TestCase = list;
-//    }
 
     public String getUpdateTime() {
         return updateTime;
@@ -190,15 +188,7 @@ public class Problem {
     public void setUpdateTime(String str) {
         updateTime = str;
     }
-
-    public String getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(String deadline) {
-        this.deadline = deadline;
-    }
-
+    
     public String getBestBefore() {
         return bestBefore;
     }
@@ -207,11 +197,27 @@ public class Problem {
         this.bestBefore = bestBefore;
     }
 
-    public String getScoreCoef() {
-        return scoreCoef;
+    public String getDeadlineForClass() {
+        return deadlineForClass;
     }
 
-    public void setScoreCoef(String scoreCoef) {
-        this.scoreCoef = scoreCoef;
+    public void setDeadlineForClass(String deadlineForClass) {
+        this.deadlineForClass = deadlineForClass;
     }
+
+    public String getBestBeforeForClass() {
+        return bestBeforeForClass;
+    }
+
+    public void setBestBeforeForClass(String bestBeforeForClass) {
+        this.bestBeforeForClass = bestBeforeForClass;
+    }    
+    
+    public String getScoreCoefForClass() {
+        return scoreCoefForClass;
+    }
+
+    public void setScoreCoefForClass(String scoreCoefForClass) {
+        this.scoreCoefForClass = scoreCoefForClass;
+    }    
 }

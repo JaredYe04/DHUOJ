@@ -149,9 +149,18 @@ public class ExamFrame extends javax.swing.JFrame {
         for (int i = 0; i < num; i++) {
             //this.JP_contest.setLayout(new java.awt.GridLayout(1, 4));
             if (i < examlist.size()) {
+                // by san_san
+                if (examlist.get(i).getType().equals("iTraining")) {
+                    continue;
+                }
+                String description = examlist.get(i).getDescription();
+                if (examlist.get(i).getLimitTime() != null && examlist.get(i).getLimitTime().length() > 0){
+                    description = description + "本场考试限制时间为：" + examlist.get(i).getLimitTime() + "分钟。";
+                }
+                
                 this.JLabel1 = new JLabel(String.valueOf(i + 1));
                 this.JLabel2 = new JLabel(getString(examlist.get(i).getName(), 12));
-                this.JLabel3 = new JLabel(getString(examlist.get(i).getDescription(), 25));
+                this.JLabel3 = new JLabel(getString(description, 25));
 
                 this.JLabel4 = new JLabel(getString(examlist.get(i).getStarttime(), 11));
                 this.JLabel5 = new JLabel(getString(examlist.get(i).getEndtime(), 11));
@@ -196,13 +205,15 @@ public class ExamFrame extends javax.swing.JFrame {
                 this.JP_contest.add(this.JLabel5);
                 this.JP_contest.add(this.JLabel6);
                 this.JP_temp = new JPanel();
-                this.JP_temp.setLayout(new FlowLayout(FlowLayout.CENTER));
+                this.JP_temp.setLayout(new BoxLayout(this.JP_temp, BoxLayout.Y_AXIS));
 
                 this.JB_contest.setText("参加");
                 //final int i=j;
                 //this.JB_contest.setActionCommand(examlist.get(i).getId());
                 this.JB_contest.addActionListener(onclicklister);
+                this.JP_temp.add(Box.createVerticalGlue());
                 this.JP_temp.add(this.JB_contest);
+                this.JP_temp.add(Box.createVerticalGlue());
                 this.JP_contest.add(this.JP_temp);
                 s.gridx = 0;
                 s.gridy = i + 1;
@@ -231,6 +242,8 @@ public class ExamFrame extends javax.swing.JFrame {
                 s.gridx = 6;
                 s.gridy = i + 1;
                 s.insets = new Insets(1, 1, 1, 0);
+                s.fill = GridBagConstraints.VERTICAL;
+                s.anchor = GridBagConstraints.CENTER;
                 layout.setConstraints(this.JP_temp, s);
             } else {
                 this.JLabel1 = new JLabel(" ");

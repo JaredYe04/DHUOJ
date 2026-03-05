@@ -3,4 +3,6 @@
     <system systemId="http://47.95.22.126:8080/oj/webservice/OJWS?wsdl" uri="xml-resources/web-service-references/OJWS/wsdl/47.95.22.126_8080/oj/webservice/OJWS.wsdl"/>
     <system systemId="http://127.0.0.1:8080/oj/webservice/OJWS?wsdl" uri="xml-resources/web-service-references/OJWS/wsdl/127.0.0.1_8080/oj/webservice/OJWS.wsdl"/>
     <system systemId="http://106.15.36.190:80/oj/webservice/OJWS?wsdl" uri="xml-resources/web-service-references/OJWS/wsdl/106.15.36.190_80/oj/webservice/OJWS.wsdl"/>
+    <system systemId="https://219.228.76.122:443/oj/webservice/OJWS?wsdl" uri="xml-resources/web-service-references/OJWS/wsdl/219.228.76.122_443/oj/webservice/OJWS.wsdl"/>
+    <system systemId="https://219.228.76.122:8080/oj/webservice/OJWS?wsdl" uri="xml-resources/web-service-references/OJWS/wsdl/219.228.76.122_8080/oj/webservice/OJWS.wsdl"/>
 </catalog>

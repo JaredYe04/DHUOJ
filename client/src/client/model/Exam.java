@@ -11,9 +11,19 @@ package client.model;
 public class Exam {
     
     private String id;
-        
+
     private String name;
-    
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
+
     private String starttime;
    
     private String endtime;
@@ -44,10 +54,14 @@ public class Exam {
     
     private String scorecoef;
     
+    private String studentViewScore;
+    
+    private String limittime; // by san_san
+    
     public Exam(){
         super();
     }
-    public Exam(String id,String name,String starttime,String endtime,String description,String problemNum,String canGetHint,String partialScore,String submitOnlyAC,String language,String teacherId,String updateTime,String status){
+    public Exam(String id,String name,String starttime,String endtime,String description,String problemNum,String canGetHint,String partialScore,String submitOnlyAC,String language,String teacherId,String updateTime,String status, String limittime){
         super();
         this.id = id;
         this.name = name;
@@ -62,6 +76,7 @@ public class Exam {
         this.teacherId = teacherId;
         this.updateTime = updateTime;
         this.status = status;
+        this.limittime = limittime;
     }
     public String getId(){
         return id;
@@ -139,10 +154,24 @@ public class Exam {
     public String getStatus(){
         return status;
     }
-    public void setStatus(String str){
+        public void setStatus(String str){
         status=str;
     }
-
+        
+    // by san_san
+    public void setLimitTime(String str){
+        this.limittime = str;
+    }
+    public String getLimitTime(){
+        return this.limittime;
+    }
+    public void setStudentViewScore(String str){
+        this.studentViewScore = str;
+    }
+    public String getStudentViewScore(){
+        return this.studentViewScore;
+    }
+    
     /**
      * @return the uuid
      */

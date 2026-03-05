@@ -20,6 +20,7 @@ public class StudentExamDetail {
     private String elapsedTime;
     private String finished;
     private String SolutionId;
+
     public StudentExamDetail(){
         super();
     }
@@ -35,8 +36,6 @@ public class StudentExamDetail {
         this.elapsedTime = elapsedTime;
         this.finished = finished;
         this.SolutionId = SolutionId;
-        
-        
     }
     public String getId(){
         return id;

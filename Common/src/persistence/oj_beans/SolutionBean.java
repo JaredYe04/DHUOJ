@@ -18,6 +18,9 @@ public class SolutionBean {
     Integer userId;
     Date submitTime;
     String language;
+    //NEW
+    String compiler;
+    //
     String SourceCode;
     Integer codelength;
     String status;
@@ -27,6 +30,7 @@ public class SolutionBean {
     Float score;
     String remark;
 
+
     public SolutionBean() {
         this.id = 1;
         this.examId = 1;
@@ -34,6 +38,7 @@ public class SolutionBean {
         this.userId = 1;
         this.submitTime = new Date();
         this.language = "";
+        this.compiler="";
         this.SourceCode = "";
         this.codelength = 3;
         this.status = "";
@@ -42,6 +47,13 @@ public class SolutionBean {
         this.similarId = 2;
         this.score = 1f;
         this.remark = "";
+    }
+        
+    public void setCompiler(String compiler){
+        this.compiler=compiler;
+    }
+    public String getCompiler(){
+        return compiler;
     }
     
     public Integer getId() {

@@ -3,12 +3,13 @@
 <finished>true</finished>
 
 <submit>
-    <sourceCode>#include &lt;stdio.h&gt;
+    <sourceCode>
+#include &lt;stdio.h&gt;
 int main()
 {
     double a,b,c;
     while(scanf("%lf%lf", &amp;a, &amp;b) != EOF)
-    {
+    { 
     if (b!=0)
     {
         c=a/b;
@@ -22,14 +23,14 @@ int main()
 }
 
 </sourceCode>
-    <id>992628</id>
-    <time>2024-01-13 01:52:26</time>
+    <id>1748813</id>
+    <time>2024-09-01 10:05:53</time>
     <status>AC</status>
     <correctCaseIds>3020,3021,3022,3023,</correctCaseIds>
     <wrongCaseIds/>
     <score>48.0</score>
     <remark>AC：运行结果正确</remark>
     <similarity/>
-    <submits>76</submits>
+    <submits>121</submits>
   </submit>
 </code>

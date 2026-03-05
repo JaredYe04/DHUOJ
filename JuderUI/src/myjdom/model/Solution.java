@@ -13,9 +13,17 @@ public class Solution {
     private String solutionId;
     private String problemId;
     private String submitTime;
-    private String langeuage;
+    private String language;
+    private String compiler;
     private String code;
 
+    
+    public void setCompiler(String compiler){
+        this.compiler=compiler;
+    }
+    public String getCompiler(){
+        return compiler;
+    }
     /**
      * @return the solutionId
      */
@@ -75,14 +83,14 @@ public class Solution {
     /**
      * @return the langeuage
      */
-    public String getLangeuage() {
-        return langeuage;
+    public String getLanguage() {
+        return language;
     }
 
     /**
      * @param langeuage the langeuage to set
      */
-    public void setLangeuage(String langeuage) {
-        this.langeuage = langeuage;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

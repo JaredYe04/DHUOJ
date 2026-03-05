@@ -68,7 +68,7 @@ public class SolutionCode {
         try {
             Transformer transformer = tf.newTransformer();
             DOMSource source = new DOMSource(document);
-            transformer.setOutputProperty(OutputKeys.ENCODING, "gb2312");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "GBK");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
             StreamResult result = new StreamResult(pw);
@@ -651,7 +651,7 @@ public class SolutionCode {
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
             DOMSource source = new DOMSource(document);        
-            transformer.setOutputProperty(OutputKeys.ENCODING, "gb2312");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "GBK");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -831,6 +831,8 @@ public class SolutionCode {
         String remark = "aaaaa";
         String correctCaseIds = "1,3";
         //
+        System.out.println("3\n" + remark);
+
         Answer answer = new Answer(testCaseId, userOutput, statusOfTestCase, status, remark, correctCaseIds);
 
         //a.updateXml("./xml/00.xml", "02", answer, "100", "aaaaaaaaaaaaa","true");

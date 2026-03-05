@@ -19,6 +19,8 @@ import client.service.myswingworker.MySwingWorker;
 import client.service.web.Webservice;
 import client.util.Config;
 import clientupdater.ClientUpdater;
+import common.LogLevel;
+import common.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -65,10 +67,10 @@ public class LoginFrame extends JFrame {
     private JLabel jLabel7;
     private JLabel jLabel8;
     private JLabel jLabel9;
-    private JTextField JTF_ip;
-    private JTextField JTF_port;
+    public JTextField JTF_ip;
+    public JTextField JTF_port;
     private User user;
-
+    private Logger logger;
     private static Boolean boollogin;
     private String ip;
     private String port;
@@ -114,7 +116,10 @@ public class LoginFrame extends JFrame {
         JB_OfflineLogin = new JButton();
         JP_Bottom_top = new JPanel();
         progressbar = new JProgressBar();
+        logger = common.Logger.getInstance();
 //        this.progressbar.setIndeterminate(true);
+
+        System.out.println(System.getProperty("file.encoding"));
 
         setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -352,9 +357,10 @@ public class LoginFrame extends JFrame {
     private void setUser() {
         User_io io = new User_io();
         user = io.getUser(message);
+        user.setPassword(password);//更新之后服务器返回的password是SHA256密文，因此需要手动设置为明文，以便客户端发起ws请求操作。
     }
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
 //        System.out.println("A".matches("[^[A-Za-z0-9\\._\\?%&+\\-=/#]]*"));
 //        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         NativeInterface.open();
@@ -368,16 +374,19 @@ public class LoginFrame extends JFrame {
 
     public Boolean login() {
         this.progressbar.setIndeterminate(true);
-        try{
-        checkUpdate(ip, port);
-        }catch(Exception e){
+        try {
+            //checkUpdate(ip, port); //取消自动更新！！！
+        } catch (Exception e) {
             e.printStackTrace();
             System.err.println("更新错误啦！");
         }
         try {
+            Control.setIp(ip);
             URL url = new URL("http://" + ip + ":" + port + "/oj/webservice/OJWS?wsdl");
             QName qname = new QName("http://ws.dhu.edu/", "OJWS");
+            logger.log("尝试建立Web服务", LogLevel.INFO);
             Control.setWebService(new Webservice(url, qname));
+            logger.log("建立Web服务成功", LogLevel.INFO);
             message = Control.getWebsService().login(username, password);
 //            new Information(ip + ":" + port, username, password);
             this.setUser();
@@ -394,6 +403,7 @@ public class LoginFrame extends JFrame {
             }
             return false;
         } catch (Exception e) {
+            logger.log("建立Web服务异常" + e.getMessage(), LogLevel.ERROR);
             alreadyClicked = false;
             User offlineUser = new User();
             offlineUser.setUserName(username);
@@ -463,7 +473,7 @@ public class LoginFrame extends JFrame {
         String ipandport = ip + ":" + port;
         ClientUpdater clientUpate = new ClientUpdater();
         int isneed = clientUpate.CheckWhetherNeedUpdate(ipandport);
-        System.out.println("检查更新后"+System.currentTimeMillis());
+        System.out.println("检查更新后" + System.currentTimeMillis());
         System.out.println(isneed);
         if (1 == isneed) {
             //System.out.println("进入start");

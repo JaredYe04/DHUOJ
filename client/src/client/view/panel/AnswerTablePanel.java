@@ -15,11 +15,8 @@ import client.view.frame.LoginFrame;
 import client.view.frame.MainFrame;
 import client.model.StudentExamDetail;
 import main.Answer;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Window;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -59,6 +56,8 @@ import client.io.xml.SolutionCode;
 import client.io.xml.StudentExamDetail_io;
 import client.io.xml.SubmitProblem;
 import client.io.xml.WrongCase;
+import common.LogLevel;
+import common.Logger;
 
 /**
  *
@@ -87,6 +86,7 @@ public class AnswerTablePanel extends JPanel {
     JPanel wrong;
     JPanel detail;
     JPanel wrongTestCase;
+    Logger logger;
     Answer answer;
     ActionListener wrongDetail;
     ActionListener submitPro;
@@ -128,12 +128,13 @@ public class AnswerTablePanel extends JPanel {
         this.correct = new JPanel();
         this.wrong = new JPanel();
         this.detail = new JPanel();
-        this.submit = new JButton("提交本题");
+        this.submit = new JButton("提交计分");
         this.refresh = new JButton("获取最新状态");
 
         this.submit.setPreferredSize(new Dimension(70, 30));
         wrongDetail = new Wrongdetail();
         this.submitPro = new SubmitPro();
+        this.logger=Logger.getInstance();
         this.Refresh = new Refresh();
         runInfo.setText("运行状态：");
         subTime.setText("提交次数：");
@@ -146,39 +147,49 @@ public class AnswerTablePanel extends JPanel {
         JSP_YourOut.setViewportView(JEP_YourOut);
         this.JSP_YourOut.setPreferredSize(new Dimension(400, 300));
         this.setLayout(new BorderLayout());
-        info.setLayout(new GridLayout(11, 5));
+
+        int col = 11;
+//        info.setLayout(new GridLayout(11, 5));
+        info.setLayout(new GridLayout(11, col));
         info.setPreferredSize(new Dimension(400, 400));
         info.add(runInfo);
         info.add(runInfoOut);
-        info.add(this.refresh);
         addBlank(2);
+        info.add(this.refresh);
+//        addBlank(2);
+        addBlank(col - 6);
         info.add(subTime);
         info.add(subTimeOut);
-        addBlank(3);
+//        addBlank(3);
+        addBlank(col - 3);
         info.add(score);
         info.add(scoreOut);
-        addBlank(3);
+//        addBlank(3);
+        addBlank(col - 3);
         info.add(rightID);
 
+        int nums = 3 * (col - 1) - 1;
         Icon icon = new ImageIcon("./image/questionmark.png");
-        for (int j = 0; j < 14; j++) {
+        for (int j = 0; j < nums; j++) {
             rightIDOut.add(new JLabel());
             wrongIDOut.add(new JButton(icon));
             panellist.add(new JPanel());
             wrongIDLabel.add(new JLabel());
         }
 
-        int blanks = 14 - rightIDOut.size();
+        int blanks = nums - rightIDOut.size();
         for (int j = 0; j < rightIDOut.size(); j++) {
             info.add(rightIDOut.get(j));
         }
         addBlank(blanks);
         info.add(wrongID);
-        blanks = 14 - wrongIDOut.size();
+        blanks = nums - wrongIDOut.size();
         for (int j = 0; j < wrongIDOut.size(); j++) {
             wrongIDLabel.get(j).setFont(new Font("DialogInput", 0, 22));
+
             panellist.get(j).add(wrongIDLabel.get(j));
             panellist.get(j).add(wrongIDOut.get(j));
+
             info.add(panellist.get(j));
             wrongIDOut.get(j).addActionListener(wrongDetail);
             wrongIDOut.get(j).setBorderPainted(false);
@@ -187,11 +198,12 @@ public class AnswerTablePanel extends JPanel {
             wrongIDOut.get(j).setPreferredSize(new Dimension(20, 20));
             wrongIDOut.get(j).setVisible(false);
         }
+
         addBlank(blanks);
         info.add(this.submit);
 
-        addBlank(4);
-        addBlank(5);
+        addBlank(col - 2);
+        addBlank(col - 1);
 //        info.add(detail);
 //        info.add(JSP_YourOut);
 
@@ -301,7 +313,7 @@ public class AnswerTablePanel extends JPanel {
                 }
                 wrongCase.put(String.valueOf(answers.getTestCaseId()[j]), j);
                 wrongnum++;
-                if (wrongnum == 9 || wrongnum == 4) {
+                if (wrongnum == 9) {
                     wrongnum++;
                 }
             }
@@ -355,7 +367,7 @@ public class AnswerTablePanel extends JPanel {
                 rightIDOut.get(rightnum).setText(answers.getTestCaseId()[j]);
                 rightIDOut.get(rightnum).setVisible(true);
                 rightnum++;
-                if (rightnum == 9 || rightnum == 4) {
+                if (rightnum == 9) {
                     rightnum++;
                 }
             } else if (answer.getStatusOfTestCase()[j].equals("CE")) {
@@ -375,7 +387,7 @@ public class AnswerTablePanel extends JPanel {
                 }
                 wrongCase.put(String.valueOf(answers.getTestCaseId()[j]), j);
                 wrongnum++;
-                if (wrongnum == 9 || wrongnum == 4) {
+                if (wrongnum == 9) {
                     wrongnum++;
                 }
             }
@@ -411,6 +423,7 @@ public class AnswerTablePanel extends JPanel {
             String toWrite = new String();
             try {
                 toWrite = Control.getWebsService().getExamProblemStatus(username, passwd, Integer.parseInt(examId), Integer.parseInt(proId));
+                System.out.println("getExamProblemStatus:\n" + toWrite);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -520,6 +533,8 @@ public class AnswerTablePanel extends JPanel {
         String remark = rf.getRemark(routing);
         String correctCaseIds = rf.getCorrectIds(routing);
         String submittimes = rf.getSubmitTimes(routing);
+        System.out.println("2\n" + remark);
+
         Answer answer = new Answer(testCaseIds, userOutput, statusofTestCase, status, remark, correctCaseIds);
         SolutionCode sc = new SolutionCode();
         sc.init();
@@ -590,7 +605,8 @@ public class AnswerTablePanel extends JPanel {
                     ////System.out.println(problemXml);
                     //System.out.println(wrongnum);
                     toWrite = Control.getWebsService().viewWrongCase(username, passwd, Integer.parseInt(examId), Integer.parseInt(proId), Integer.parseInt(wrongnum), true);
-//                    Object[] obj =client.invoke("WS_ViewWrongCase",username,passwd,Integer.parseInt(examId),Integer.parseInt(proId),Integer.parseInt(wrongnum),true);
+                    System.out.println("viewWrongCase:\n" + toWrite);
+                    //                    Object[] obj =client.invoke("WS_ViewWrongCase",username,passwd,Integer.parseInt(examId),Integer.parseInt(proId),Integer.parseInt(wrongnum),true);
 //                    System.out.println(obj[0]);
 //                    toWrite = (String)obj[0];
                 } catch (Exception e) {
@@ -652,6 +668,7 @@ public class AnswerTablePanel extends JPanel {
     }
 
     public void submitProblem() {
+        String proId = this.proId;
         String problemXml;
         Boolean flag = true;
         if (submitOnlyAC && !answer.getStatus().equals("AC")) {
@@ -662,6 +679,7 @@ public class AnswerTablePanel extends JPanel {
                     JOptionPane.WARNING_MESSAGE
             );
             return;
+            
         }
         SolutionCode sc = new SolutionCode();
         sc.init();
@@ -680,7 +698,7 @@ public class AnswerTablePanel extends JPanel {
             this.simi = new Similarity("-1", "", "");
             sc.setSimi("./xml/"+Control.getPath()+"/"+Control.getExamId()+"-"+proId+".xml", "-1");
         }
-
+        logger.log("[提交代码]进行setSimilarity成功", LogLevel.INFO);
         SubmitProblem sub = new SubmitProblem();
         if (sc.isCopied("./xml/"+Control.getPath()+"/"+Control.getExamId()+"-"+proId+".xml").equals("true")) {
             String message = "此代码涉嫌抄袭，是否提交？";
@@ -713,8 +731,11 @@ public class AnswerTablePanel extends JPanel {
         String toWrite = new String();
         try {
             toWrite = Control.getWebsService().submitThisProblem(username, passwd, problemXml);
+            System.out.println("submitThisProblem:\n" + toWrite);
+            logger.log("[提交代码]submitThisProblem成功，已获得toWrite内容", LogLevel.INFO);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log("[提交代码]submitThisProblem失败："+e.getMessage(), LogLevel.ERROR);
         }
         String backFile = "./xml/" + Control.getPath() + "/afterSubmitProblem.xml";
         File tmpFile = new File(backFile);
@@ -722,10 +743,13 @@ public class AnswerTablePanel extends JPanel {
             tmpFile.delete();
         }
         TextToFile(backFile, toWrite);
+        
         SubmitProblem sb = new SubmitProblem();
         sb.init();
         String msg = sb.isSubmitted(backFile);
+        
         if (msg.equals("true")) {
+            logger.log("[提交代码]成功：", LogLevel.INFO);
             if (flag) {
                 String message = "成功提交本题";
                 JOptionPane.showConfirmDialog(AnswerTablePanel.this,
@@ -742,8 +766,10 @@ public class AnswerTablePanel extends JPanel {
             }
 
         } else if (msg.equals("不能重复提交")) {
+            logger.log("[提交代码]失败："+msg, LogLevel.WARNING);
             JOptionPane.showConfirmDialog(AnswerTablePanel.this, "请注意：\n您已经提交过本题，不可再提交。", "注意", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
         } else {
+            logger.log("[提交代码]失败："+msg, LogLevel.WARNING);
             String message = msg;
             JOptionPane.showConfirmDialog(AnswerTablePanel.this,
                     message, "提示",
@@ -782,8 +808,11 @@ public class AnswerTablePanel extends JPanel {
         String toWrite = new String();
         try {
             toWrite = Control.getWebsService().getExamProblemStatus(username, passwd, Integer.parseInt(Control.getExamId()), Integer.parseInt(proId));
+            System.out.println("getExamProblemStatus:\n" + toWrite);
+            logger.log("[刷新结果]getExamProblemStatus:"+toWrite, LogLevel.INFO);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log("[刷新结果]失败："+e.getMessage(), LogLevel.ERROR);
         }
         String backFile = "./xml/" + Control.getPath() + "/afterRefresh.xml";
         File tmpFile = new File(backFile);

@@ -9,21 +9,33 @@ import cache.ProblemsCachManager;
 import common.Config;
 import common.FileFinder;
 import common.LangSelector;
+import common.LogLevel;
+import common.Logger;
+import static gui.Control.getJudgeInfoEditorPane;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.xml.namespace.QName;
 import share.gui.NewCompileSetting;
+import web.Dubboservice;
+import web.Webservice;
 
 /**
  *
  * @author Administrator
  */
 public class MainFrame extends javax.swing.JFrame {
+    private Logger logger=Logger.getInstance();
 
     /**
      * Creates new form MainFrame
@@ -63,6 +75,37 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         });
+        comboCppCompiler.removeAllItems();
+        comboJavaCompiler.removeAllItems();
+        List<String> cppCompilers = LangSelector.getCompilerNames("C++");
+        for (int i = 0; i < cppCompilers.size(); ++i) {
+            comboCppCompiler.addItem(cppCompilers.get(i));
+        }
+        List<String> javaCompilers = LangSelector.getCompilerNames("Java");
+        for (int i = 0; i < javaCompilers.size(); ++i) {
+            comboJavaCompiler.addItem(javaCompilers.get(i));
+        }
+
+//        // 设置定时器，每小时执行一次gc
+//        Timer timer = new Timer(3600* 1000, new ActionListener() { // 3600000 milliseconds = 1 hour
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+////              
+////                ProblemsCachManager problemsCachManager = ProblemsCachManager.getInstance();
+////                problemsCachManager.removeAllObject();
+//                System.gc();
+//                 logger.log("已自动执行gc！", LogLevel.INFO);
+////                synchronized (Control.refreshLock) {//
+////                //if(!Control.queue.isEmpty())return;//如果有队列任务就下次重启
+////                buttonStopActionPerformed(null);
+////                button_StartActionPerformed(null);
+////                Control.addJudgeInfo(0, "裁判机线程已自动刷新！");
+////                logger.log("裁判机线程已自动刷新！", LogLevel.INFO);
+////               }
+//            }
+//        });
+//        timer.start();
+
     }
 
     /**
@@ -81,7 +124,6 @@ public class MainFrame extends javax.swing.JFrame {
         button_Start = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        buttonCompilersConfig = new javax.swing.JButton();
         buttonStop = new javax.swing.JButton();
         distributorIP = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -111,8 +153,10 @@ public class MainFrame extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel17 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        buttonCompilersConfig1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        comboCppCompiler = new javax.swing.JComboBox();
+        comboJavaCompiler = new javax.swing.JComboBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,13 +164,6 @@ public class MainFrame extends javax.swing.JFrame {
         button_Start.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_StartActionPerformed(evt);
-            }
-        });
-
-        buttonCompilersConfig.setText("C/C++编译器配置");
-        buttonCompilersConfig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonCompilersConfigActionPerformed(evt);
             }
         });
 
@@ -150,6 +187,12 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel7.setText("线程数量:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4" }));
+        jComboBox1.setOpaque(false);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel15.setText("一般信息:");
 
@@ -164,18 +207,16 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel15))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addGap(35, 501, Short.MAX_VALUE))))
+                    .addComponent(jLabel16)
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,7 +255,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -233,6 +274,7 @@ public class MainFrame extends javax.swing.JFrame {
         threadManagerTabb.addTab("线程[未运行]", jPanel6);
 
         button_StartThread.setText("设置");
+        button_StartThread.setOpaque(false);
         button_StartThread.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_StartThreadActionPerformed(evt);
@@ -264,17 +306,45 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        buttonCompilersConfig1.setText("JAVA编译器配置");
-        buttonCompilersConfig1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonCompilersConfig1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("查看配置文件");
+        jButton2.setText("编辑配置文件");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        comboCppCompiler.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboCppCompiler.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboCppCompilerItemStateChanged(evt);
+            }
+        });
+        comboCppCompiler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCppCompilerActionPerformed(evt);
+            }
+        });
+
+        comboJavaCompiler.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboJavaCompiler.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboJavaCompilerItemStateChanged(evt);
+            }
+        });
+        comboJavaCompiler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboJavaCompilerActionPerformed(evt);
+            }
+        });
+
+        jCheckBox2.setFont(new java.awt.Font("宋体", 2, 12)); // NOI18N
+        jCheckBox2.setForeground(new java.awt.Color(0, 204, 102));
+        jCheckBox2.setSelected(true);
+        jCheckBox2.setText("Dubbo");
+        jCheckBox1.setToolTipText("下次程序启动时，自动开始裁判");
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
             }
         });
 
@@ -284,65 +354,69 @@ public class MainFrame extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator2)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(buttonCompilersConfig)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonCompilersConfig1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(distributorIP, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(distributorPort, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(207, 207, 207))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(button_Start)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox1)
-                        .addGap(36, 36, 36)
-                        .addComponent(buttonStop)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel14)
-                        .addGap(64, 64, 64)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addComponent(button_StartThread)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel17)
-                        .addGap(87, 87, 87))))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(threadManagerTabb, javax.swing.GroupLayout.PREFERRED_SIZE, 955, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addComponent(jSeparator1))
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(button_Start)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jCheckBox1)
+                                .addGap(36, 36, 36)
+                                .addComponent(buttonStop)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel14)
+                                .addGap(64, 64, 64)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addGap(156, 156, 156)
+                                .addComponent(jLabel17)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton1)
+                                .addGap(30, 30, 30)
+                                .addComponent(button_StartThread)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addGap(353, 353, 353)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(distributorIP, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(distributorPort, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(comboCppCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(comboJavaCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(83, 83, 83)))
+                        .addGap(21, 21, 21))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(threadManagerTabb, javax.swing.GroupLayout.PREFERRED_SIZE, 945, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(buttonCompilersConfig)
-                        .addComponent(distributorIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3)
-                        .addComponent(buttonCompilersConfig1)
-                        .addComponent(jButton2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(distributorPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(comboCppCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboJavaCompiler, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(distributorPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(distributorIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jCheckBox2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -376,9 +450,8 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 958, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 958, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,7 +462,9 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,19 +479,19 @@ public class MainFrame extends javax.swing.JFrame {
         if (Control.stopJudgerForNet()) {
             this.button_Start.setEnabled(true);
             this.buttonStop.setEnabled(false);
+            this.jCheckBox2.setEnabled(true);
             this.jLabel14.setText("正在关闭");
             this.button_StartThread.setEnabled(false);
         }
     }//GEN-LAST:event_buttonStopActionPerformed
 
-    private void buttonCompilersConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCompilersConfigActionPerformed
-
-        NewCompileSetting cConfig = new NewCompileSetting("c", this, true);
-        cConfig.setVisible(true);
-        Config.freshConfig();
-    }//GEN-LAST:event_buttonCompilersConfigActionPerformed
-
     private void button_StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_StartActionPerformed
+        try {
+            LangSelector.init();
+        } catch (Exception ex) {
+            logger.log("错误:"+ex.getMessage(), LogLevel.ERROR);
+            //Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }//刷新配置文件
         if (!checkForCompile()) {
             return;
         }
@@ -426,13 +501,19 @@ public class MainFrame extends javax.swing.JFrame {
         if (Control.startJudgerForNet(ip, Integer.parseInt(port))) {
             this.jLabel14.setText("- -");
             //线程开始后，不允许编辑编译器
-            this.buttonCompilersConfig.setEnabled(false);
-            this.buttonCompilersConfig1.setEnabled(false);
-            
+//            this.buttonCompilersConfig.setEnabled(false);
+//            this.buttonCompilersConfig1.setEnabled(false);
+            this.jButton2.setEnabled(false);//设置编辑配置文件
             Control.setRunStatus();
             this.button_Start.setEnabled(false);
             this.buttonStop.setEnabled(true);
             this.button_StartThread.setEnabled(true);
+            this.jCheckBox2.setEnabled(false);
+            Webservice.existDubbo = false;
+//            if(!Dubboservice.running){
+//                Dubboservice.main(null);
+//                Dubboservice.running=true;
+//            }
             //this.jLabel14.setText("正在运行");
         }
     }//GEN-LAST:event_button_StartActionPerformed
@@ -445,30 +526,36 @@ public class MainFrame extends javax.swing.JFrame {
     private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
         // TODO add your handling code here:
         for (int i = 0; i <= 4; i++) {
-            Control.clearInfo(i);
+             getJudgeInfoEditorPane(i).setText("");
         }
     }//GEN-LAST:event_jLabel17MouseClicked
     private boolean checkForCompile() {
-        String tmp = null;
-        tmp = Config.getCompilerDir("c");
-        if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "gcc.exe") || !FileFinder.isExistFile(tmp + File.separator + "g++.exe")) {
-            //弹窗设置保存
+        //String tmp = null;
+        //tmp = Config.getCompilerDir("c",comboCppCompiler.getSelectedItem().toString());
+        //if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "gcc.exe")&&!FileFinder.isExistFile(tmp + File.separator + "g++.exe")&&!FileFinder.isExistFile(tmp + File.separator + "/bin/cl.exe")) {
+        //弹窗设置保存
 
-            JOptionPane.showMessageDialog(this, "请先配置C语言编译器");
-            NewCompileSetting window = new NewCompileSetting("c", this, true);
-            window.setVisible(true);
-            return false;
-        }
-
-        tmp = Config.getCompilerDir("java");
-        if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
-
-            JOptionPane.showMessageDialog(this, "请先配置Java编译器");
-            NewCompileSetting window = new NewCompileSetting("java", this, true);
-            window.setVisible(true);
-            return false;
-        }
+        //   JOptionPane.showMessageDialog(this, "请先配置C/C++编译器");
+//            NewCompileSetting window = new NewCompileSetting("c", this, true);
+//            window.setVisible(true);
+        //    return false;
+        //}
+        //  tmp = Config.getCompilerDir("java",comboJavaCompiler.getSelectedItem().toString());
+        //if (tmp == null || "".equals(tmp) || !FileFinder.isExistFile(tmp + File.separator + "javac.exe")) {
+        //    JOptionPane.showMessageDialog(this, "请先配置Java编译器");
+//            NewCompileSetting window = new NewCompileSetting("java", this, true);
+//            window.setVisible(true);
+        //    return false;
+        //}
         return true;
+    }
+
+    public String getSelectedCppCompilerName() {
+        return comboCppCompiler.getSelectedItem().toString();
+    }
+
+    public String getSelectedJavaCompilerName() {
+        return comboJavaCompiler.getSelectedItem().toString();
     }
     private void button_StartThreadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_StartThreadActionPerformed
 
@@ -482,25 +569,53 @@ public class MainFrame extends javax.swing.JFrame {
         ProblemsCachManager problemsCachManager = ProblemsCachManager.getInstance();
         problemsCachManager.removeAllObject();
         JOptionPane.showMessageDialog(this, "缓存清除成功");
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void buttonCompilersConfig1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCompilersConfig1ActionPerformed
-        // TODO add your handling code here:
-        NewCompileSetting javaConfig = new NewCompileSetting("java", this, true);
-        javaConfig.setVisible(true);
-    }//GEN-LAST:event_buttonCompilersConfig1ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Desktop desktop = Desktop.getDesktop();
 
-            try {
-                // 打开文件
-                desktop.open(new File(LangSelector.getConfigPath()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            // 打开文件
+            desktop.open(new File(LangSelector.getConfigPath()));
+//                desktop.open(FileFinder.findFile("ConfigEditor.exe")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        Webservice.ENABLE_DUBBO = jCheckBox2.isSelected();
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void comboCppCompilerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCppCompilerActionPerformed
+        try {
+            LangSelector.setDefaultCompiler("C++", comboCppCompiler.getSelectedItem().toString());
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+    }//GEN-LAST:event_comboCppCompilerActionPerformed
+
+    private void comboJavaCompilerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboJavaCompilerActionPerformed
+
+        try {
+            LangSelector.setDefaultCompiler("Java", comboJavaCompiler.getSelectedItem().toString());
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_comboJavaCompilerActionPerformed
+
+    private void comboCppCompilerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCppCompilerItemStateChanged
+        //LangSelector.setDefaultCompiler("C++", comboCppCompiler.getSelectedItem().toString());
+    }//GEN-LAST:event_comboCppCompilerItemStateChanged
+
+    private void comboJavaCompilerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboJavaCompilerItemStateChanged
+        //LangSelector.setDefaultCompiler("Java", comboJavaCompiler.getSelectedItem().toString());
+    }//GEN-LAST:event_comboJavaCompilerItemStateChanged
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void loadConfig() {
         this.distributorIP.setText(Config.getValue("distributorIP"));
@@ -576,17 +691,18 @@ public class MainFrame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JButton buttonCompilersConfig;
-    javax.swing.JButton buttonCompilersConfig1;
     private javax.swing.ButtonGroup buttonGroup1;
     javax.swing.JButton buttonStop;
     private javax.swing.JButton button_Start;
     javax.swing.JButton button_StartThread;
-    private javax.swing.JTextField distributorIP;
-    private javax.swing.JTextField distributorPort;
+    private javax.swing.JComboBox comboCppCompiler;
+    private javax.swing.JComboBox comboJavaCompiler;
+    public javax.swing.JTextField distributorIP;
+    public javax.swing.JTextField distributorPort;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     javax.swing.JComboBox<String> jComboBox1;
     javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -600,7 +716,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    public javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel6;
     javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane11;

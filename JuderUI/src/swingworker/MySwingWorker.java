@@ -5,6 +5,9 @@
  */
 package swingworker;
 
+import common.Const;
+import gui.Control;
+import java.awt.EventQueue;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -12,6 +15,8 @@ import javax.swing.SwingWorker;
 import main.Answer;
 import main.Process;
 import persistence.oj_beans.ProblemTestCaseBean;
+import resultData.CompileInfo;
+import resultData.Result;
 
 /**
  *
@@ -23,23 +28,30 @@ public class MySwingWorker extends SwingWorker<Answer,String>{
     private String solutionId;
     private String problemId;
     private String language;
+    private String compiler;
+    
+    
     private String sourceCode;
     private Float timeOut;
     private List<ProblemTestCaseBean> testCaseList;
-    public MySwingWorker(int threadNo,String solutionId,String problemId,String language,String sourceCode,Float timeOut,List<ProblemTestCaseBean> testCaseList,Consumer<String> changeMessage,Consumer<Answer> submitResult){
+    public MySwingWorker(int threadNo,String solutionId,String problemId,String language,String compiler,String sourceCode,Float timeOut,List<ProblemTestCaseBean> testCaseList,Consumer<String> changeMessage,Consumer<Answer> submitResult){
         this.solutionId = solutionId;
         this.problemId = problemId;
         this.language = language;
+        this.compiler=compiler;
         this.sourceCode = sourceCode;
         this.timeOut = timeOut;
         this.testCaseList = testCaseList;
         this.con1 = changeMessage;
         this.con2 = submitResult;
+        
     }
     
     @Override
     protected Answer doInBackground() throws Exception {
-        return  new Process().Judge(getSolutionId(),getProblemId(),getLanguage(), getSourceCode(), timeOut, getTestCaseList(),this::writeToGui);
+
+            return  new Process().Judge(getSolutionId(),getProblemId(),getLanguage(),getCompiler(), getSourceCode(), timeOut, getTestCaseList(),this::writeToGui);
+
     }
     
     public void writeToGui(String s){
@@ -66,7 +78,12 @@ public class MySwingWorker extends SwingWorker<Answer,String>{
     }
     
     
-
+    public void setCompier(String compiler){
+        this.compiler=compiler;
+    }
+    public String getCompiler(){
+        return compiler;
+    }
     /**
      * @return the language
      */
